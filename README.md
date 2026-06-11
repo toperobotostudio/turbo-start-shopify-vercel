@@ -274,4 +274,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to th
 
 ## License
 
-[MIT](LICENSE) &copy; [Roboto Studio](https://roboto.studio/)
+[MIT](LICENSE) &copy; [Roboto Studio](https://robotostudio.com)
