@@ -39,7 +39,7 @@ export function FilterDrawer({ filters }: FilterDrawerProps) {
       <Button
         size="sm"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-none border border-foreground bg-transparent px-6 py-2.5 text-sm text-foreground tracking-wider transition-colors hover:bg-foreground hover:text-background focus-visible:ring-0 lg:hidden"
+        className="flex items-center gap-2 px-6 py-2.5 text-sm tracking-wider focus-visible:ring-0 lg:hidden"
       >
         <SlidersHorizontal className="size-4" />
         Filter{filterCount > 0 && ` (${filterCount})`}

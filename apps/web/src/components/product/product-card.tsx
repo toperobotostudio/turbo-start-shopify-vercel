@@ -1,18 +1,288 @@
+"use client";
+
+import { Badge } from "@workspace/ui/components/badge";
+import { cn } from "@workspace/ui/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
+import { useCart } from "@/components/cart/cart-context";
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
 import { formatMoney } from "@/lib/shopify/money";
 
-type ProductCardProps = {
+export type MerchBadge = "new" | "exclusive";
+export type StockStatus = "low" | "out" | null;
+export type CardColor = { name: string; hex: string | null };
+export type CardVariant = {
+  id: string;
+  availableForSale: boolean;
+  selectedOptions: { name: string; value: string }[];
+};
+
+export type ProductCardProps = {
   slug: string;
   title: string;
   priceRange: { minVariantPrice: number; maxVariantPrice: number };
   currencyCode?: string;
   imageUrl: string | null;
   vendor?: string | null;
+  /** Color/variant name shown under the title (e.g. "Navy"). */
+  variantName?: string | null;
+  /** Merch flag rendered as a badge over the image. */
+  badge?: MerchBadge | null;
+  /** Original price; strikethrough when higher than current. */
+  compareAtPrice?: number | null;
+  stockStatus?: StockStatus;
+  /** Size labels shown in the hover bar. */
+  sizes?: string[];
+  /** Initially selected size (underlined in the hover bar). */
+  selectedSize?: string;
+  /** Color swatches shown on the info row. */
+  colors?: CardColor[];
+  /** Initially selected color name (rendered as the taller, underlined swatch). */
+  selectedColor?: string;
+  /** Variants for resolving the color+size selection to a cart line. */
+  variants?: CardVariant[];
   mini?: boolean;
 };
+
+const BADGE_LABEL: Record<MerchBadge, string> = {
+  new: "New",
+  exclusive: "Online exclusive",
+};
+
+const MERCH_BADGE_CLASS = "px-1.5 py-0.5";
+
+function money(amount: number, currencyCode: string) {
+  return formatMoney({ amount: String(amount), currencyCode });
+}
+
+/** Finds the variant matching the selected color and size values. */
+function resolveVariant(
+  variants: CardVariant[] | undefined,
+  color: string | undefined,
+  size: string | undefined
+): CardVariant | undefined {
+  if (!variants || variants.length === 0) return undefined;
+  return variants.find((variant) => {
+    const values = variant.selectedOptions.map((option) => option.value);
+    return (
+      (!color || values.includes(color)) && (!size || values.includes(size))
+    );
+  });
+}
+
+function ProductCardMini({
+  slug,
+  title,
+  imageUrl,
+  price,
+  strikePrice,
+}: {
+  slug: string;
+  title: string;
+  imageUrl: string | null;
+  price: string;
+  strikePrice: string | null;
+}) {
+  return (
+    <Link
+      className="flex items-center gap-3 p-2 transition-colors hover:bg-accent"
+      href={`/products/${slug}`}
+    >
+      {imageUrl ? (
+        <div className="relative size-12 shrink-0 overflow-hidden border">
+          <Image
+            alt={title}
+            className="object-cover"
+            fill
+            sizes="48px"
+            src={imageUrl}
+          />
+        </div>
+      ) : (
+        <div className="size-12 shrink-0 border bg-muted" />
+      )}
+      <div className="min-w-0">
+        <p className="truncate font-medium text-sm">{title}</p>
+        <p className="text-muted-foreground text-xs">
+          {price}
+          {strikePrice && (
+            <span className="ml-1 line-through">{strikePrice}</span>
+          )}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
+function CardFlags({
+  badge,
+  stockStatus,
+}: {
+  badge: MerchBadge | null | undefined;
+  stockStatus: StockStatus | undefined;
+}) {
+  return (
+    <>
+      <div className="pointer-events-none absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
+        {/* Sale tag temporarily disabled — re-enable with <Badge variant="sale">Save {salePercentage}%</Badge> */}
+        {badge && (
+          <Badge className={MERCH_BADGE_CLASS} variant={badge}>
+            {BADGE_LABEL[badge]}
+          </Badge>
+        )}
+      </div>
+      {stockStatus === "low" && (
+        <Badge
+          className={cn(
+            "pointer-events-none absolute right-2 bottom-2 z-10",
+            MERCH_BADGE_CLASS
+          )}
+          variant="low-stock"
+        >
+          Low stock
+        </Badge>
+      )}
+      {stockStatus === "out" && (
+        <Badge
+          className={cn(
+            "pointer-events-none absolute right-2 bottom-2 z-10",
+            MERCH_BADGE_CLASS
+          )}
+          variant="sold-out"
+        >
+          Sold out
+        </Badge>
+      )}
+    </>
+  );
+}
+
+function SizeRow({
+  sizes,
+  selectedSize,
+  onSelect,
+}: {
+  sizes: string[];
+  selectedSize: string | undefined;
+  onSelect: (size: string) => void;
+}) {
+  return (
+    <div className="flex items-center gap-2.5">
+      {sizes.map((size) => (
+        <button
+          className={cn(
+            "cursor-pointer border-b text-xs",
+            size === selectedSize
+              ? "border-foreground text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+          key={size}
+          onClick={() => onSelect(size)}
+          type="button"
+        >
+          {size}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function CardSwatches({
+  colors,
+  selectedColor,
+  onSelect,
+}: {
+  colors: CardColor[];
+  selectedColor: string | undefined;
+  onSelect: (name: string) => void;
+}) {
+  return (
+    <div className="flex shrink-0 items-start gap-0.5 py-1">
+      {colors.map((color) => {
+        const swatch = cn(
+          "block",
+          !color.hex && "border border-border bg-muted"
+        );
+        const style = color.hex ? { backgroundColor: color.hex } : undefined;
+        const selected = color.name === selectedColor;
+
+        return (
+          <button
+            aria-label={color.name}
+            aria-pressed={selected}
+            className="flex cursor-pointer flex-col gap-0.5"
+            key={color.name}
+            onClick={() => onSelect(color.name)}
+            title={color.name}
+            type="button"
+          >
+            <span
+              className={cn(swatch, selected ? "h-2.5 w-5" : "h-2 w-4")}
+              style={style}
+            />
+            {selected && (
+              <span className="block h-px w-full bg-muted-foreground" />
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Hover bar with the "Add to cart" action and size selector. */
+function AddToCartBar({
+  variants,
+  selectedColor,
+  selectedSize,
+  sizes,
+  onSelectSize,
+}: {
+  variants: CardVariant[] | undefined;
+  selectedColor: string | undefined;
+  selectedSize: string | undefined;
+  sizes: string[] | undefined;
+  onSelectSize: (size: string) => void;
+}) {
+  const { addLine, openCart } = useCart();
+  const [pending, setPending] = useState(false);
+
+  const variant = resolveVariant(variants, selectedColor, selectedSize);
+  const canAdd = Boolean(variant?.availableForSale);
+
+  async function handleAdd() {
+    if (!variant || pending) return;
+    setPending(true);
+    try {
+      await addLine(variant.id, 1);
+      openCart();
+    } finally {
+      setPending(false);
+    }
+  }
+
+  return (
+    <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-between gap-2 bg-background p-2 opacity-0 transition-opacity duration-200 md:group-hover:opacity-100">
+      <button
+        className="cursor-pointer font-medium text-foreground text-sm disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={!canAdd || pending}
+        onClick={handleAdd}
+        type="button"
+      >
+        Add to cart
+      </button>
+      {sizes && sizes.length > 0 && (
+        <SizeRow
+          onSelect={onSelectSize}
+          selectedSize={selectedSize}
+          sizes={sizes}
+        />
+      )}
+    </div>
+  );
+}
 
 export function ProductCard({
   slug,
@@ -21,56 +291,51 @@ export function ProductCard({
   currencyCode,
   imageUrl,
   vendor,
+  variantName,
+  badge,
+  compareAtPrice,
+  stockStatus,
+  sizes,
+  selectedSize: initialSize,
+  colors,
+  selectedColor: initialColor,
+  variants,
   mini,
 }: ProductCardProps) {
-  const code = currencyCode ?? "GBP";
-  const formattedPrice = formatMoney({
-    amount: String(priceRange.minVariantPrice),
-    currencyCode: code,
-  });
-  const formattedMaxPrice = formatMoney({
-    amount: String(priceRange.maxVariantPrice),
-    currencyCode: code,
-  });
+  const [selectedColor, setSelectedColor] = useState(initialColor);
+  const [selectedSize, setSelectedSize] = useState(initialSize);
 
+  const code = currencyCode ?? "GBP";
+  const price = money(priceRange.minVariantPrice, code);
   const showRange = priceRange.minVariantPrice !== priceRange.maxVariantPrice;
 
   if (mini) {
     return (
-      <Link
-        className="flex items-center gap-3 p-2 transition-colors hover:bg-accent"
-        href={`/products/${slug}`}
-      >
-        {imageUrl ? (
-          <div className="relative size-12 shrink-0 overflow-hidden border">
-            <Image
-              alt={title}
-              className="object-cover"
-              fill
-              sizes="48px"
-              src={imageUrl}
-            />
-          </div>
-        ) : (
-          <div className="size-12 shrink-0 border bg-muted" />
-        )}
-        <div className="min-w-0">
-          <p className="truncate font-medium text-sm">{title}</p>
-          <p className="text-muted-foreground text-xs">
-            {formattedPrice}
-            {showRange && (
-              <span className="ml-1 line-through">{formattedMaxPrice}</span>
-            )}
-          </p>
-        </div>
-      </Link>
+      <ProductCardMini
+        imageUrl={imageUrl}
+        price={price}
+        slug={slug}
+        strikePrice={showRange ? money(priceRange.maxVariantPrice, code) : null}
+        title={title}
+      />
     );
   }
 
+  const onSale =
+    typeof compareAtPrice === "number" &&
+    compareAtPrice > priceRange.minVariantPrice;
+  const strikePrice = onSale
+    ? money(compareAtPrice, code)
+    : showRange
+      ? money(priceRange.maxVariantPrice, code)
+      : null;
+  const subtitle = selectedColor ?? variantName ?? vendor;
+  const href = `/products/${slug}`;
+
   return (
     <div className="group relative">
-      <Link className="block space-y-3" href={`/products/${slug}`}>
-        <div className="relative aspect-3/4 overflow-hidden bg-muted">
+      <div className="relative aspect-3/4 overflow-hidden bg-muted">
+        <Link aria-label={title} className="block size-full" href={href}>
           {imageUrl ? (
             <Image
               alt={title}
@@ -84,28 +349,54 @@ export function ProductCard({
               No image
             </div>
           )}
-        </div>
-        <div className="space-y-1">
-          <h3 className="font-normal text-sm leading-tight">{title}</h3>
-          {vendor && (
-            <p className="text-xs uppercase tracking-wider text-muted-foreground">
-              {vendor}
-            </p>
-          )}
-          <p className="font-normal text-sm">
-            {formattedPrice}
-            {showRange && (
-              <span className="ml-1 text-muted-foreground line-through">
-                {formattedMaxPrice}
+        </Link>
+
+        <CardFlags badge={badge} stockStatus={stockStatus} />
+
+        {/* Hover add-to-cart bar — inset 8px on the image, per Figma 1515-40 */}
+        {stockStatus !== "out" && variants && variants.length > 0 && (
+          <AddToCartBar
+            onSelectSize={setSelectedSize}
+            selectedColor={selectedColor}
+            selectedSize={selectedSize}
+            sizes={sizes}
+            variants={variants}
+          />
+        )}
+
+        <SavedItemButton
+          className="absolute top-2 right-2 z-10 transition-opacity md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:focus-visible:pointer-events-auto md:focus-visible:opacity-100 md:data-[saved=true]:pointer-events-auto md:data-[saved=true]:opacity-100"
+          handle={slug}
+        />
+      </div>
+
+      <div className="mt-2 flex items-start justify-between gap-2">
+        <Link className="flex flex-col gap-2" href={href}>
+          <div className="flex flex-col gap-0.5">
+            <h3 className="font-medium text-base text-foreground leading-tight">
+              {title}
+            </h3>
+            {subtitle && (
+              <p className="text-base text-muted-foreground">{subtitle}</p>
+            )}
+          </div>
+          <p className="font-medium text-base text-foreground">
+            {price}
+            {strikePrice && (
+              <span className="ml-1.5 font-normal text-muted-foreground line-through">
+                {strikePrice}
               </span>
             )}
           </p>
-        </div>
-      </Link>
-      <SavedItemButton
-        className="absolute top-2 right-2 z-10 transition-opacity md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:focus-visible:pointer-events-auto md:focus-visible:opacity-100 md:data-[saved=true]:pointer-events-auto md:data-[saved=true]:opacity-100"
-        handle={slug}
-      />
+        </Link>
+        {colors && colors.length > 0 && (
+          <CardSwatches
+            colors={colors}
+            onSelect={setSelectedColor}
+            selectedColor={selectedColor}
+          />
+        )}
+      </div>
     </div>
   );
 }

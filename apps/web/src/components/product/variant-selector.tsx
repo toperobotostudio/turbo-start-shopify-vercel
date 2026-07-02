@@ -4,6 +4,7 @@ import { cn } from "@workspace/ui/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
+import { getOptionType } from "@/lib/shopify/options";
 import type { ShopifyProductOption, ShopifyVariant } from "@/lib/shopify/types";
 import { getOptionAvailability } from "@/lib/shopify/variant-utils";
 import { ColorSwatch } from "./color-swatch";
@@ -14,19 +15,6 @@ type VariantSelectorProps = {
   variants: ShopifyVariant[];
   handle: string;
 };
-
-/** Option names that render as color swatches. */
-const COLOR_OPTION_NAMES = new Set(["color", "colour"]);
-
-/** Option names that render as size buttons. */
-const SIZE_OPTION_NAMES = new Set(["size"]);
-
-function getOptionType(name: string): "color" | "size" | "default" {
-  const lower = name.toLowerCase();
-  if (COLOR_OPTION_NAMES.has(lower)) return "color";
-  if (SIZE_OPTION_NAMES.has(lower)) return "size";
-  return "default";
-}
 
 export function VariantSelector({
   options,

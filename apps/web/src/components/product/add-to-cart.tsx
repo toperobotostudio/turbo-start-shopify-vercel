@@ -28,7 +28,7 @@ export function AddToCart({
         className="w-full rounded-none uppercase py-6 px-8"
         disabled
         size="lg"
-        variant="outline"
+        variant="default"
       >
         Sold Out
       </Button>
@@ -41,7 +41,7 @@ export function AddToCart({
         className="w-full rounded-none uppercase py-6 px-8"
         disabled
         size="lg"
-        variant="outline"
+        variant="default"
       >
         Select Options
       </Button>

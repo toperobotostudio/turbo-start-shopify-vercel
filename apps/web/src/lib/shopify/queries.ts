@@ -126,6 +126,12 @@ export const COLLECTION_QUERY = /* graphql */ `
             title
             vendor
             productType
+            tags
+            options {
+              id
+              name
+              values
+            }
             featuredImage {
               url
               altText
@@ -148,12 +154,16 @@ export const COLLECTION_QUERY = /* graphql */ `
                 currencyCode
               }
             }
-            variants(first: 1) {
+            variants(first: 100) {
               edges {
                 node {
                   id
                   availableForSale
                   quantityAvailable
+                  selectedOptions {
+                    name
+                    value
+                  }
                 }
               }
             }
@@ -225,6 +235,27 @@ export const FEATURED_PRODUCTS_QUERY = /* graphql */ `
           handle
           title
           vendor
+          tags
+          availableForSale
+          totalInventory
+          options {
+            id
+            name
+            values
+          }
+          variants(first: 100) {
+            edges {
+              node {
+                id
+                availableForSale
+                quantityAvailable
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
           featuredImage {
             url
             altText
@@ -237,6 +268,12 @@ export const FEATURED_PRODUCTS_QUERY = /* graphql */ `
               currencyCode
             }
             maxVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          compareAtPriceRange {
+            minVariantPrice {
               amount
               currencyCode
             }
@@ -279,6 +316,12 @@ export const SEARCH_PRODUCTS_QUERY = /* graphql */ `
             title
             vendor
             productType
+            tags
+            options {
+              id
+              name
+              values
+            }
             featuredImage {
               url
               altText
@@ -295,12 +338,16 @@ export const SEARCH_PRODUCTS_QUERY = /* graphql */ `
                 currencyCode
               }
             }
-            variants(first: 1) {
+            variants(first: 100) {
               edges {
                 node {
                   id
                   availableForSale
                   quantityAvailable
+                  selectedOptions {
+                    name
+                    value
+                  }
                 }
               }
             }
@@ -366,6 +413,12 @@ export const PRODUCT_BY_HANDLE_QUERY = /* graphql */ `
       title
       vendor
       productType
+      tags
+      options {
+        id
+        name
+        values
+      }
       featuredImage {
         url
         altText
@@ -382,11 +435,16 @@ export const PRODUCT_BY_HANDLE_QUERY = /* graphql */ `
           currencyCode
         }
       }
-      variants(first: 1) {
+      variants(first: 100) {
         edges {
           node {
             id
             availableForSale
+            quantityAvailable
+            selectedOptions {
+              name
+              value
+            }
           }
         }
       }

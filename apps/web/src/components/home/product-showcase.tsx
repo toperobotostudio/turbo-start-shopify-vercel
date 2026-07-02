@@ -70,11 +70,7 @@ export function ProductShowcase({ products }: ProductShowcaseProps) {
           Standout Pieces
         </h2>
 
-        <Button
-          asChild
-          className="rounded-none border border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-white dark:hover:text-black"
-          size="lg"
-        >
+        <Button asChild size="lg">
           <Link href="/collections/all-products">
             See all
             <ArrowRight className="size-4" />

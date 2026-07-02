@@ -4,9 +4,9 @@ import { Button } from "@workspace/ui/components/button";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
+import { useCart } from "@/components/cart/cart-context";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CartSummary } from "@/components/cart/cart-summary";
-import { useCart } from "@/components/cart/cart-context";
 
 export default function CartPage() {
   const { cart, isLoading } = useCart();
@@ -55,7 +55,7 @@ export default function CartPage() {
             ))}
           </div>
           <div className="mt-6">
-            <Button asChild variant="outline">
+            <Button asChild variant="default">
               <Link href="/collections">Continue Shopping</Link>
             </Button>
           </div>

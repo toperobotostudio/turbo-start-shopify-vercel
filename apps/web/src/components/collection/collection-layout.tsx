@@ -38,8 +38,9 @@ export function FilterToggle() {
   return (
     <Button
       size="sm"
+      variant="default"
       onClick={toggle}
-      className="hidden items-center gap-2 rounded-none border border-foreground bg-transparent px-6 py-2.5 text-sm text-foreground tracking-wider transition-colors hover:bg-foreground hover:text-background focus-visible:ring-0 lg:flex"
+      className="hidden items-center gap-2  px-6 py-2.5 text-sm  tracking-wider  focus-visible:ring-0 lg:flex"
     >
       <SlidersHorizontal className="size-4" />
       {showFilters ? "Hide Filters" : "Show Filters"}
