@@ -45,7 +45,7 @@ export function CollectionsHero({
             <Button
               key={button._key}
               asChild
-              className="rounded-none border border-white mt-10 lg:mt-26 bg-transparent text-white hover:bg-white hover:text-black"
+              className="mt-10 bg-white text-black hover:bg-white/90 lg:mt-26"
               size="lg"
             >
               <Link

@@ -1,3 +1,4 @@
+import { Button } from "@workspace/ui/components/button";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -14,18 +15,17 @@ export default function NotFound() {
           The page you were looking for could not be found.
         </p>
         <div className="mt-4 flex gap-3">
-          <Link
-            href="/collections"
-            className="rounded-none border border-foreground bg-foreground px-6 py-2.5 text-sm uppercase text-background tracking-wider transition-colors hover:bg-transparent hover:text-foreground"
+          <Button asChild className="uppercase tracking-wider" size="lg">
+            <Link href="/collections">Back to Shop</Link>
+          </Button>
+          <Button
+            asChild
+            className="uppercase tracking-wider"
+            size="lg"
+            variant="secondary"
           >
-            Back to Shop
-          </Link>
-          <Link
-            href="/"
-            className="rounded-none border border-foreground bg-transparent px-6 py-2.5 text-sm uppercase text-foreground tracking-wider transition-colors hover:bg-foreground hover:text-background"
-          >
-            Go Home
-          </Link>
+            <Link href="/">Go Home</Link>
+          </Button>
         </div>
       </div>
     </div>

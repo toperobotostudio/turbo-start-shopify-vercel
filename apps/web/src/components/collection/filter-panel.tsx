@@ -180,9 +180,14 @@ function AvailabilitySection({
 
   return (
     <AccordionItem value="availability">
-      <AccordionTrigger className="hover:no-underline">Availability</AccordionTrigger>
+      <AccordionTrigger className="hover:no-underline">
+        Availability
+      </AccordionTrigger>
       <AccordionContent>
-        <label htmlFor="filter-available" className="flex cursor-pointer items-center gap-3">
+        <label
+          htmlFor="filter-available"
+          className="flex cursor-pointer items-center gap-3"
+        >
           <Checkbox
             id="filter-available"
             checked={isChecked}
@@ -237,7 +242,7 @@ function PriceSection({
         <Button
           size="lg"
           onClick={() => onApply(min, max)}
-          className="mt-3 w-full rounded-none border border-foreground bg-transparent text-foreground text-xs tracking-wider hover:bg-foreground hover:text-background"
+          className="mt-3 w-full text-xs tracking-wider"
         >
           Apply
         </Button>
@@ -265,7 +270,9 @@ function CheckboxSection({
 
   return (
     <AccordionItem value={value}>
-      <AccordionTrigger className="hover:no-underline">{label}</AccordionTrigger>
+      <AccordionTrigger className="hover:no-underline">
+        {label}
+      </AccordionTrigger>
       <AccordionContent>
         <div className="flex flex-col gap-2">
           {filterValues.map((fv) => {

@@ -68,7 +68,7 @@ export function SortSelector({
         <DropdownMenuTrigger asChild>
           <Button
             size="sm"
-            className="flex items-center gap-2 rounded-none border border-foreground bg-transparent px-6 py-2.5 text-sm text-foreground tracking-wider transition-colors hover:bg-foreground hover:text-background focus-visible:ring-0"
+            className="flex items-center gap-2 px-6 py-2.5 text-sm tracking-wider focus-visible:ring-0"
           >
             <ArrowUpDown className="mr-2 size-4" />
             {currentLabel}
@@ -89,7 +89,7 @@ export function SortSelector({
         <Button
           size="sm"
           onClick={handleReset}
-          className="size-8 rounded-none border border-foreground bg-transparent p-0 text-foreground transition-colors hover:bg-foreground hover:text-background focus-visible:ring-0"
+          className="size-8 p-0 focus-visible:ring-0"
         >
           <X className="size-4" />
           <span className="sr-only">Reset sort</span>
