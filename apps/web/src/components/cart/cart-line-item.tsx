@@ -69,7 +69,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
               disabled={line.quantity <= 1}
               onClick={() => updateLine(line.id, line.quantity - 1)}
               size="icon"
-              variant="outline"
+              variant="default"
               className="size-7"
             >
               <Minus className="size-3" />
@@ -78,7 +78,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
             <Button
               onClick={() => updateLine(line.id, line.quantity + 1)}
               size="icon"
-              variant="outline"
+              variant="default"
               className="size-7"
             >
               <Plus className="size-3" />

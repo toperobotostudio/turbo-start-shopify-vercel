@@ -1,6 +1,6 @@
 import { storefrontQuery } from "@/lib/shopify/client";
-import type { MoneyV2, ShopifyImage } from "@/lib/shopify/types";
-
+import { collectionProductToCardProps } from "@/lib/shopify/product-card";
+import type { ShopifyCollectionProduct } from "@/lib/shopify/types";
 import { ProductCard } from "./product-card";
 
 const RELATED_PRODUCTS_QUERY = /* graphql */ `
@@ -10,6 +10,13 @@ const RELATED_PRODUCTS_QUERY = /* graphql */ `
       handle
       title
       vendor
+      productType
+      tags
+      options {
+        id
+        name
+        values
+      }
       featuredImage {
         url
         altText
@@ -26,22 +33,31 @@ const RELATED_PRODUCTS_QUERY = /* graphql */ `
           currencyCode
         }
       }
+      compareAtPriceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      variants(first: 100) {
+        edges {
+          node {
+            id
+            availableForSale
+            quantityAvailable
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
     }
   }
 `;
 
 type RelatedProductsResponse = {
-  productRecommendations: Array<{
-    id: string;
-    handle: string;
-    title: string;
-    vendor: string;
-    featuredImage: ShopifyImage | null;
-    priceRange: {
-      minVariantPrice: MoneyV2;
-      maxVariantPrice: MoneyV2;
-    };
-  }>;
+  productRecommendations: ShopifyCollectionProduct[];
 };
 
 type RelatedProductsProps = {
@@ -68,20 +84,8 @@ export async function RelatedProducts({ productId }: RelatedProductsProps) {
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
         {products.map((product) => (
           <ProductCard
-            currencyCode={product.priceRange.minVariantPrice.currencyCode}
-            imageUrl={product.featuredImage?.url ?? null}
             key={product.id}
-            priceRange={{
-              minVariantPrice: Number(
-                product.priceRange.minVariantPrice.amount
-              ),
-              maxVariantPrice: Number(
-                product.priceRange.maxVariantPrice.amount
-              ),
-            }}
-            slug={product.handle}
-            title={product.title}
-            vendor={product.vendor}
+            {...collectionProductToCardProps(product)}
           />
         ))}
       </div>

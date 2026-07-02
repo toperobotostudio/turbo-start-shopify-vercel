@@ -30,7 +30,7 @@ export function CartDrawer() {
           <div className="flex flex-1 flex-col items-center justify-center gap-4">
             <ShoppingBag className="size-12 text-muted-foreground" />
             <p className="text-muted-foreground">Your cart is empty</p>
-            <Button onClick={closeCart} variant="outline">
+            <Button onClick={closeCart} variant="default">
               Continue Shopping
             </Button>
           </div>
@@ -60,7 +60,7 @@ export function CartDrawer() {
                   className="w-full"
                   onClick={closeCart}
                   size="lg"
-                  variant="outline"
+                  variant="default"
                 >
                   Continue Shopping
                 </Button>

@@ -57,6 +57,8 @@ export type ShopifyCollectionProduct = {
   title: string;
   vendor: string;
   productType: string;
+  tags: string[];
+  options: ShopifyProductOption[];
   featuredImage: ShopifyImage | null;
   priceRange: {
     minVariantPrice: MoneyV2;
@@ -66,7 +68,10 @@ export type ShopifyCollectionProduct = {
     minVariantPrice: MoneyV2;
   };
   variants: Connection<
-    Pick<ShopifyVariant, "id" | "availableForSale" | "quantityAvailable">
+    Pick<
+      ShopifyVariant,
+      "id" | "availableForSale" | "quantityAvailable" | "selectedOptions"
+    >
   >;
 };
 
@@ -177,10 +182,23 @@ export type FeaturedProduct = {
   handle: string;
   title: string;
   vendor: string;
+  tags: string[];
+  options: ShopifyProductOption[];
+  availableForSale: boolean;
+  totalInventory: number | null;
+  variants: Connection<
+    Pick<
+      ShopifyVariant,
+      "id" | "availableForSale" | "quantityAvailable" | "selectedOptions"
+    >
+  >;
   featuredImage: ShopifyImage | null;
   priceRange: {
     minVariantPrice: MoneyV2;
     maxVariantPrice: MoneyV2;
+  };
+  compareAtPriceRange?: {
+    minVariantPrice: MoneyV2;
   };
 };
 
