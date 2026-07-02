@@ -10,7 +10,7 @@ export function Logo({ text }: LogoProps) {
   return (
     <Link className="flex gap-2 items-center" href="/">
       {text && (
-        <h1 className="whitespace-nowrap text-xl tracking-wide uppercase font-(family-name:--font-geist-pixel-square)">
+        <h1 className="whitespace-nowrap text-xl tracking-wide font-medium uppercase ">
           {text}
         </h1>
       )}
