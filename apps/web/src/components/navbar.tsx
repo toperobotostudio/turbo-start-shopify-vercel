@@ -44,7 +44,7 @@ function DesktopColumnDropdown({
       <button
         aria-expanded={isOpen}
         aria-haspopup="menu"
-        className="flex items-center gap-1 px-3 py-2 font-medium text-sm transition-colors hover:text-foreground"
+        className="flex items-center gap-1 px-3 py-2 font-medium text-sm tracking-[0.02em] transition-colors hover:text-foreground"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         type="button"
@@ -85,7 +85,7 @@ function DesktopColumnLink({
 
   return (
     <Link
-      className="px-3 py-2 font-medium text-sm transition-colors hover:text-foreground"
+      className="px-3 py-2 font-medium text-sm tracking-[0.02em] transition-colors hover:text-foreground"
       href={column.href}
     >
       {column.name}
@@ -157,7 +157,7 @@ export function Navbar({
   };
   const { navbarData, settingsData } = navigationData;
   const { columns } = navbarData || {};
-  const { logo, siteTitle } = settingsData || {};
+  const { siteTitle } = settingsData || {};
 
   // Show skeleton only on initial mount when no fallback data is available
   if (isLoading && !data && !(initialNavbarData && initialSettingsData)) {
@@ -165,7 +165,7 @@ export function Navbar({
   }
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Desktop Navigation */}
@@ -205,6 +205,7 @@ export function Navbar({
 
           {/* Desktop Actions */}
           <div className="hidden flex-1 items-center justify-end gap-4 md:flex">
+            <SavedItemsToggle variant="text" />
             <Link
               aria-label="Search"
               className="inline-flex size-9 items-center justify-center rounded-md transition-colors hover:text-foreground"
@@ -212,13 +213,7 @@ export function Navbar({
             >
               <Search className="size-4" />
             </Link>
-            <SavedItemsToggle />
             <CartToggle />
-            {/* <SanityButtons
-              buttonClassName="rounded-lg"
-              buttons={buttons || []}
-              className="flex items-center gap-2"
-            /> */}
           </div>
 
           {/* Mobile Actions */}

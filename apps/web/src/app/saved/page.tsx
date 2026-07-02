@@ -62,7 +62,7 @@ export default function SavedPage() {
           <div className="text-center">
             <p className="font-medium text-lg">No saved items yet</p>
             <p className="mt-1 text-muted-foreground text-sm">
-              Tap the heart icon on any product to save it for later.
+              Tap the bookmark icon on any product to save it for later.
             </p>
           </div>
           <Button asChild>

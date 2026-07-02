@@ -6,8 +6,24 @@ import Link from "next/link";
 
 import { useSavedItems } from "./saved-items-context";
 
-export function SavedItemsToggle() {
+type SavedItemsToggleProps = {
+  variant?: "icon" | "text";
+};
+
+export function SavedItemsToggle({ variant = "icon" }: SavedItemsToggleProps) {
   const { count } = useSavedItems();
+
+  if (variant === "text") {
+    return (
+      <Link
+        aria-label={`Wishlist${count > 0 ? ` (${count} items)` : ""}`}
+        className="text-foreground text-sm transition-colors hover:text-foreground/70"
+        href="/saved"
+      >
+        Wishlist{count > 0 && ` (${count > 99 ? "99+" : count})`}
+      </Link>
+    );
+  }
 
   return (
     <Button

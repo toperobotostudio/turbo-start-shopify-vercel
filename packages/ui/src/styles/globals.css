@@ -41,6 +41,10 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
+  /* Overscroll canvas colors: top matches the always-dark promo bar (zinc-950),
+   * bottom matches the footer (--background, so it follows light/dark). */
+  --color-overscroll-top: oklch(0.141 0.005 285.823);
+  --color-overscroll-bottom: var(--background);
 }
 
 .dark {
@@ -142,17 +146,30 @@
   }
 }
 
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
+/* Two-tone overscroll: the rubber-band / bounce region beyond the top and bottom
+ * edges shows the document's (root) background. A single fixed color can only match
+ * one edge, so we drive the root background-color across page scroll with a CSS
+ * scroll-progress timeline — the dark promo bar near the top, the footer background
+ * near the bottom — so the bounce is color-matched at both ends. The body keeps its
+ * solid bg-background, so only the overscroll canvas is affected, not the page
+ * content. No JS; browsers without scroll-timeline support and reduced-motion users
+ * keep a static root color. */
+@keyframes overscroll-color-transition {
+  from {
+    background-color: var(--color-overscroll-top);
   }
-  100% {
-    transform: translateX(-50%);
+  to {
+    background-color: var(--color-overscroll-bottom);
   }
 }
 
-.animate-marquee {
-  animation: marquee 22s steps(600) infinite;
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    html {
+      animation: overscroll-color-transition linear both;
+      animation-timeline: scroll(root y);
+    }
+  }
 }
 
 img {
