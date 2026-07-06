@@ -13,6 +13,7 @@ import { MenuLink } from "./elements/menu-link";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
 import { CollectionGroupDropdown } from "./nav/collection-group-dropdown";
+import { SavedItemsDrawer } from "./saved-items/saved-items-drawer";
 import { SavedItemsToggle } from "./saved-items/saved-items-toggle";
 
 // Fetcher function
@@ -240,6 +241,7 @@ export function Navbar({
       )}
 
       <CartDrawer />
+      <SavedItemsDrawer />
     </header>
   );
 }
