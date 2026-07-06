@@ -11,8 +11,14 @@ import {
   CART_LINES_UPDATE_MUTATION,
   CART_QUERY,
 } from "@/lib/shopify/mutations";
-import { VARIANT_INVENTORY_QUERY } from "@/lib/shopify/queries";
-import type { Cart, CartLineInput } from "@/lib/shopify/types";
+import { PRODUCT_QUERY, VARIANT_INVENTORY_QUERY } from "@/lib/shopify/queries";
+import type {
+  Cart,
+  CartLineInput,
+  ProductQueryResponse,
+  ShopifyProductOption,
+  ShopifyVariant,
+} from "@/lib/shopify/types";
 
 const logger = new Logger("CartActions");
 
@@ -72,7 +78,8 @@ export async function addToCart(lines: CartLineInput[]): Promise<CartResult> {
 
 export async function updateCartLine(
   lineId: string,
-  quantity: number
+  quantity: number,
+  merchandiseId?: string
 ): Promise<CartResult> {
   const cartId = await getCartId();
 
@@ -80,10 +87,14 @@ export async function updateCartLine(
     return { ok: false, error: "No cart found" };
   }
 
+  const line = merchandiseId
+    ? { id: lineId, quantity, merchandiseId }
+    : { id: lineId, quantity };
+
   const result = await storefrontQuery<{
     cartLinesUpdate: { cart: Cart };
   }>(CART_LINES_UPDATE_MUTATION, {
-    variables: { cartId, lines: [{ id: lineId, quantity }] },
+    variables: { cartId, lines: [line] },
   });
 
   if (!result.ok) {
@@ -120,7 +131,7 @@ type InventoryResult =
   | { ok: false; error: string };
 
 export async function checkVariantInventory(
-  variantId: string,
+  variantId: string
 ): Promise<InventoryResult> {
   const result = await storefrontQuery<{
     node: {
@@ -144,6 +155,39 @@ export async function checkVariantInventory(
     ok: true,
     availableForSale: node.availableForSale,
     quantityAvailable: node.quantityAvailable,
+  };
+}
+
+export type ProductOptions = {
+  options: ShopifyProductOption[];
+  variants: ShopifyVariant[];
+};
+
+/**
+ * Fetches a product's options and variants by handle — used to build the
+ * in-cart Color/Size variant selectors. Returns null on error or missing
+ * product so the caller can fall back to displaying the line's own options.
+ */
+export async function getProductOptions(
+  handle: string
+): Promise<ProductOptions | null> {
+  const result = await storefrontQuery<ProductQueryResponse>(PRODUCT_QUERY, {
+    variables: { handle },
+  });
+
+  if (!result.ok) {
+    logger.error(`Failed to fetch product options: ${result.error}`);
+    return null;
+  }
+
+  const product = result.data.product;
+  if (!product) {
+    return null;
+  }
+
+  return {
+    options: product.options,
+    variants: product.variants.edges.map((edge) => edge.node),
   };
 }
 

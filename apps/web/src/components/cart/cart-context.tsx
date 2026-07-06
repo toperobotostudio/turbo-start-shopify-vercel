@@ -26,6 +26,11 @@ type CartContextValue = {
   closeCart: () => void;
   addLine: (variantId: string, quantity: number) => Promise<void>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
+  swapLineVariant: (
+    lineId: string,
+    merchandiseId: string,
+    quantity: number
+  ) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
 };
 
@@ -66,6 +71,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const swapLineVariant = useCallback(
+    async (lineId: string, merchandiseId: string, quantity: number) => {
+      startTransition(async () => {
+        const result = await updateCartLine(lineId, quantity, merchandiseId);
+        if (result.ok) {
+          setCart(result.cart);
+        }
+      });
+    },
+    []
+  );
+
   const removeLine = useCallback(async (lineId: string) => {
     startTransition(async () => {
       const result = await removeCartLine(lineId);
@@ -84,6 +101,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       closeCart,
       addLine,
       updateLine,
+      swapLineVariant,
       removeLine,
     }),
     [
@@ -94,6 +112,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       closeCart,
       addLine,
       updateLine,
+      swapLineVariant,
       removeLine,
     ]
   );
