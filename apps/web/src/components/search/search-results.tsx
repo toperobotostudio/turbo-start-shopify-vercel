@@ -55,6 +55,7 @@ function CollectionsGrid({
           handle={collection.handle}
           imageUrl={collection.image?.url ?? null}
           key={collection.id}
+          showViewButton
           title={collection.title}
         />
       ))}

@@ -1,3 +1,4 @@
+import { cn } from "@workspace/ui/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,6 +7,8 @@ type CollectionCardProps = {
   title: string;
   imageUrl: string | null;
   description?: string | null;
+  /** Show a "View Collection" bar that fades in on hover (mirrors the product card's add-to-cart bar). */
+  showViewButton?: boolean;
 };
 
 /** Strips HTML tags from a string. */
@@ -18,6 +21,7 @@ export function CollectionCard({
   title,
   imageUrl,
   description,
+  showViewButton,
 }: CollectionCardProps) {
   const plainDescription = description ? stripHtml(description) : null;
   return (
@@ -39,9 +43,22 @@ export function CollectionCard({
             No image
           </div>
         )}
+
+        {showViewButton && (
+          <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-center bg-background p-2 opacity-0 transition-opacity duration-200 md:group-hover:opacity-100">
+            <span className="font-medium text-foreground text-sm">
+              View Collection
+            </span>
+          </div>
+        )}
       </div>
       <div className="py-4 flex flex-col gap-2">
-        <h2 className="font-medium text-sm md:text-xl group-hover:underline">
+        <h2
+          className={cn(
+            "font-medium text-sm md:text-xl",
+            !showViewButton && "group-hover:underline"
+          )}
+        >
           {title}
         </h2>
         {plainDescription ? (
