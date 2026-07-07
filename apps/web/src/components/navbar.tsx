@@ -1,7 +1,7 @@
 "use client";
 
 import { env } from "@workspace/env/client";
-import { ChevronDown, Search } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
@@ -15,6 +15,8 @@ import { MobileMenu } from "./mobile-menu";
 import { CollectionGroupDropdown } from "./nav/collection-group-dropdown";
 import { SavedItemsDrawer } from "./saved-items/saved-items-drawer";
 import { SavedItemsToggle } from "./saved-items/saved-items-toggle";
+import { SearchOverlay } from "./search/search-overlay";
+import { SearchToggle } from "./search/search-toggle";
 
 // Fetcher function
 const fetcher = async (url: string): Promise<NavigationData> => {
@@ -207,25 +209,13 @@ export function Navbar({
           {/* Desktop Actions */}
           <div className="hidden flex-1 items-center justify-end gap-4 md:flex">
             <SavedItemsToggle variant="text" />
-            <Link
-              aria-label="Search"
-              className="inline-flex size-9 items-center justify-center rounded-md transition-colors hover:text-foreground"
-              href="/search"
-            >
-              <Search className="size-4" />
-            </Link>
+            <SearchToggle />
             <CartToggle />
           </div>
 
           {/* Mobile Actions */}
           <div className="flex items-center gap-2 md:hidden">
-            <Link
-              aria-label="Search"
-              className="inline-flex size-9 items-center justify-center rounded-md transition-colors hover:text-foreground"
-              href="/search"
-            >
-              <Search className="size-4" />
-            </Link>
+            <SearchToggle />
             <SavedItemsToggle />
             <CartToggle />
             <MobileMenu navbarData={navbarData} settingsData={settingsData} />
@@ -242,6 +232,7 @@ export function Navbar({
 
       <CartDrawer />
       <SavedItemsDrawer />
+      <SearchOverlay />
     </header>
   );
 }

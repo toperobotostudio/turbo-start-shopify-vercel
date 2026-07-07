@@ -359,6 +359,137 @@ export const SEARCH_PRODUCTS_QUERY = /* graphql */ `
   }
 `;
 
+export const PREDICTIVE_SEARCH_QUERY = /* graphql */ `
+  query PredictiveSearch($query: String!, $limit: Int!) {
+    predictiveSearch(
+      query: $query
+      limit: $limit
+      limitScope: EACH
+      types: [PRODUCT, COLLECTION, QUERY]
+    ) {
+      products {
+        id
+        handle
+        title
+        vendor
+        productType
+        tags
+        options {
+          id
+          name
+          values
+        }
+        featuredImage {
+          url
+          altText
+          width
+          height
+        }
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+          maxVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+        compareAtPriceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+        variants(first: 100) {
+          edges {
+            node {
+              id
+              availableForSale
+              quantityAvailable
+              selectedOptions {
+                name
+                value
+              }
+            }
+          }
+        }
+      }
+      collections {
+        id
+        handle
+        title
+        image {
+          url
+          altText
+          width
+          height
+        }
+      }
+      queries {
+        text
+      }
+    }
+  }
+`;
+
+export const BEST_SELLING_PRODUCTS_QUERY = /* graphql */ `
+  query BestSellingProducts($first: Int!) {
+    products(first: $first, sortKey: BEST_SELLING) {
+      edges {
+        node {
+          id
+          handle
+          title
+          vendor
+          productType
+          tags
+          options {
+            id
+            name
+            values
+          }
+          featuredImage {
+            url
+            altText
+            width
+            height
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          compareAtPriceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          variants(first: 100) {
+            edges {
+              node {
+                id
+                availableForSale
+                quantityAvailable
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const PRODUCT_BY_ID_QUERY = /* graphql */ `
   query ProductById($id: ID!) {
     product(id: $id) {

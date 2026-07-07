@@ -6,6 +6,7 @@ import type { PropsWithChildren } from "react";
 
 import { CartProvider } from "./cart/cart-context";
 import { SavedItemsProvider } from "./saved-items/saved-items-context";
+import { SearchProvider } from "./search/search-context";
 
 const queryClient = new QueryClient();
 
@@ -14,15 +15,17 @@ export function Providers({ children }: PropsWithChildren) {
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <SavedItemsProvider>
-          <NextThemesProvider
-            attribute="class"
-            defaultTheme="system"
-            disableTransitionOnChange
-            enableColorScheme
-            enableSystem
-          >
-            {children}
-          </NextThemesProvider>
+          <SearchProvider>
+            <NextThemesProvider
+              attribute="class"
+              defaultTheme="system"
+              disableTransitionOnChange
+              enableColorScheme
+              enableSystem
+            >
+              {children}
+            </NextThemesProvider>
+          </SearchProvider>
         </SavedItemsProvider>
       </CartProvider>
     </QueryClientProvider>
