@@ -57,7 +57,6 @@ export function FeatureCardsWithIcon({
           {cards?.map((card, index) => (
             <FeatureCard
               card={card}
-
               index={index}
               key={`FeatureCard-${card?._key}-${index}`}
             />

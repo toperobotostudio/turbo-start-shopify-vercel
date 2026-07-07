@@ -12,11 +12,10 @@ type FilterVisibilityContextType = {
   toggle: () => void;
 };
 
-const FilterVisibilityContext =
-  createContext<FilterVisibilityContextType>({
-    showFilters: true,
-    toggle: () => {},
-  });
+const FilterVisibilityContext = createContext<FilterVisibilityContextType>({
+  showFilters: true,
+  toggle: () => {},
+});
 
 export function FilterVisibilityProvider({
   children,
@@ -26,7 +25,9 @@ export function FilterVisibilityProvider({
   const [showFilters, setShowFilters] = useState(true);
 
   return (
-    <FilterVisibilityContext value={{ showFilters, toggle: () => setShowFilters((p) => !p) }}>
+    <FilterVisibilityContext
+      value={{ showFilters, toggle: () => setShowFilters((p) => !p) }}
+    >
       {children}
     </FilterVisibilityContext>
   );
@@ -53,10 +54,7 @@ type CollectionLayoutProps = {
   children: React.ReactNode;
 };
 
-export function CollectionLayout({
-  filters,
-  children,
-}: CollectionLayoutProps) {
+export function CollectionLayout({ filters, children }: CollectionLayoutProps) {
   const { showFilters } = useContext(FilterVisibilityContext);
 
   return (

@@ -99,7 +99,10 @@ function LoadingState() {
       </div>
       <div className="grid grid-cols-1 gap-8">
         {LOADING_SKELETONS.map((id) => (
-          <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2" key={id}>
+          <div
+            className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2"
+            key={id}
+          >
             <div className="aspect-video animate-pulse bg-muted" />
             <div className="flex flex-col justify-center space-y-3">
               <div className="h-4 w-24 animate-pulse rounded bg-muted" />

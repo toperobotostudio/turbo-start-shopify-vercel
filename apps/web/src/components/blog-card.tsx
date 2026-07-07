@@ -116,13 +116,14 @@ export function BlogCard({ blog }: BlogCardProps) {
       )}
       <div className="flex flex-col justify-center gap-3">
         {publishedAt && (
-          <time className="text-xs text-muted-foreground" dateTime={publishedAt}>
+          <time
+            className="text-xs text-muted-foreground"
+            dateTime={publishedAt}
+          >
             {formatDate(publishedAt)}
           </time>
         )}
-        <h3 className="font-semibold text-lg leading-6">
-          {title}
-        </h3>
+        <h3 className="font-semibold text-lg leading-6">{title}</h3>
         <p className="line-clamp-2 text-muted-foreground text-sm leading-6">
           {description}
         </p>

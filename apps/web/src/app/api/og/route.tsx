@@ -113,9 +113,7 @@ const dominantColorSeoImageRender = ({
         {title}
       </h1>
       {description && (
-        <p tw="text-lg text-white">
-          {description.replace(/<[^>]*>/g, "")}
-        </p>
+        <p tw="text-lg text-white">{description.replace(/<[^>]*>/g, "")}</p>
       )}
       {_type && (
         <div
