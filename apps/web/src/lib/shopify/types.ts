@@ -177,6 +177,25 @@ export type SearchProductsResponse = {
   };
 };
 
+export type ShopifyCollectionLite = {
+  id: string;
+  handle: string;
+  title: string;
+  image: ShopifyImage | null;
+};
+
+export type PredictiveSearchResponse = {
+  predictiveSearch: {
+    products: ShopifyCollectionProduct[];
+    collections: ShopifyCollectionLite[];
+    queries: { text: string }[];
+  };
+};
+
+export type BestSellingProductsResponse = {
+  products: Connection<ShopifyCollectionProduct>;
+};
+
 export type FeaturedProduct = {
   id: string;
   handle: string;
