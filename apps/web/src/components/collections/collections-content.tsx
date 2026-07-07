@@ -10,6 +10,7 @@ import {
   type SortOption,
   sortCollections,
 } from "@/components/collections/collections-sort";
+import { sanityCollectionToCardProps } from "@/lib/collection-card";
 
 type CollectionsContentProps = {
   title: string;
@@ -45,11 +46,8 @@ function CollectionsGrid({
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
           {sorted.map((collection) => (
             <CollectionCard
-              description={collection.description}
-              handle={collection.slug ?? ""}
-              imageUrl={collection.imageUrl ?? null}
               key={collection._id}
-              title={collection.title ?? "Untitled"}
+              {...sanityCollectionToCardProps(collection)}
             />
           ))}
         </div>

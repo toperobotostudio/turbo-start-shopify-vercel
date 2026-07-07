@@ -1,14 +1,11 @@
-import { cn } from "@workspace/ui/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
-type CollectionCardProps = {
+export type CollectionCardProps = {
   handle: string;
   title: string;
   imageUrl: string | null;
   description?: string | null;
-  /** Show a "View Collection" bar that fades in on hover (mirrors the product card's add-to-cart bar). */
-  showViewButton?: boolean;
 };
 
 /** Strips HTML tags from a string. */
@@ -21,15 +18,14 @@ export function CollectionCard({
   title,
   imageUrl,
   description,
-  showViewButton,
 }: CollectionCardProps) {
   const plainDescription = description ? stripHtml(description) : null;
   return (
     <Link
-      className="group block overflow-hidden bg-card"
+      className="group block overflow-hidden"
       href={`/collections/${handle}`}
     >
-      <div className="relative aspect-square overflow-hidden bg-muted">
+      <div className="card-surface relative aspect-3/4 overflow-hidden">
         {imageUrl ? (
           <Image
             alt={title}
@@ -44,25 +40,17 @@ export function CollectionCard({
           </div>
         )}
 
-        {showViewButton && (
-          <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-center bg-background p-2 opacity-0 transition-opacity duration-200 md:group-hover:opacity-100">
-            <span className="font-medium text-foreground text-sm">
-              View Collection
-            </span>
-          </div>
-        )}
+        {/* "View Collection" bar — fades in on hover (mirrors the product card's add-to-cart bar). */}
+        <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-center bg-background p-2 opacity-0 transition-opacity duration-200 md:group-hover:opacity-100">
+          <span className="font-medium text-foreground text-sm">
+            View Collection
+          </span>
+        </div>
       </div>
-      <div className="py-4 flex flex-col gap-2">
-        <h2
-          className={cn(
-            "font-medium text-sm md:text-xl",
-            !showViewButton && "group-hover:underline"
-          )}
-        >
-          {title}
-        </h2>
+      <div className="flex flex-col gap-2 py-4">
+        <h2 className="font-medium text-sm md:text-xl">{title}</h2>
         {plainDescription ? (
-          <p className=" line-clamp-2 text-muted-foreground text-xs">
+          <p className="line-clamp-2 text-muted-foreground text-xs">
             {plainDescription}
           </p>
         ) : null}

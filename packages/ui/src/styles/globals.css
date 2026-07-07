@@ -8,7 +8,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
+  /* Page canvas is zinc-100 (not pure white); cards/popovers stay white to pop. */
+  --background: oklch(0.967 0.001 286.375);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
@@ -45,6 +46,10 @@
    * bottom matches the footer (--background, so it follows light/dark). */
   --color-overscroll-top: oklch(0.141 0.005 285.823);
   --color-overscroll-bottom: var(--background);
+  /* Card image surface: soft vertical gradient behind product/collection images
+   * (transparent product shots float on this). See `card-surface` utility. */
+  --card-surface-from: #c1c6c8;
+  --card-surface-to: #e2e5e9;
 }
 
 .dark {
@@ -80,6 +85,8 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+  /* Card image surface stays the same light gradient in dark mode too
+   * (--card-surface-* are inherited from :root; no override). */
 }
 
 @theme inline {
@@ -136,6 +143,16 @@
     padding-inline: 2rem;
   }
 } */
+
+/* Soft vertical gradient behind product/collection card images. Follows
+ * light/dark via the --card-surface-* tokens. */
+@utility card-surface {
+  background-image: linear-gradient(
+    to bottom,
+    var(--card-surface-from),
+    var(--card-surface-to)
+  );
+}
 
 @layer base {
   * {

@@ -8,16 +8,14 @@ import type { QueryCollectionByHandleResult } from "@workspace/sanity/types";
 import { notFound } from "next/navigation";
 
 import { ActiveFilters } from "@/components/collection/active-filters";
-import {
-  CollectionLayout,
-  FilterToggle,
-  FilterVisibilityProvider,
-} from "@/components/collection/collection-layout";
 import { CollectionModuleRenderer } from "@/components/collection/collection-module";
 import { CollectionProducts } from "@/components/collection/collection-products";
-import { FilterDrawer } from "@/components/collection/filter-drawer";
+import { FilterPanel } from "@/components/collection/filter-panel";
 import { parseFilterParams } from "@/components/collection/filter-utils";
-import { SortSelector } from "@/components/collection/sort-selector";
+import {
+  ListingControls,
+  ListingControlsProvider,
+} from "@/components/collection/listing-controls";
 import { parseSortParams } from "@/components/collection/sort-utils";
 import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
@@ -93,11 +91,9 @@ export default async function CollectionPage({
     }),
   ]);
 
-  if (
-    !sanityCollection ||
-    !shopifyResult.ok ||
-    !shopifyResult.data.collection
-  ) {
+  // The Shopify collection is required; the Sanity editorial doc is optional so
+  // a Shopify-only collection (e.g. the catch-all "all products") still renders.
+  if (!shopifyResult.ok || !shopifyResult.data.collection) {
     notFound();
   }
 
@@ -110,42 +106,36 @@ export default async function CollectionPage({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="font-normal font-(family-name:--font-geist-pixel-square) text-3xl md:text-4xl">
-          {shopifyCollection.title}
-        </h1>
+      <ListingControlsProvider>
+        <div className="flex items-start justify-between gap-4">
+          <h1 className="min-w-0 text-balance font-medium text-2xl tracking-tight md:text-[32px]">
+            {shopifyCollection.title}
+          </h1>
+          <ListingControls currentReverse={reverse} currentSort={sort} />
+        </div>
 
         {shopifyCollection.description && (
-          <p className="mt-2 text-muted-foreground">
+          <p className="mt-2 max-w-2xl text-muted-foreground">
             {shopifyCollection.description}
           </p>
         )}
-      </div>
 
-      <FilterVisibilityProvider>
-        <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <FilterDrawer filters={availableFilters} />
-            <FilterToggle />
-          </div>
-          <SortSelector currentReverse={reverse} currentSort={sort} />
+        <div className="mt-4 mb-6 flex flex-col gap-4">
+          <FilterPanel filters={availableFilters} />
+          <ActiveFilters />
         </div>
 
-        <ActiveFilters />
+        <CollectionProducts
+          handle={handle}
+          initialPageInfo={shopifyCollection.products.pageInfo}
+          initialProducts={products}
+          key={`${sort}-${reverse}-${filterKey}`}
+          reverse={reverse}
+          sort={sort}
+        />
+      </ListingControlsProvider>
 
-        <CollectionLayout filters={availableFilters}>
-          <CollectionProducts
-            handle={handle}
-            initialPageInfo={shopifyCollection.products.pageInfo}
-            initialProducts={products}
-            key={`${sort}-${reverse}-${filterKey}`}
-            reverse={reverse}
-            sort={sort}
-          />
-        </CollectionLayout>
-      </FilterVisibilityProvider>
-
-      {sanityCollection.modules && sanityCollection.modules.length > 0 && (
+      {sanityCollection?.modules && sanityCollection.modules.length > 0 && (
         <div className="mt-12">
           {sanityCollection.modules.map(
             (

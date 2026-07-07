@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { CollectionCard } from "@/components/collection/collection-card";
+import { shopifyCollectionToCardProps } from "@/lib/collection-card";
 import type {
   ShopifyCollectionLite,
   ShopifyCollectionProduct,
@@ -52,11 +53,8 @@ function CollectionsGrid({
     <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3">
       {collections.map((collection) => (
         <CollectionCard
-          handle={collection.handle}
-          imageUrl={collection.image?.url ?? null}
           key={collection.id}
-          showViewButton
-          title={collection.title}
+          {...shopifyCollectionToCardProps(collection)}
         />
       ))}
     </div>

@@ -1,7 +1,8 @@
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
+import { CollectionCard } from "@/components/collection/collection-card";
+import { sanityCollectionToCardProps } from "@/lib/collection-card";
 import type { SanityButtonProps } from "@/types";
 
 type Collection = {
@@ -18,34 +19,6 @@ type ExploreCategoriesProps = {
   buttons?: SanityButtonProps[] | null;
   collections?: Collection[] | null;
 };
-
-function CategoryCard({ collection }: { collection: Collection }) {
-  return (
-    <Link
-      className="group block"
-      href={`/collections/${collection.slug ?? ""}`}
-    >
-      <div className="relative aspect-square overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-        {collection.imageUrl ? (
-          <Image
-            alt={collection.title ?? "Collection"}
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            fill
-            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-            src={collection.imageUrl}
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
-            No image
-          </div>
-        )}
-      </div>
-      <p className="mt-3 text-sm font-medium md:text-base">
-        {collection.title}
-      </p>
-    </Link>
-  );
-}
 
 export function ExploreCategories({
   title,
@@ -76,7 +49,10 @@ export function ExploreCategories({
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
         {collections.map((collection) => (
-          <CategoryCard collection={collection} key={collection._id} />
+          <CollectionCard
+            key={collection._id}
+            {...sanityCollectionToCardProps(collection)}
+          />
         ))}
       </div>
     </section>

@@ -91,7 +91,7 @@ function ProductCardMini({
       href={`/products/${slug}`}
     >
       {imageUrl ? (
-        <div className="relative size-12 shrink-0 overflow-hidden border">
+        <div className="card-surface relative size-12 shrink-0 overflow-hidden border">
           <Image
             alt={title}
             className="object-cover"
@@ -101,7 +101,7 @@ function ProductCardMini({
           />
         </div>
       ) : (
-        <div className="size-12 shrink-0 border bg-muted" />
+        <div className="card-surface size-12 shrink-0 border" />
       )}
       <div className="min-w-0">
         <p className="truncate font-medium text-sm">{title}</p>
@@ -334,7 +334,7 @@ export function ProductCard({
 
   return (
     <div className="group relative">
-      <div className="relative aspect-3/4 overflow-hidden bg-muted">
+      <div className="card-surface relative aspect-3/4 overflow-hidden">
         <Link aria-label={title} className="block size-full" href={href}>
           {imageUrl ? (
             <Image
