@@ -48,7 +48,7 @@ export function VariantSelector({
   if (options.length === 0) return null;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       {options.map((option) => {
         const availability = getOptionAvailability(
           variants,
@@ -60,13 +60,9 @@ export function VariantSelector({
 
         return (
           <div key={option.id}>
-            <p className="my-6 text-sm">
+            <p className="mb-2 text-foreground text-sm">
               {option.name}
-              {selected && (
-                <>
-                  : <span className="font-semibold">{selected}</span>
-                </>
-              )}
+              {selected && <>: {selected}</>}
             </p>
 
             {optionType === "color" ? (
@@ -84,7 +80,7 @@ export function VariantSelector({
                 values={option.values}
               />
             ) : (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 {option.values.map((value) => {
                   const isAvailable = availability[value] !== false;
                   const isSelected = selected === value;
@@ -92,10 +88,10 @@ export function VariantSelector({
                   return (
                     <button
                       className={cn(
-                        "border px-4 py-2 text-sm transition-colors",
+                        "border-b px-1 pb-0.5 text-xs tracking-wide transition-colors",
                         isSelected
                           ? "border-foreground text-foreground"
-                          : "border-border text-foreground hover:border-foreground/50",
+                          : "border-transparent text-muted-foreground hover:text-foreground",
                         !isAvailable && "opacity-40"
                       )}
                       key={value}
