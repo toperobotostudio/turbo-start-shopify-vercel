@@ -1,3 +1,6 @@
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+
 import { storefrontQuery } from "@/lib/shopify/client";
 import { collectionProductToCardProps } from "@/lib/shopify/product-card";
 import type { ShopifyCollectionProduct } from "@/lib/shopify/types";
@@ -22,6 +25,16 @@ const RELATED_PRODUCTS_QUERY = /* graphql */ `
         altText
         width
         height
+      }
+      images(first: 2) {
+        edges {
+          node {
+            url
+            altText
+            width
+            height
+          }
+        }
       }
       priceRange {
         minVariantPrice {
@@ -78,9 +91,18 @@ export async function RelatedProducts({ productId }: RelatedProductsProps) {
 
   return (
     <section className="mt-16">
-      <h2 className="mb-6 font-medium font-(family-name:--font-geist-pixel-square) text-3xl">
-        Related Products
-      </h2>
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <h2 className="font-medium text-2xl tracking-tight md:text-3xl">
+          Related Products
+        </h2>
+        <Link
+          className="flex shrink-0 items-center gap-1 text-muted-foreground text-sm transition-colors hover:text-foreground"
+          href="/collections"
+        >
+          Shop All
+          <ArrowRight className="size-4" />
+        </Link>
+      </div>
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
         {products.map((product) => (
           <ProductCard

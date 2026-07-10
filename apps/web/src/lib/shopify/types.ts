@@ -18,6 +18,13 @@ export type ShopifyProductOption = {
   values: string[];
 };
 
+export type ShopifyMetafield = {
+  key: string;
+  namespace: string;
+  value: string;
+  type: string;
+};
+
 export type SelectedOption = {
   name: string;
   value: string;
@@ -49,6 +56,8 @@ export type ShopifyProduct = {
   images: Connection<ShopifyImage>;
   seo: { title: string | null; description: string | null };
   featuredImage: ShopifyImage | null;
+  /** Positional array matching the `identifiers` order in PRODUCT_QUERY. */
+  metafields: (ShopifyMetafield | null)[];
 };
 
 export type ShopifyCollectionProduct = {
@@ -60,6 +69,8 @@ export type ShopifyCollectionProduct = {
   tags: string[];
   options: ShopifyProductOption[];
   featuredImage: ShopifyImage | null;
+  /** First two images, used for the hover cross-fade on product cards. */
+  images?: Connection<ShopifyImage>;
   priceRange: {
     minVariantPrice: MoneyV2;
     maxVariantPrice: MoneyV2;
@@ -212,6 +223,8 @@ export type FeaturedProduct = {
     >
   >;
   featuredImage: ShopifyImage | null;
+  /** First two images, used for the hover cross-fade on product cards. */
+  images?: Connection<ShopifyImage>;
   priceRange: {
     minVariantPrice: MoneyV2;
     maxVariantPrice: MoneyV2;

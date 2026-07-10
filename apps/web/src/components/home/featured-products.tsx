@@ -9,7 +9,10 @@ import {
 import { storefrontQuery } from "@/lib/shopify/client";
 import { getColorHex } from "@/lib/shopify/color";
 import { getCardOptions } from "@/lib/shopify/options";
-import { badgeFromTags } from "@/lib/shopify/product-card";
+import {
+  badgeFromTags,
+  secondaryImageUrl,
+} from "@/lib/shopify/product-card";
 import { FEATURED_PRODUCTS_QUERY } from "@/lib/shopify/queries";
 import {
   type FeaturedProduct,
@@ -80,6 +83,10 @@ export async function FeaturedProducts() {
               currencyCode={product.priceRange.minVariantPrice.currencyCode}
               imageUrl={product.featuredImage?.url ?? null}
               key={product.id}
+              secondaryImageUrl={secondaryImageUrl(
+                product.images,
+                product.featuredImage?.url ?? null
+              )}
               priceRange={{
                 minVariantPrice: Number(
                   product.priceRange.minVariantPrice.amount

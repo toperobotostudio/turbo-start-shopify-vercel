@@ -25,6 +25,8 @@ export type ProductCardProps = {
   priceRange: { minVariantPrice: number; maxVariantPrice: number };
   currencyCode?: string;
   imageUrl: string | null;
+  /** Second image, cross-faded in on hover. */
+  secondaryImageUrl?: string | null;
   vendor?: string | null;
   /** Color/variant name shown under the title (e.g. "Navy"). */
   variantName?: string | null;
@@ -284,12 +286,63 @@ function AddToCartBar({
   );
 }
 
+const CARD_IMAGE_SIZES =
+  "(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw";
+
+/** Card image with an optional second image cross-faded in on hover. */
+function CardImage({
+  imageUrl,
+  secondaryImageUrl,
+  title,
+}: {
+  imageUrl: string | null;
+  secondaryImageUrl?: string | null;
+  title: string;
+}) {
+  if (!imageUrl) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
+        No image
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Image
+        alt={title}
+        className={cn(
+          "object-cover",
+          // Morph on hover: outgoing image zooms in (1 → 1.05) as it fades out.
+          // Broad `transition` so Tailwind v4's `scale` property animates too.
+          secondaryImageUrl &&
+            "transition duration-200 ease-in-out group-hover:scale-105 group-hover:opacity-0"
+        )}
+        fill
+        sizes={CARD_IMAGE_SIZES}
+        src={imageUrl}
+      />
+      {secondaryImageUrl && (
+        <Image
+          alt={title}
+          // Incoming image settles from 1.05 → 1 as it fades in.
+          className="scale-105 object-cover opacity-0 transition duration-200 ease-in-out group-hover:scale-100 group-hover:opacity-100"
+          fill
+          sizes={CARD_IMAGE_SIZES}
+          src={secondaryImageUrl}
+        />
+      )}
+    </>
+  );
+}
+
 export function ProductCard({
   slug,
   title,
   priceRange,
   currencyCode,
   imageUrl,
+  secondaryImageUrl,
   vendor,
   variantName,
   badge,
@@ -336,19 +389,11 @@ export function ProductCard({
     <div className="group relative">
       <div className="card-surface relative aspect-3/4 overflow-hidden">
         <Link aria-label={title} className="block size-full" href={href}>
-          {imageUrl ? (
-            <Image
-              alt={title}
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              fill
-              sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-              src={imageUrl}
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
-              No image
-            </div>
-          )}
+          <CardImage
+            imageUrl={imageUrl}
+            secondaryImageUrl={secondaryImageUrl}
+            title={title}
+          />
         </Link>
 
         <CardFlags badge={badge} stockStatus={stockStatus} />

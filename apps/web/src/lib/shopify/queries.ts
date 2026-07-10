@@ -51,6 +51,19 @@ const PRODUCT_FIELDS_FRAGMENT = /* graphql */ `
       width
       height
     }
+    metafields(
+      identifiers: [
+        { namespace: "custom", key: "details" }
+        { namespace: "custom", key: "fit_sizing" }
+        { namespace: "custom", key: "materials" }
+        { namespace: "custom", key: "shipping" }
+      ]
+    ) {
+      key
+      namespace
+      value
+      type
+    }
   }
 `;
 
@@ -137,6 +150,16 @@ export const COLLECTION_QUERY = /* graphql */ `
               altText
               width
               height
+            }
+            images(first: 2) {
+              edges {
+                node {
+                  url
+                  altText
+                  width
+                  height
+                }
+              }
             }
             priceRange {
               minVariantPrice {
@@ -262,6 +285,16 @@ export const FEATURED_PRODUCTS_QUERY = /* graphql */ `
             width
             height
           }
+          images(first: 2) {
+            edges {
+              node {
+                url
+                altText
+                width
+                height
+              }
+            }
+          }
           priceRange {
             minVariantPrice {
               amount
@@ -328,6 +361,16 @@ export const SEARCH_PRODUCTS_QUERY = /* graphql */ `
               width
               height
             }
+            images(first: 2) {
+              edges {
+                node {
+                  url
+                  altText
+                  width
+                  height
+                }
+              }
+            }
             priceRange {
               minVariantPrice {
                 amount
@@ -384,6 +427,16 @@ export const PREDICTIVE_SEARCH_QUERY = /* graphql */ `
           altText
           width
           height
+        }
+        images(first: 2) {
+          edges {
+            node {
+              url
+              altText
+              width
+              height
+            }
+          }
         }
         priceRange {
           minVariantPrice {
@@ -454,6 +507,16 @@ export const BEST_SELLING_PRODUCTS_QUERY = /* graphql */ `
             altText
             width
             height
+          }
+          images(first: 2) {
+            edges {
+              node {
+                url
+                altText
+                width
+                height
+              }
+            }
           }
           priceRange {
             minVariantPrice {
@@ -555,6 +618,16 @@ export const PRODUCT_BY_HANDLE_QUERY = /* graphql */ `
         altText
         width
         height
+      }
+      images(first: 2) {
+        edges {
+          node {
+            url
+            altText
+            width
+            height
+          }
+        }
       }
       priceRange {
         minVariantPrice {

@@ -21,16 +21,16 @@ export function PriceDisplay({ price, compareAtPrice }: PriceDisplayProps) {
     : 0;
 
   return (
-    <div className="flex flex-col gap-6 md:gap-8">
+    <div className="flex flex-col gap-2">
       {isOnSale && savePercent > 0 && (
-        <span className="inline-block bg-red-600 w-fit px-2 py-1 text-white text-sm uppercase">
+        <span className="inline-block w-fit bg-red-600 px-2 py-1 text-sm text-white uppercase">
           Save {savePercent}%
         </span>
       )}
       <div className="flex items-center gap-3">
-        <span className="text-4xl">{formatMoney(price)}</span>
+        <span className="text-xl">{formatMoney(price)}</span>
         {isOnSale && compareAtPrice && (
-          <span className="text-lg text-muted-foreground line-through">
+          <span className="text-base text-muted-foreground line-through">
             {formatMoney(compareAtPrice)}
           </span>
         )}
