@@ -8,12 +8,14 @@ import { useCallback, useMemo } from "react";
 
 import { CollectionBanner } from "./sections/collection-banner";
 import { CTABlock } from "./sections/cta";
+import { EditorialTwoUp } from "./sections/editorial-two-up";
 import { ExploreCategories } from "./sections/explore-categories";
 import { FaqAccordion } from "./sections/faq-accordion";
 import { FaqCategories } from "./sections/faq-categories";
 import { FeatureCardsWithIcon } from "./sections/feature-cards-with-icon";
 import { HeroBlock } from "./sections/hero";
 import { ImageLinkCards } from "./sections/image-link-cards";
+import { LayersShowcase } from "./sections/layers-showcase";
 import { SubscribeNewsletter } from "./sections/subscribe-newsletter";
 
 // More specific and descriptive type aliases
@@ -37,11 +39,13 @@ type SanityDataAttributeConfig = {
 const BLOCK_COMPONENTS: Record<string, React.ComponentType<any>> = {
   collectionBanner: CollectionBanner,
   cta: CTABlock,
+  editorialTwoUp: EditorialTwoUp,
   exploreCategories: ExploreCategories,
   faqAccordion: FaqAccordion,
   faqCategories: FaqCategories,
   hero: HeroBlock,
   featureCardsIcon: FeatureCardsWithIcon,
+  layersShowcase: LayersShowcase,
   subscribeNewsletter: SubscribeNewsletter,
   imageLinkCards: ImageLinkCards,
 };
