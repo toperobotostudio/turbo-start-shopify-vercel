@@ -1,5 +1,4 @@
 import { Button } from "@workspace/ui/components/button";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -24,7 +23,7 @@ import {
 async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
   const result = await storefrontQuery<FeaturedProductsResponse>(
     FEATURED_PRODUCTS_QUERY,
-    { variables: { first: 8 } }
+    { variables: { first: 4 } }
   );
 
   if (!result.ok) return [];
@@ -49,22 +48,17 @@ export async function FeaturedProducts() {
   if (products.length === 0) return null;
 
   return (
-    <section className="container mx-auto px-4 py-20 md:px-6 md:py-28">
-      <div className="mb-12 flex items-end justify-between md:mb-16">
-        <div>
-          <h2 className="font-light font-(family-name:--font-geist-pixel-square) text-3xl tracking-tight md:text-4xl">
-            Featured Products
-          </h2>
-        </div>
-        <Button asChild size="lg">
-          <Link href="/collections/all-products">
-            See all
-            <ArrowRight className="size-4" />
-          </Link>
+    <section className="container mx-auto px-4 py-12 md:px-6 md:py-20">
+      <div className="mb-8 flex items-end justify-between">
+        <h2 className="font-light font-(family-name:--font-geist-pixel-square) text-3xl tracking-tight md:text-4xl">
+          Featured Products
+        </h2>
+        <Button asChild size="sm" variant="default">
+          <Link href="/collections/all-products">Shop All</Link>
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
+      <div className="grid grid-cols-2 gap-1 md:grid-cols-4">
         {products.map((product) => {
           const { colors: colorNames, sizes } = getCardOptions(product.options);
           const colors = colorNames.map((name) => ({
@@ -107,12 +101,6 @@ export async function FeaturedProducts() {
             />
           );
         })}
-      </div>
-
-      <div className="mt-10 text-center md:hidden">
-        <Button asChild>
-          <Link href="/collections">View All</Link>
-        </Button>
       </div>
     </section>
   );

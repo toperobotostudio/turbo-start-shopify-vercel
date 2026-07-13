@@ -235,17 +235,45 @@ const featureCardsIconBlock = /* groq */ `
   }
 `;
 
+const editorialTwoUpBlock = /* groq */ `
+  _type == "editorialTwoUp" => {
+    ...,
+    "items": array::compact(items[]{
+      ...,
+      swatchColor,
+      "collectionTitle": collection->store.title,
+      "collectionImage": collection->store.imageUrl,
+      "collectionHref": select(
+        defined(collection) => "/collections/" + collection->store.slug.current,
+        null
+      ),
+    })
+  }
+`;
+
+const layersShowcaseBlock = /* groq */ `
+  _type == "layersShowcase" => {
+    ...,
+    heading,
+    description,
+    "productHandle": product->store.slug.current,
+    "productTitle": product->store.title,
+  }
+`;
+
 const pageBuilderFragment = /* groq */ `
   pageBuilder[]{
     ...,
     _type,
     ${collectionBannerBlock},
     ${ctaBlock},
+    ${editorialTwoUpBlock},
     ${exploreCategoriesBlock},
     ${heroBlock},
     ${faqAccordionBlock},
     ${faqCategoriesBlock},
     ${featureCardsIconBlock},
+    ${layersShowcaseBlock},
     ${subscribeNewsletterBlock},
     ${imageLinkCardsBlock}
   }

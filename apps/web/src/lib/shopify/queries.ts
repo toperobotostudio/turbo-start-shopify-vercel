@@ -619,7 +619,7 @@ export const PRODUCT_BY_HANDLE_QUERY = /* graphql */ `
         width
         height
       }
-      images(first: 2) {
+      images(first: 8) {
         edges {
           node {
             url
