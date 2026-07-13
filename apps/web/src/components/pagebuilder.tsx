@@ -10,6 +10,7 @@ import { CollectionBanner } from "./sections/collection-banner";
 import { CTABlock } from "./sections/cta";
 import { ExploreCategories } from "./sections/explore-categories";
 import { FaqAccordion } from "./sections/faq-accordion";
+import { FaqCategories } from "./sections/faq-categories";
 import { FeatureCardsWithIcon } from "./sections/feature-cards-with-icon";
 import { HeroBlock } from "./sections/hero";
 import { ImageLinkCards } from "./sections/image-link-cards";
@@ -38,6 +39,7 @@ const BLOCK_COMPONENTS: Record<string, React.ComponentType<any>> = {
   cta: CTABlock,
   exploreCategories: ExploreCategories,
   faqAccordion: FaqAccordion,
+  faqCategories: FaqCategories,
   hero: HeroBlock,
   featureCardsIcon: FeatureCardsWithIcon,
   subscribeNewsletter: SubscribeNewsletter,

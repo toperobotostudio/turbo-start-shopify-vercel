@@ -185,6 +185,17 @@ const faqAccordionBlock = /* groq */ `
   }
 `;
 
+const faqCategoriesBlock = /* groq */ `
+  _type == "faqCategories" => {
+    ...,
+    categories[]{
+      _key,
+      title,
+      ${faqFragment}
+    }
+  }
+`;
+
 const subscribeNewsletterBlock = /* groq */ `
   _type == "subscribeNewsletter" => {
     ...,
@@ -233,6 +244,7 @@ const pageBuilderFragment = /* groq */ `
     ${exploreCategoriesBlock},
     ${heroBlock},
     ${faqAccordionBlock},
+    ${faqCategoriesBlock},
     ${featureCardsIconBlock},
     ${subscribeNewsletterBlock},
     ${imageLinkCardsBlock}
