@@ -1,13 +1,12 @@
 "use client";
 
 import { cn } from "@workspace/ui/lib/utils";
-import { Minus, Plus } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 
 import type { PagebuilderType } from "@/types";
-import { RichText } from "../elements/rich-text";
 import { FaqJsonLd } from "../json-ld";
+import { FaqEntry } from "./faq-entry";
 
 type FaqCategoriesProps = PagebuilderType<"faqCategories">;
 
@@ -94,24 +93,13 @@ export function FaqCategories({ title, categories }: FaqCategoriesProps) {
 
                   <div className="flex flex-col">
                     {(category?.faqs ?? []).map((faq, faqIndex) => (
-                      <motion.details
-                        className="group border-zinc-200 border-b first:border-t dark:border-zinc-800"
+                      <FaqEntry
+                        defaultOpen={faqIndex === 0}
                         key={faq?._id}
-                        open={faqIndex === 0}
-                        variants={itemVariants}
-                      >
-                        <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-3 text-sm text-zinc-900 marker:hidden dark:text-zinc-100 [&::-webkit-details-marker]:hidden">
-                          <span>{faq?.title}</span>
-                          <span className="shrink-0 text-zinc-500">
-                            <Plus className="size-4 group-open:hidden" />
-                            <Minus className="hidden size-4 group-open:block" />
-                          </span>
-                        </summary>
-                        <RichText
-                          className="pb-6 text-sm text-zinc-950 dark:text-zinc-50"
-                          richText={faq?.richText ?? []}
-                        />
-                      </motion.details>
+                        motionVariants={itemVariants}
+                        richText={faq?.richText}
+                        title={faq?.title}
+                      />
                     ))}
                   </div>
                 </motion.div>
