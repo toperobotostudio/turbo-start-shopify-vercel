@@ -981,6 +981,23 @@
             "value": "hero"
           }
         },
+        "style": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "classic"
+              },
+              {
+                "type": "string",
+                "value": "fullBleed"
+              }
+            ]
+          },
+          "optional": true
+        },
         "badge": {
           "type": "objectAttribute",
           "value": {

@@ -13,6 +13,20 @@ export const hero = defineType({
     "Eye-catching banner at the top of a page with a headline, description, image, and call-to-action buttons",
   fields: [
     defineField({
+      name: "style",
+      type: "string",
+      title: "Hero style",
+      description: "Layout variant for the hero section",
+      options: {
+        list: [
+          { title: "Classic (two-column)", value: "classic" },
+          { title: "Full bleed", value: "fullBleed" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "classic",
+    }),
+    defineField({
       name: "badge",
       type: "string",
       title: "Badge",
