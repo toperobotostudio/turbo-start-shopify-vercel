@@ -5,7 +5,6 @@ import {
 } from "@workspace/sanity/query";
 
 import { CollectionsContent } from "@/components/collections/collections-content";
-import { CollectionsHero } from "@/components/collections/collections-hero";
 import { getSEOMetadata } from "@/lib/seo";
 
 export async function generateMetadata() {
@@ -28,17 +27,10 @@ export default async function CollectionsPage() {
   ]);
 
   return (
-    <div className="flex flex-col gap-4 md:gap-8">
-      <CollectionsHero
-        buttons={indexData?.buttons ?? null}
-        heroImage={indexData?.heroImage ?? null}
-        heroTitle={indexData?.heroTitle ?? null}
-      />
-      <CollectionsContent
-        collections={collections ?? []}
-        subtitle={indexData?.subtitle ?? null}
-        title={indexData?.title ?? "Collections"}
-      />
-    </div>
+    <CollectionsContent
+      collections={collections ?? []}
+      subtitle={indexData?.subtitle ?? null}
+      title={indexData?.title ?? "Collections"}
+    />
   );
 }
