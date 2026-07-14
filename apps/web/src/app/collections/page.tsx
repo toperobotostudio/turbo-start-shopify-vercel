@@ -5,7 +5,9 @@ import {
 } from "@workspace/sanity/query";
 
 import { CollectionsContent } from "@/components/collections/collections-content";
+import { BreadcrumbJsonLd, CollectionJsonLd } from "@/components/json-ld";
 import { getSEOMetadata } from "@/lib/seo";
+import { getBaseUrl } from "@/utils";
 
 export async function generateMetadata() {
   const { data } = await sanityFetch({
@@ -26,11 +28,29 @@ export default async function CollectionsPage() {
     sanityFetch({ query: queryAllCollections }),
   ]);
 
+  const baseUrl = getBaseUrl();
+  const title = indexData?.title ?? "Collections";
+  const allCollections = collections ?? [];
+
   return (
-    <CollectionsContent
-      collections={collections ?? []}
-      subtitle={indexData?.subtitle ?? null}
-      title={indexData?.title ?? "Collections"}
-    />
+    <>
+      <BreadcrumbJsonLd
+        items={[{ name: "Home", url: baseUrl }, { name: title }]}
+      />
+      <CollectionJsonLd
+        description={indexData?.subtitle ?? null}
+        items={allCollections.map((c) => ({
+          name: c.title ?? "",
+          ...(c.slug ? { url: `${baseUrl}/collections/${c.slug}` } : {}),
+        }))}
+        name={title}
+        url={`${baseUrl}/collections`}
+      />
+      <CollectionsContent
+        collections={allCollections}
+        subtitle={indexData?.subtitle ?? null}
+        title={title}
+      />
+    </>
   );
 }

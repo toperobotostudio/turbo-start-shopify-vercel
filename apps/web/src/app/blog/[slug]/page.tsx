@@ -8,8 +8,9 @@ import { BlogAuthor } from "@/components/blog-card";
 import { RichText } from "@/components/elements/rich-text";
 import { SanityImage } from "@/components/elements/sanity-image";
 import { TableOfContent } from "@/components/elements/table-of-content";
-import { ArticleJsonLd } from "@/components/json-ld";
+import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
 import { getSEOMetadata } from "@/lib/seo";
+import { getBaseUrl } from "@/utils";
 
 const logger = new Logger("BlogSlug");
 
@@ -80,9 +81,18 @@ export default async function BlogSlugPage({
   const { title, description, image, richText, authors, publishedAt } =
     data ?? {};
 
+  const baseUrl = getBaseUrl();
+
   return (
     <div className="container mx-auto px-4 md:px-6 py-16 max-w-7xl">
       <ArticleJsonLd article={data} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: baseUrl },
+          { name: "Blog", url: `${baseUrl}/blog` },
+          { name: title ?? "" },
+        ]}
+      />
 
       {/* Hero header — full width, centered */}
       <header className="mb-12 max-w-3xl mx-auto text-center">

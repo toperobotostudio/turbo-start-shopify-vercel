@@ -17,10 +17,12 @@ import {
   ListingControlsProvider,
 } from "@/components/collection/listing-controls";
 import { parseSortParams } from "@/components/collection/sort-utils";
+import { BreadcrumbJsonLd, CollectionJsonLd } from "@/components/json-ld";
 import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
 import { COLLECTION_QUERY } from "@/lib/shopify/queries";
 import type { CollectionQueryResponse } from "@/lib/shopify/types";
+import { getBaseUrl } from "@/utils";
 
 type PageProps = {
   params: Promise<{ handle: string }>;
@@ -104,8 +106,26 @@ export default async function CollectionPage({
   // Build a stable key that includes filters so components re-mount on filter change
   const filterKey = JSON.stringify(filters);
 
+  const baseUrl = getBaseUrl();
+
   return (
     <div className="container mx-auto px-4 py-8">
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: baseUrl },
+          { name: "Collections", url: `${baseUrl}/collections` },
+          { name: shopifyCollection.title },
+        ]}
+      />
+      <CollectionJsonLd
+        description={shopifyCollection.description}
+        items={products.map((p) => ({
+          name: p.title,
+          url: `${baseUrl}/products/${p.handle}`,
+        }))}
+        name={shopifyCollection.title}
+        url={`${baseUrl}/collections/${handle}`}
+      />
       <ListingControlsProvider>
         <div className="flex items-start justify-between gap-4">
           <h1 className="min-w-0 text-balance font-medium text-2xl tracking-tight md:text-[32px]">
