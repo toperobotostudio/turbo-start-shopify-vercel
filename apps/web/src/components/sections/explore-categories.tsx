@@ -30,7 +30,7 @@ export function ExploreCategories({
   return (
     <section className="container mx-auto px-4 md:px-6">
       <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
-        <h2 className="font-normal font-(family-name:--font-geist-pixel-square) text-3xl tracking-tight md:text-4xl">
+        <h2 className="font-normal text-3xl tracking-tight md:text-4xl">
           {title}
         </h2>
         {buttons?.map((button) =>

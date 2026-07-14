@@ -72,7 +72,7 @@ export function FeaturedBlogCard({ blog }: BlogCardProps) {
           )}
           <BlogAuthor author={authors} />
         </div>
-        <h2 className="font-semibold text-2xl leading-tight font-(family-name:--font-geist-pixel-square)">
+        <h2 className="font-semibold text-2xl leading-tight">
           {title}
         </h2>
         <p className="text-muted-foreground text-sm leading-6">{description}</p>
@@ -143,7 +143,7 @@ export function BlogHeader({
   return (
     <div className="flex w-full flex-col items-center">
       <div className="flex flex-col items-center space-y-4 text-center sm:space-y-6">
-        <h1 className="font-semibold text-4xl md:text-5xl font-(family-name:--font-geist-pixel-square)">
+        <h1 className="font-semibold text-4xl md:text-5xl">
           {title}
         </h1>
         <p className="max-w-3xl text-balance text-base text-muted-foreground md:text-lg">

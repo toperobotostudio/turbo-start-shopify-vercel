@@ -96,7 +96,7 @@ export default async function BlogSlugPage({
 
       {/* Hero header — full width, centered */}
       <header className="mb-12 max-w-3xl mx-auto text-center">
-        <h1 className="font-semibold text-4xl md:text-5xl leading-tight tracking-tight font-(family-name:--font-geist-pixel-square) mb-4">
+        <h1 className="font-semibold text-4xl md:text-5xl leading-tight tracking-tight mb-4">
           {title}
         </h1>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">

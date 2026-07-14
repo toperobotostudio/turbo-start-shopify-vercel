@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="container mx-auto flex h-screen flex-col items-center justify-center px-4">
-      <p className="select-none font-(family-name:--font-geist-pixel-square) text-[10rem] leading-none text-foreground md:text-[14rem] lg:text-[24rem]">
+      <p className="select-none text-[10rem] leading-none text-foreground md:text-[14rem] lg:text-[24rem]">
         404
       </p>
       <div className="flex flex-col items-center gap-4">

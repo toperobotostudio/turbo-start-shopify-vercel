@@ -13,7 +13,7 @@ export function FaqAccordion({ title, faqs, link }: FaqAccordionProps) {
       <FaqJsonLd faqs={faqs} />
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center">
-          <h2 className="mb-10 font-normal font-(family-name:--font-geist-pixel-square) text-3xl md:text-4xl">
+          <h2 className="mb-10 font-normal text-3xl md:text-4xl">
             {title}
           </h2>
         </div>
