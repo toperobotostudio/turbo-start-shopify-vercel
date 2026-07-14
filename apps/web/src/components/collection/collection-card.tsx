@@ -5,21 +5,9 @@ export type CollectionCardProps = {
   handle: string;
   title: string;
   imageUrl: string | null;
-  description?: string | null;
 };
 
-/** Strips HTML tags from a string. */
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, "").trim();
-}
-
-export function CollectionCard({
-  handle,
-  title,
-  imageUrl,
-  description,
-}: CollectionCardProps) {
-  const plainDescription = description ? stripHtml(description) : null;
+export function CollectionCard({ handle, title, imageUrl }: CollectionCardProps) {
   return (
     <Link
       className="group block overflow-hidden"
@@ -31,7 +19,7 @@ export function CollectionCard({
             alt={title}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             fill
-            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+            sizes="(min-width: 768px) 33vw, 50vw"
             src={imageUrl}
           />
         ) : (
@@ -47,13 +35,8 @@ export function CollectionCard({
           </span>
         </div>
       </div>
-      <div className="flex flex-col gap-2 py-4">
-        <h2 className="font-medium text-sm md:text-xl">{title}</h2>
-        {plainDescription ? (
-          <p className="line-clamp-2 text-muted-foreground text-xs">
-            {plainDescription}
-          </p>
-        ) : null}
+      <div className="px-1 pt-2">
+        <h2 className="font-medium text-base text-foreground">{title}</h2>
       </div>
     </Link>
   );

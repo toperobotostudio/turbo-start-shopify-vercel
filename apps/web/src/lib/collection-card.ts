@@ -3,13 +3,12 @@ import type { ShopifyCollectionLite } from "@/lib/shopify/types";
 
 /**
  * Sanity-shaped collection (collections index, explore-categories block).
- * Only the fields the card needs; `description` is optional.
+ * Only the fields the card needs.
  */
 type SanityCollectionLike = {
   slug?: string | null;
   title?: string | null;
   imageUrl?: string | null;
-  description?: string | null;
 };
 
 /** Map a Sanity collection document into CollectionCard props. */
@@ -20,7 +19,6 @@ export function sanityCollectionToCardProps(
     handle: collection.slug ?? "",
     title: collection.title ?? "Untitled",
     imageUrl: collection.imageUrl ?? null,
-    description: collection.description ?? null,
   };
 }
 

@@ -28,10 +28,10 @@ function CollectionsGrid({
   const sorted = sortCollections(collections, sort);
 
   return (
-    <div className="container mx-auto  px-4 py-12">
-      <div className="mb-8 flex items-center md:items-end justify-between gap-4">
-        <div className="w-6/12 md:max-w-2xl">
-          <h2 className="font-semibold font-(family-name:--font-geist-pixel-square) text-3xl">
+    <div className="container mx-auto px-4 py-12 md:px-6">
+      <div className="mb-8 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="font-medium text-2xl tracking-tight md:text-[32px]">
             {title}
           </h2>
           {subtitle ? (
@@ -43,7 +43,7 @@ function CollectionsGrid({
       {sorted.length === 0 ? (
         <p className="text-muted-foreground">No collections found.</p>
       ) : (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
+        <div className="grid grid-cols-2 gap-x-1 gap-y-10 md:grid-cols-3">
           {sorted.map((collection) => (
             <CollectionCard
               key={collection._id}
