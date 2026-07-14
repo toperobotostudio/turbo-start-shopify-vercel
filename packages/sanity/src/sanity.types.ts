@@ -153,6 +153,7 @@ export type ImageLinkCards = {
 
 export type Hero = {
   _type: "hero";
+  style?: "classic" | "fullBleed";
   badge?: string;
   title?: string;
   richText?: Array<{
@@ -2107,6 +2108,7 @@ export type QueryHomePageDataResult = {
     | {
         _key: string;
         _type: "hero";
+        style?: "classic" | "fullBleed";
         badge?: string;
         title?: string;
         richText: Array<{
@@ -2596,6 +2598,7 @@ export type QuerySlugPageDataResult = {
     | {
         _key: string;
         _type: "hero";
+        style?: "classic" | "fullBleed";
         badge?: string;
         title?: string;
         richText: Array<{
@@ -3085,6 +3088,7 @@ export type QueryBlogIndexPageDataResult = {
     | {
         _key: string;
         _type: "hero";
+        style?: "classic" | "fullBleed";
         badge?: string;
         title?: string;
         richText: Array<{
@@ -4100,6 +4104,7 @@ export type QueryCollectionByHandleResult = {
   showHero: boolean | null;
   hero: {
     _type: "hero";
+    style?: "classic" | "fullBleed";
     badge?: string;
     title?: string;
     richText: Array<{
