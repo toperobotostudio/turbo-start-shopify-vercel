@@ -8,10 +8,12 @@ import { notFound } from "next/navigation";
 
 import { BlogHeader } from "@/components/blog-card";
 import { BlogPageContent } from "@/components/blog-page-content";
+import { BreadcrumbJsonLd } from "@/components/json-ld";
 import { PageBuilder } from "@/components/pagebuilder";
 import { getSEOMetadata } from "@/lib/seo";
 import {
   calculatePaginationMetadata,
+  getBaseUrl,
   getBlogPaginationStartEnd,
   handleErrors,
 } from "@/utils";
@@ -139,11 +141,18 @@ export default async function BlogIndexPage({ searchParams }: BlogPageProps) {
     );
   }
 
+  const baseUrl = getBaseUrl();
+
   return (
-    <BlogPageContent
-      blogs={blogs}
-      indexPageData={indexPageData}
-      paginationMetadata={paginationMetadata}
-    />
+    <>
+      <BreadcrumbJsonLd
+        items={[{ name: "Home", url: baseUrl }, { name: "Blog" }]}
+      />
+      <BlogPageContent
+        blogs={blogs}
+        indexPageData={indexPageData}
+        paginationMetadata={paginationMetadata}
+      />
+    </>
   );
 }

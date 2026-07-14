@@ -7,6 +7,8 @@ import {
 import { notFound } from "next/navigation";
 import sanitizeHtml from "sanitize-html";
 
+import { BreadcrumbJsonLd } from "@/components/json-ld";
+import { PriceDisplay } from "@/components/product/price-display";
 import {
   type AccordionSection,
   ProductAccordion,
@@ -14,7 +16,6 @@ import {
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductJsonLd } from "@/components/product/product-json-ld";
 import { ProductPurchase } from "@/components/product/product-purchase";
-import { PriceDisplay } from "@/components/product/price-display";
 import { RelatedProducts } from "@/components/product/related-products";
 import { VariantSelector } from "@/components/product/variant-selector";
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
@@ -29,6 +30,7 @@ import {
   type ShopifyVariant,
 } from "@/lib/shopify/types";
 import { findVariantByOptions } from "@/lib/shopify/variant-utils";
+import { getBaseUrl } from "@/utils";
 
 /** Builds the PDP accordion from the Shopify description + `custom.*` metafields. */
 function buildAccordionSections(product: ShopifyProduct): AccordionSection[] {
@@ -176,9 +178,18 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   // Accordion content: Shopify description + `custom.*` metafields.
   const accordionSections = buildAccordionSections(shopifyProduct);
 
+  const baseUrl = getBaseUrl();
+
   return (
     <>
       <ProductJsonLd handle={handle} product={shopifyProduct} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: baseUrl },
+          { name: "Collections", url: `${baseUrl}/collections` },
+          { name: title },
+        ]}
+      />
       <div className="container mx-auto px-4 py-8 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,760px)]">
           {/* Info column — sticky on desktop, uniform 32px rhythm */}
