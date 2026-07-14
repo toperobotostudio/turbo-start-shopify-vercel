@@ -43,7 +43,7 @@ export function CollectionBanner({
               {eyebrow}
             </p>
           )}
-          <h2 className="max-w-lg text-3xl font-light font-(family-name:--font-geist-pixel-square) tracking-tight md:text-5xl">
+          <h2 className="max-w-lg text-3xl font-light tracking-tight md:text-5xl">
             {title}
           </h2>
           {description && (

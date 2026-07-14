@@ -43,7 +43,7 @@ function ClassicHero({
           <div className="grid h-full grid-rows-[auto_1fr_auto] items-center justify-items-center gap-4 text-center lg:items-start lg:justify-items-start lg:text-left">
             {badge && <Badge variant="secondary">{badge}</Badge>}
             <div className="grid gap-4">
-              <h1 className="text-balance font-semibold text-4xl font-(family-name:--font-geist-pixel-square) lg:text-6xl">
+              <h1 className="text-balance font-semibold text-4xl lg:text-6xl">
                 {title}
               </h1>
               <RichText

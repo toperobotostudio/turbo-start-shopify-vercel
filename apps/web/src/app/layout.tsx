@@ -1,8 +1,6 @@
 import "@workspace/ui/globals.css";
 
 import { SanityLive } from "@workspace/sanity/live";
-import { GeistMono } from "geist/font/mono";
-import { GeistPixelSquare } from "geist/font/pixel";
 import { GeistSans } from "geist/font/sans";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -18,8 +16,6 @@ import { Providers } from "@/components/providers";
 import { getNavigationData } from "@/lib/navigation";
 
 const fontSans = GeistSans;
-const fontMono = GeistMono;
-const fontPixel = GeistPixelSquare;
 
 export default async function RootLayout({
   children,
@@ -32,7 +28,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${fontSans.variable} ${fontMono.variable} ${fontPixel.variable} font-sans antialiased`}
+        className={`${fontSans.variable} font-sans antialiased`}
       >
         <Providers>
           <div className="flex min-h-screen flex-col">
