@@ -370,10 +370,11 @@ const ogFieldsFragment = /* groq */ `
     defined(seoDescription) => seoDescription,
     description
   ),
-  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",
+  "image": image.asset->url + "?w=1200&h=630&dpr=2&fit=crop",
   "dominantColor": image.asset->metadata.palette.dominant.background,
-  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", 
+  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",
   "logo": *[_type == "settings"][0].logo.asset->url + "?w=80&h=40&dpr=3&fit=max&q=100",
+  "siteTitle": *[_type == "settings"][0].siteTitle,
   "date": coalesce(date, _createdAt)
 `;
 
@@ -414,12 +415,15 @@ export const queryProductOGData = defineQuery(`
       store.descriptionHtml
     ),
     "image": select(
-      defined(seo.image.asset) => seo.image.asset->url + "?w=566&h=566&dpr=2&fit=max",
+      defined(seo.image.asset) => seo.image.asset->url + "?w=1200&h=630&dpr=2&fit=crop",
       defined(store.previewImageUrl) => store.previewImageUrl
     ),
+    "price": store.priceRange.minVariantPrice,
+    "colors": store.options[]{ name, values },
     "dominantColor": seo.image.asset->metadata.palette.dominant.background,
     "seoImage": seo.image.asset->url + "?w=1200&h=630&dpr=2&fit=max",
     "logo": *[_type == "settings"][0].logo.asset->url + "?w=80&h=40&dpr=3&fit=max&q=100",
+    "siteTitle": *[_type == "settings"][0].siteTitle,
     "date": coalesce(store.createdAt, _createdAt)
   }
 `);
@@ -437,8 +441,8 @@ export const queryCollectionOGData = defineQuery(`
       store.descriptionHtml
     ),
     "image": select(
-      defined(seo.image.asset) => seo.image.asset->url + "?w=566&h=566&dpr=2&fit=max",
-      defined(hero.image.asset) => hero.image.asset->url + "?w=566&h=566&dpr=2&fit=max",
+      defined(seo.image.asset) => seo.image.asset->url + "?w=1200&h=630&dpr=2&fit=crop",
+      defined(hero.image.asset) => hero.image.asset->url + "?w=1200&h=630&dpr=2&fit=crop",
       defined(store.imageUrl) => store.imageUrl
     ),
     "dominantColor": coalesce(
@@ -447,6 +451,7 @@ export const queryCollectionOGData = defineQuery(`
     ),
     "seoImage": seo.image.asset->url + "?w=1200&h=630&dpr=2&fit=max",
     "logo": *[_type == "settings"][0].logo.asset->url + "?w=80&h=40&dpr=3&fit=max&q=100",
+    "siteTitle": *[_type == "settings"][0].siteTitle,
     "date": coalesce(store.createdAt, _createdAt)
   }
 `);
