@@ -420,6 +420,7 @@ export const queryProductOGData = defineQuery(`
     ),
     "price": store.priceRange.minVariantPrice,
     "colors": store.options[]{ name, values },
+    "variants": store.variants[]->store{ price, compareAtPrice },
     "dominantColor": seo.image.asset->metadata.palette.dominant.background,
     "seoImage": seo.image.asset->url + "?w=1200&h=630&dpr=2&fit=max",
     "logo": *[_type == "settings"][0].logo.asset->url + "?w=80&h=40&dpr=3&fit=max&q=100",

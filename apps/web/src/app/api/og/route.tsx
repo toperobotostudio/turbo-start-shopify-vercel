@@ -40,7 +40,11 @@ type ProductRenderProps = BrandedRenderProps & {
   price?: Maybe<string>;
   /** Comma-separated hex list of all available colors. */
   swatches?: Maybe<string>;
+  /** Preformatted markdown label, e.g. "-16%". */
+  discount?: Maybe<string>;
 };
+
+type OgVariant = { price: number | null; compareAtPrice: number | null };
 
 const MAX_SWATCHES = 6;
 
@@ -69,6 +73,29 @@ const resolveSwatches = (
     .map((value) => getColorHex(value))
     .filter((hex): hex is string => Boolean(hex));
   return hexes.length > 0 ? hexes.join(",") : undefined;
+};
+
+/**
+ * Markdown label for the cheapest variant (the one whose price the OG shows via
+ * `minVariantPrice`). Returns e.g. "-16%", or undefined when it isn't on sale.
+ */
+const resolveDiscount = (
+  variants: Maybe<Array<OgVariant | null>>
+): string | undefined => {
+  let price: number | undefined;
+  let compareAtPrice: number | null = null;
+  for (const variant of variants ?? []) {
+    if (!variant || variant.price === null) continue;
+    if (price === undefined || variant.price < price) {
+      price = variant.price;
+      compareAtPrice = variant.compareAtPrice;
+    }
+  }
+  if (price === undefined || compareAtPrice === null || compareAtPrice <= price) {
+    return;
+  }
+  const percent = Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
+  return percent > 0 ? `-${percent}%` : undefined;
 };
 
 // Floating bar: inset from the image edges (no radius, no shadow — the float
@@ -296,12 +323,34 @@ const SwatchRow = ({ swatches }: { swatches: string }) => {
   );
 };
 
+// Sale markdown label — matches Figma node 2768:616 (grey zinc/200 chip).
+const DiscountBadge = ({ label }: { label: string }) => (
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: 26,
+      padding: "0 4px",
+      backgroundColor: "#e4e4e7",
+      fontSize: 12,
+      fontWeight: 500,
+      letterSpacing: "0.24px",
+      color: TEXT_DARK,
+      flexShrink: 0,
+    }}
+  >
+    {label}
+  </div>
+);
+
 const productOgRender = ({
   image,
   siteTitle,
   title,
   price,
   swatches,
+  discount,
 }: ProductRenderProps) => (
   <FullBleed image={image}>
     <div style={barStyle}>
@@ -319,6 +368,7 @@ const productOgRender = ({
         {title ? <span style={{ flexShrink: 0 }}>{title}</span> : null}
         {swatches ? <SwatchRow swatches={swatches} /> : null}
         {price ? <span style={{ flexShrink: 0 }}>{price}</span> : null}
+        {discount ? <DiscountBadge label={discount} /> : null}
       </div>
     </div>
   </FullBleed>
@@ -444,6 +494,7 @@ const getProductContent = async ({ id }: ContentProps) => {
     title: result.title,
     price: formatOgPrice(result.price),
     swatches: resolveSwatches(result.colors),
+    discount: resolveDiscount(result.variants),
   });
 };
 
