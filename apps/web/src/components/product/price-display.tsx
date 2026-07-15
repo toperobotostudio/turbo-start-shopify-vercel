@@ -1,4 +1,4 @@
-import { formatMoney } from "@/lib/shopify/money";
+import { formatMoney, getDiscountPercent } from "@/lib/shopify/money";
 import type { MoneyV2 } from "@/lib/shopify/types";
 
 type PriceDisplayProps = {
@@ -7,22 +7,12 @@ type PriceDisplayProps = {
 };
 
 export function PriceDisplay({ price, compareAtPrice }: PriceDisplayProps) {
-  const isOnSale =
-    compareAtPrice &&
-    Number.parseFloat(compareAtPrice.amount) > Number.parseFloat(price.amount);
-
-  const savePercent = isOnSale
-    ? Math.round(
-        ((Number.parseFloat(compareAtPrice.amount) -
-          Number.parseFloat(price.amount)) /
-          Number.parseFloat(compareAtPrice.amount)) *
-          100
-      )
-    : 0;
+  const savePercent = getDiscountPercent(price, compareAtPrice);
+  const isOnSale = savePercent > 0;
 
   return (
     <div className="flex flex-col gap-2">
-      {isOnSale && savePercent > 0 && (
+      {isOnSale && (
         <span className="inline-block w-fit bg-red-600 px-2 py-1 text-sm text-white uppercase">
           Save {savePercent}%
         </span>
