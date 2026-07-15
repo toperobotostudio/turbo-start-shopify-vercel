@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/performance/noImgElement: this is a edge runtime function */
+import { env } from "@workspace/env/client";
 import { ImageResponse } from "next/og";
 import type { ImageResponseOptions } from "next/server";
 import type { CSSProperties, ReactNode } from "react";
@@ -53,8 +54,9 @@ const MAX_SWATCHES = 6;
 const OG_STATIC_IMAGE = `${getBaseUrl()}/opengraph.png`;
 
 // Sanity stores product prices as bare numbers (store.priceRange.minVariantPrice)
-// without a currency code, so we format with the store's currency here.
-const OG_CURRENCY = "GBP";
+// without a currency code, so we format with the store's currency here
+// (configurable per store via NEXT_PUBLIC_STORE_CURRENCY, defaults to GBP).
+const OG_CURRENCY = env.NEXT_PUBLIC_STORE_CURRENCY;
 
 const formatOgPrice = (price: Maybe<number>): string | undefined => {
   if (price === null || price === undefined) return;
@@ -365,7 +367,19 @@ const productOgRender = ({
           color: TEXT_DARK,
         }}
       >
-        {title ? <span style={{ flexShrink: 0 }}>{title}</span> : null}
+        {title ? (
+          <span
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              flexShrink: 1,
+              minWidth: 0,
+            }}
+          >
+            {truncate(title, 32)}
+          </span>
+        ) : null}
         {swatches ? <SwatchRow swatches={swatches} /> : null}
         {price ? <span style={{ flexShrink: 0 }}>{price}</span> : null}
         {discount ? <DiscountBadge label={discount} /> : null}
@@ -417,6 +431,15 @@ const getOptions = async ({
   return {
     width,
     height,
+    // Override next/og's default `immutable, max-age=31536000` (1 year) so live
+    // price/sale edits refresh: the CDN serves cached for 1h, then revalidates
+    // in the background for up to a day (no user waits on a re-render).
+    // Note: social crawlers cache the image by URL on their own servers, so
+    // already-scraped links only update when the platform re-scrapes.
+    headers: {
+      "cache-control":
+        "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+    },
     fonts: [
       {
         name: "Inter",

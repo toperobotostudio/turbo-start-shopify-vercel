@@ -12,7 +12,7 @@ export function PriceDisplay({ price, compareAtPrice }: PriceDisplayProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      {isOnSale && savePercent > 0 && (
+      {isOnSale && (
         <span className="inline-block w-fit bg-red-600 px-2 py-1 text-sm text-white uppercase">
           Save {savePercent}%
         </span>

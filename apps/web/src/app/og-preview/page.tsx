@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/performance/noImgElement: internal QA preview, not user-facing */
 import { client } from "@workspace/sanity/client";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "OG Image Preview",
@@ -54,6 +55,12 @@ type Card = { id: string; title: string; url: string };
 type Section = { heading: string; cards: Card[] };
 
 export default async function OgPreviewPage() {
+  // QA-only gallery — it enumerates content and renders many OG images, so keep
+  // it out of production entirely (the noindex metadata alone isn't a gate).
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
+
   const content = await client.fetch<Content>(CONTENT_QUERY);
   const products = content.products;
 
