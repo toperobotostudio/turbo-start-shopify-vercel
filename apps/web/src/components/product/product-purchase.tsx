@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import type { LineMetadata } from "@/lib/cart/types";
 import { AddToCart } from "./add-to-cart";
 import { QuantitySelector } from "./quantity-selector";
 
@@ -10,6 +11,7 @@ type ProductPurchaseProps = {
   availableForSale: boolean;
   optionsSelected: boolean;
   quantityAvailable: number | null;
+  metadata: LineMetadata;
 };
 
 /**
@@ -22,6 +24,7 @@ export function ProductPurchase({
   availableForSale,
   optionsSelected,
   quantityAvailable,
+  metadata,
 }: ProductPurchaseProps) {
   const [quantity, setQuantity] = useState(1);
 
@@ -40,6 +43,7 @@ export function ProductPurchase({
         <AddToCart
           availableForSale={availableForSale}
           key={variantId}
+          metadata={metadata}
           optionsSelected={optionsSelected}
           quantity={quantity}
           variantId={variantId}

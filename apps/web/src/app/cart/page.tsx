@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { ShoppingBag } from "lucide-react";
+import { Loader2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
 import { useCart } from "@/components/cart/cart-context";
@@ -9,9 +9,11 @@ import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CartSummary } from "@/components/cart/cart-summary";
 
 export default function CartPage() {
-  const { cart, isLoading } = useCart();
+  const { cart, confirmedCart, isCreatingCart, hasPendingAdds, isLoading } =
+    useCart();
 
   const lines = cart?.lines.edges.map((e) => e.node) ?? [];
+  const checkoutPending = isCreatingCart || hasPendingAdds || !confirmedCart;
 
   if (isLoading && !cart) {
     return (
@@ -69,11 +71,16 @@ export default function CartPage() {
                 <CartSummary cart={cart} />
                 <Button
                   className="mt-4 w-full"
+                  disabled={checkoutPending}
                   onClick={() => {
-                    window.location.href = cart.checkoutUrl;
+                    if (!confirmedCart) return;
+                    window.location.href = confirmedCart.checkoutUrl;
                   }}
                   size="lg"
                 >
+                  {checkoutPending && (
+                    <Loader2 className="mr-2 size-4 animate-spin" />
+                  )}
                   Checkout
                 </Button>
               </>

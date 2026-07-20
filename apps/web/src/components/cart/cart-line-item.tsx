@@ -1,10 +1,11 @@
 "use client";
 
-import { Bookmark } from "lucide-react";
+import { Bookmark, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { useSavedItems } from "@/components/saved-items/saved-items-context";
+import { isSyntheticLineId } from "@/lib/cart/intents";
 import { getColorHex } from "@/lib/shopify/color";
 import { formatMoney } from "@/lib/shopify/money";
 import { getOptionType } from "@/lib/shopify/options";
@@ -46,11 +47,13 @@ function buildProductUrl(line: CartLine): string {
 }
 
 export function CartLineItem({ line }: { line: CartLine }) {
-  const { updateLine, swapLineVariant, removeLine, closeCart, isLoading } =
+  const { updateLine, swapLineVariant, removeLine, closeCart, cartError } =
     useCart();
-  const { toggle } = useSavedItems();
+  const { add: addToWishlist } = useSavedItems();
   const handle = line.merchandise.product.handle;
   const { data: productOptions } = useProductOptions(handle);
+  const isSynthetic = isSyntheticLineId(line.id);
+  const lineError = cartError?.lineId === line.id ? cartError : null;
 
   const productUrl = buildProductUrl(line);
   const currentSelections = selectionsFromOptions(
@@ -72,12 +75,17 @@ export function CartLineItem({ line }: { line: CartLine }) {
     const next = { ...currentSelections, [optionName]: nextValue };
     const target = findVariantByOptions(variants, next);
     if (target?.availableForSale) {
-      swapLineVariant(line.id, target.id, line.quantity);
+      swapLineVariant(line.id, target.id, line.quantity, {
+        variantTitle: target.title,
+        price: target.price,
+        image: target.image,
+        selectedOptions: target.selectedOptions,
+      });
     }
   }
 
   function handleMoveToWishlist() {
-    toggle(handle);
+    addToWishlist(handle);
     removeLine(line.id);
   }
 
@@ -124,7 +132,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
               }));
               return (
                 <CartLineVariantSelect
-                  disabled={isLoading}
+                  disabled={isSynthetic}
                   key={option.name}
                   label={option.name}
                   onSelect={(value) => handleSelect(option.name, value)}
@@ -136,7 +144,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
             })}
 
             <CartLineVariantSelect
-              disabled={isLoading}
+              disabled={isSynthetic}
               label="Qty"
               onSelect={(value) => updateLine(line.id, Number(value))}
               options={qtyOptions}
@@ -144,17 +152,30 @@ export function CartLineItem({ line }: { line: CartLine }) {
               value={String(line.quantity)}
             />
           </div>
+
+          {lineError && (
+            <p className="text-red-600 text-sm">{lineError.message}</p>
+          )}
         </div>
 
-        <button
-          className="inline-flex items-center gap-1.5 text-muted-foreground text-sm transition-colors hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
-          disabled={isLoading}
-          onClick={handleMoveToWishlist}
-          type="button"
-        >
-          <Bookmark className="size-4" />
-          Move to wishlist
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            className="inline-flex items-center gap-1.5 text-muted-foreground text-sm transition-colors hover:text-foreground"
+            onClick={handleMoveToWishlist}
+            type="button"
+          >
+            <Bookmark className="size-4" />
+            Move to wishlist
+          </button>
+          <button
+            className="inline-flex items-center gap-1.5 text-muted-foreground text-sm transition-colors hover:text-foreground"
+            onClick={() => removeLine(line.id)}
+            type="button"
+          >
+            <Trash2 className="size-4" />
+            Remove
+          </button>
+        </div>
       </div>
 
       <Link className="shrink-0" href={productUrl} onClick={closeCart}>

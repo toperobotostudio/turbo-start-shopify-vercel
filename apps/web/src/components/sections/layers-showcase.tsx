@@ -9,6 +9,7 @@ import { useState } from "react";
 
 import { useCart } from "@/components/cart/cart-context";
 import type { CardVariant } from "@/components/product/product-card";
+import type { LineMetadata } from "@/lib/cart/types";
 import { formatMoney } from "@/lib/shopify/money";
 import { collectionProductToCardProps } from "@/lib/shopify/product-card";
 import type {
@@ -65,7 +66,6 @@ function PurchaseBar({ product }: { product: ShopifyCollectionProduct }) {
   const card = collectionProductToCardProps(product);
   const { addLine, openCart } = useCart();
   const [selectedSize, setSelectedSize] = useState(card.selectedSize);
-  const [pending, setPending] = useState(false);
 
   const sizes = card.sizes ?? [];
   const variant = resolveVariant(
@@ -79,22 +79,28 @@ function PurchaseBar({ product }: { product: ShopifyCollectionProduct }) {
     currencyCode: card.currencyCode ?? "GBP",
   });
 
-  async function handleAdd() {
-    if (!variant || pending) return;
-    setPending(true);
-    try {
-      await addLine(variant.id, 1);
-      openCart();
-    } finally {
-      setPending(false);
-    }
+  function handleAdd() {
+    if (!variant) return;
+    const variantTitle = variant.selectedOptions
+      .map((option) => option.value)
+      .join(" / ");
+    const metadata: LineMetadata = {
+      productTitle: product.title,
+      productHandle: product.handle,
+      variantTitle: variantTitle || "Default Title",
+      price: variant.price,
+      image: product.featuredImage ?? null,
+      selectedOptions: variant.selectedOptions,
+    };
+    openCart();
+    void addLine(variant.id, 1, metadata);
   }
 
   return (
     <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-between gap-3 bg-background p-3 opacity-0 transition-opacity duration-200 md:group-hover:opacity-100">
       <button
         className="cursor-pointer font-medium text-foreground text-sm disabled:cursor-not-allowed disabled:opacity-50"
-        disabled={!canAdd || pending}
+        disabled={!canAdd}
         onClick={handleAdd}
         type="button"
       >

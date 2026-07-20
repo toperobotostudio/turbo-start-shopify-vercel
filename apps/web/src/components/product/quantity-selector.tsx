@@ -2,10 +2,12 @@
 
 import { Minus, Plus } from "lucide-react";
 
+const MAX_QUANTITY = 99;
+
 type QuantitySelectorProps = {
   value: number;
   onChange: (value: number) => void;
-  /** Upper bound (e.g. available inventory). Omitted = no cap. */
+  /** Upper bound (e.g. available inventory). Always capped at 99. */
   max?: number | null;
   disabled?: boolean;
 };
@@ -16,9 +18,9 @@ export function QuantitySelector({
   max,
   disabled,
 }: QuantitySelectorProps) {
+  const effectiveMax = Math.min(max ?? MAX_QUANTITY, MAX_QUANTITY);
   const canDecrement = !disabled && value > 1;
-  const canIncrement =
-    !disabled && (max === null || max === undefined || value < max);
+  const canIncrement = !disabled && value < effectiveMax;
 
   const stepButton =
     "flex items-center justify-center text-foreground transition-colors hover:text-muted-foreground disabled:pointer-events-none disabled:opacity-40";

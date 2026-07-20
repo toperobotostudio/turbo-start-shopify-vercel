@@ -9,7 +9,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@workspace/ui/components/sheet";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 
 import { useCart } from "./cart-context";
 import { CartEmptyState } from "./cart-empty-state";
@@ -17,10 +17,18 @@ import { CartLineItem } from "./cart-line-item";
 import { CartSummary } from "./cart-summary";
 
 export function CartDrawer() {
-  const { cart, isCartOpen, closeCart } = useCart();
+  const {
+    cart,
+    confirmedCart,
+    isCreatingCart,
+    hasPendingAdds,
+    isCartOpen,
+    closeCart,
+  } = useCart();
 
   const lines = cart?.lines.edges.map((e) => e.node) ?? [];
   const isEmpty = lines.length === 0;
+  const checkoutPending = isCreatingCart || hasPendingAdds || !confirmedCart;
 
   return (
     <Sheet onOpenChange={(open) => !open && closeCart()} open={isCartOpen}>
@@ -63,11 +71,16 @@ export function CartDrawer() {
                 <CartSummary cart={cart} />
                 <Button
                   className="w-full"
+                  disabled={checkoutPending}
                   onClick={() => {
-                    window.location.href = cart.checkoutUrl;
+                    if (!confirmedCart) return;
+                    window.location.href = confirmedCart.checkoutUrl;
                   }}
                   size="lg"
                 >
+                  {checkoutPending && (
+                    <Loader2 className="mr-2 size-4 animate-spin" />
+                  )}
                   Go to checkout
                 </Button>
               </SheetFooter>

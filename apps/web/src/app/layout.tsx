@@ -1,12 +1,14 @@
 import "@workspace/ui/globals.css";
 
 import { SanityLive } from "@workspace/sanity/live";
+import { Toaster } from "@workspace/ui/components/sonner";
 import { GeistSans } from "geist/font/sans";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { Suspense } from "react";
 import { preconnect, prefetchDNS } from "react-dom";
 
+import { CartToasts } from "@/components/cart/cart-toasts";
 import { FooterServer, FooterSkeleton } from "@/components/footer";
 import { CombinedJsonLd } from "@/components/json-ld";
 import { Navbar } from "@/components/navbar";
@@ -27,9 +29,7 @@ export default async function RootLayout({
   const nav = await getNavigationData();
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${fontSans.variable} font-sans antialiased`}
-      >
+      <body className={`${fontSans.variable} font-sans antialiased`}>
         <Providers>
           <div className="flex min-h-screen flex-col">
             <PromoBanner data={nav.promoBannerData} />
@@ -42,6 +42,8 @@ export default async function RootLayout({
               <FooterServer />
             </Suspense>
           </div>
+          <CartToasts />
+          <Toaster position="bottom-right" richColors />
           <SanityLive />
           <CombinedJsonLd includeOrganization includeWebsite />
           {(await draftMode()).isEnabled && (

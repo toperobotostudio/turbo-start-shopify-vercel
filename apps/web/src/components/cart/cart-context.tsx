@@ -7,7 +7,7 @@ import {
   useEffect,
   useMemo,
   useState,
-  useTransition,
+  useSyncExternalStore,
 } from "react";
 
 import {
@@ -16,100 +16,170 @@ import {
   removeCartLine,
   updateCartLine,
 } from "@/app/cart/actions";
+import { type AddLineResult, CartController } from "@/lib/cart/controller";
+import type { CartError, CartWarning, LineMetadata } from "@/lib/cart/types";
 import type { Cart } from "@/lib/shopify/types";
 
 type CartContextValue = {
   cart: Cart | null;
+  confirmedCart: Cart | null;
   isLoading: boolean;
+  isMutating: boolean;
+  isCreatingCart: boolean;
+  hasPendingAdds: boolean;
   isCartOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
-  addLine: (variantId: string, quantity: number) => Promise<void>;
-  updateLine: (lineId: string, quantity: number) => Promise<void>;
+  cartError: CartError | null;
+  warnings: CartWarning[];
+  clearCartError: () => void;
+  clearWarnings: () => void;
+  addLine: (
+    variantId: string,
+    quantity: number,
+    metadata: LineMetadata
+  ) => Promise<AddLineResult>;
+  updateLine: (lineId: string, quantity: number) => void;
   swapLineVariant: (
     lineId: string,
     merchandiseId: string,
-    quantity: number
-  ) => Promise<void>;
-  removeLine: (lineId: string) => Promise<void>;
+    quantity: number,
+    metadata?: Partial<LineMetadata>
+  ) => void;
+  removeLine: (lineId: string) => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<Cart | null>(null);
+export function CartProvider({
+  children,
+  initialCart,
+}: {
+  children: React.ReactNode;
+  initialCart?: Cart | null;
+}) {
+  const [controller] = useState(() => {
+    const instance = new CartController({
+      getCart,
+      addLines: addToCart,
+      updateLine: updateCartLine,
+      removeLine: removeCartLine,
+    });
+    if (initialCart !== undefined) {
+      instance.seed(initialCart);
+    }
+    return instance;
+  });
+
+  const snapshot = useSyncExternalStore(
+    controller.subscribe,
+    controller.getSnapshot,
+    controller.getSnapshot
+  );
+
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isLoading, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(initialCart === undefined);
 
   useEffect(() => {
-    startTransition(async () => {
-      const existingCart = await getCart();
-      if (existingCart) {
-        setCart(existingCart);
+    if (initialCart !== undefined) return;
+    let cancelled = false;
+    getCart()
+      .then((cart) => {
+        controller.seed(cart);
+      })
+      .catch(() => {
+        controller.seed(null);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [controller, initialCart]);
+
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        controller.refetch();
       }
-    });
-  }, []);
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, [controller]);
+
+  useEffect(() => {
+    return () => {
+      controller.dispose();
+    };
+  }, [controller]);
 
   const openCart = useCallback(() => setIsCartOpen(true), []);
   const closeCart = useCallback(() => setIsCartOpen(false), []);
 
-  const addLine = useCallback(async (variantId: string, quantity: number) => {
-    startTransition(async () => {
-      const result = await addToCart([{ merchandiseId: variantId, quantity }]);
-      if (result.ok) {
-        setCart(result.cart);
-      }
-    });
-  }, []);
-
-  const updateLine = useCallback(async (lineId: string, quantity: number) => {
-    startTransition(async () => {
-      const result = await updateCartLine(lineId, quantity);
-      if (result.ok) {
-        setCart(result.cart);
-      }
-    });
-  }, []);
-
-  const swapLineVariant = useCallback(
-    async (lineId: string, merchandiseId: string, quantity: number) => {
-      startTransition(async () => {
-        const result = await updateCartLine(lineId, quantity, merchandiseId);
-        if (result.ok) {
-          setCart(result.cart);
-        }
-      });
-    },
-    []
+  const clearCartError = useCallback(
+    () => controller.clearError(),
+    [controller]
+  );
+  const clearWarnings = useCallback(
+    () => controller.clearWarnings(),
+    [controller]
   );
 
-  const removeLine = useCallback(async (lineId: string) => {
-    startTransition(async () => {
-      const result = await removeCartLine(lineId);
-      if (result.ok) {
-        setCart(result.cart);
-      }
-    });
-  }, []);
+  const addLine = useCallback(
+    (variantId: string, quantity: number, metadata: LineMetadata) =>
+      controller.addLine(variantId, quantity, metadata),
+    [controller]
+  );
+  const updateLine = useCallback(
+    (lineId: string, quantity: number) =>
+      controller.updateLine(lineId, quantity),
+    [controller]
+  );
+  const swapLineVariant = useCallback(
+    (
+      lineId: string,
+      merchandiseId: string,
+      quantity: number,
+      metadata?: Partial<LineMetadata>
+    ) => controller.swapLineVariant(lineId, merchandiseId, quantity, metadata),
+    [controller]
+  );
+  const removeLine = useCallback(
+    (lineId: string) => controller.removeLine(lineId),
+    [controller]
+  );
 
-  const value = useMemo(
+  const value = useMemo<CartContextValue>(
     () => ({
-      cart,
+      cart: snapshot.cartWithPending,
+      confirmedCart: snapshot.cart,
       isLoading,
+      isMutating: snapshot.isMutating,
+      isCreatingCart: snapshot.isCreatingCart,
+      hasPendingAdds: snapshot.hasPendingAdds,
       isCartOpen,
       openCart,
       closeCart,
+      cartError: snapshot.error,
+      warnings: snapshot.warnings,
+      clearCartError,
+      clearWarnings,
       addLine,
       updateLine,
       swapLineVariant,
       removeLine,
     }),
     [
-      cart,
+      snapshot,
       isLoading,
       isCartOpen,
       openCart,
       closeCart,
+      clearCartError,
+      clearWarnings,
       addLine,
       updateLine,
       swapLineVariant,
