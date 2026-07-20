@@ -160,7 +160,7 @@ export function Navbar({
   };
   const { navbarData, settingsData } = navigationData;
   const { columns } = navbarData || {};
-  const { siteTitle } = settingsData || {};
+  const { siteTitle, logo } = settingsData || {};
 
   // Show skeleton only on initial mount when no fallback data is available
   if (isLoading && !data && !(initialNavbarData && initialSettingsData)) {
@@ -203,7 +203,7 @@ export function Navbar({
 
           {/* Logo */}
           <div className="flex h-10 items-center">
-            <Logo text={siteTitle} />
+            <Logo logo={logo} text={siteTitle} />
           </div>
 
           {/* Desktop Actions */}
