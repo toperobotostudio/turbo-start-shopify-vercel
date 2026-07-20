@@ -6,9 +6,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { useCart } from "@/components/cart/cart-context";
+import { useCartActions } from "@/components/cart/cart-context";
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
+import { buildLineMetadata } from "@/lib/cart/metadata";
 import { formatMoney } from "@/lib/shopify/money";
+import type { MoneyV2 } from "@/lib/shopify/types";
 
 export type MerchBadge = "new" | "exclusive";
 export type StockStatus = "low" | "out" | null;
@@ -16,6 +18,7 @@ export type CardColor = { name: string; hex: string | null };
 export type CardVariant = {
   id: string;
   availableForSale: boolean;
+  price: MoneyV2;
   selectedOptions: { name: string; value: string }[];
 };
 
@@ -241,35 +244,44 @@ function AddToCartBar({
   selectedSize,
   sizes,
   onSelectSize,
+  productTitle,
+  productHandle,
+  imageUrl,
 }: {
   variants: CardVariant[] | undefined;
   selectedColor: string | undefined;
   selectedSize: string | undefined;
   sizes: string[] | undefined;
   onSelectSize: (size: string) => void;
+  productTitle: string;
+  productHandle: string;
+  imageUrl: string | null;
 }) {
-  const { addLine, openCart } = useCart();
-  const [pending, setPending] = useState(false);
+  const { addLine, openCart } = useCartActions();
 
   const variant = resolveVariant(variants, selectedColor, selectedSize);
   const canAdd = Boolean(variant?.availableForSale);
 
-  async function handleAdd() {
-    if (!variant || pending) return;
-    setPending(true);
-    try {
-      await addLine(variant.id, 1);
-      openCart();
-    } finally {
-      setPending(false);
-    }
+  function handleAdd() {
+    if (!variant) return;
+    const metadata = buildLineMetadata({
+      productTitle,
+      productHandle,
+      price: variant.price,
+      selectedOptions: variant.selectedOptions,
+      image: imageUrl
+        ? { url: imageUrl, altText: productTitle, width: 0, height: 0 }
+        : null,
+    });
+    openCart();
+    void addLine(variant.id, 1, metadata);
   }
 
   return (
     <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-between gap-2 bg-background p-2 opacity-0 transition-opacity duration-200 md:group-hover:opacity-100">
       <button
         className="cursor-pointer font-medium text-foreground text-sm disabled:cursor-not-allowed disabled:opacity-50"
-        disabled={!canAdd || pending}
+        disabled={!canAdd}
         onClick={handleAdd}
         type="button"
       >
@@ -401,7 +413,10 @@ export function ProductCard({
         {/* Hover add-to-cart bar — inset 8px on the image, per Figma 1515-40 */}
         {stockStatus !== "out" && variants && variants.length > 0 && (
           <AddToCartBar
+            imageUrl={imageUrl}
             onSelectSize={setSelectedSize}
+            productHandle={slug}
+            productTitle={title}
             selectedColor={selectedColor}
             selectedSize={selectedSize}
             sizes={sizes}

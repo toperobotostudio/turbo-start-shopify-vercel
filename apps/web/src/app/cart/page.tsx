@@ -1,17 +1,29 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { ShoppingBag } from "lucide-react";
+import { Loader2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 import { useCart } from "@/components/cart/cart-context";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CartSummary } from "@/components/cart/cart-summary";
 
 export default function CartPage() {
-  const { cart, isLoading } = useCart();
+  const { cart, isLoading, settle } = useCart();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const lines = cart?.lines.edges.map((e) => e.node) ?? [];
+
+  async function handleCheckout() {
+    setIsCheckingOut(true);
+    const confirmed = await settle();
+    if (confirmed?.checkoutUrl) {
+      window.location.href = confirmed.checkoutUrl;
+      return;
+    }
+    setIsCheckingOut(false);
+  }
 
   if (isLoading && !cart) {
     return (
@@ -69,11 +81,13 @@ export default function CartPage() {
                 <CartSummary cart={cart} />
                 <Button
                   className="mt-4 w-full"
-                  onClick={() => {
-                    window.location.href = cart.checkoutUrl;
-                  }}
+                  disabled={isCheckingOut}
+                  onClick={handleCheckout}
                   size="lg"
                 >
+                  {isCheckingOut && (
+                    <Loader2 className="mr-2 size-4 animate-spin" />
+                  )}
                   Checkout
                 </Button>
               </>

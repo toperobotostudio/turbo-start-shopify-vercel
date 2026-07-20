@@ -19,6 +19,7 @@ import { ProductPurchase } from "@/components/product/product-purchase";
 import { RelatedProducts } from "@/components/product/related-products";
 import { VariantSelector } from "@/components/product/variant-selector";
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
+import { buildLineMetadata } from "@/lib/cart/metadata";
 import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
 import { keyMetafields } from "@/lib/shopify/metafields";
@@ -175,6 +176,15 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   const vendor = shopifyProduct.vendor;
   const category = shopifyProduct.productType;
 
+  const lineMetadata = buildLineMetadata({
+    productTitle: title,
+    productHandle: handle,
+    variantTitle: selectedVariant.title,
+    price: selectedVariant.price,
+    selectedOptions: selectedVariant.selectedOptions,
+    image: selectedVariant.image ?? images[0] ?? null,
+  });
+
   // Accordion content: Shopify description + `custom.*` metafields.
   const accordionSections = buildAccordionSections(shopifyProduct);
 
@@ -231,6 +241,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
             <div className="flex flex-col gap-2">
               <ProductPurchase
                 availableForSale={selectedVariant.availableForSale}
+                metadata={lineMetadata}
                 optionsSelected={allOptionsSelected}
                 quantityAvailable={selectedVariant.quantityAvailable}
                 variantId={selectedVariant.id}

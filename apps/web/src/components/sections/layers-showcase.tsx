@@ -7,8 +7,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { useCart } from "@/components/cart/cart-context";
+import { useCartActions } from "@/components/cart/cart-context";
 import type { CardVariant } from "@/components/product/product-card";
+import { buildLineMetadata } from "@/lib/cart/metadata";
 import { formatMoney } from "@/lib/shopify/money";
 import { collectionProductToCardProps } from "@/lib/shopify/product-card";
 import type {
@@ -63,9 +64,8 @@ function productImageUrls(product: ShopifyCollectionProduct): string[] {
 /** Bottom bar: add-to-cart action, size selector, and price. */
 function PurchaseBar({ product }: { product: ShopifyCollectionProduct }) {
   const card = collectionProductToCardProps(product);
-  const { addLine, openCart } = useCart();
+  const { addLine, openCart } = useCartActions();
   const [selectedSize, setSelectedSize] = useState(card.selectedSize);
-  const [pending, setPending] = useState(false);
 
   const sizes = card.sizes ?? [];
   const variant = resolveVariant(
@@ -79,22 +79,24 @@ function PurchaseBar({ product }: { product: ShopifyCollectionProduct }) {
     currencyCode: card.currencyCode ?? "GBP",
   });
 
-  async function handleAdd() {
-    if (!variant || pending) return;
-    setPending(true);
-    try {
-      await addLine(variant.id, 1);
-      openCart();
-    } finally {
-      setPending(false);
-    }
+  function handleAdd() {
+    if (!variant) return;
+    const metadata = buildLineMetadata({
+      productTitle: product.title,
+      productHandle: product.handle,
+      price: variant.price,
+      selectedOptions: variant.selectedOptions,
+      image: product.featuredImage ?? null,
+    });
+    openCart();
+    void addLine(variant.id, 1, metadata);
   }
 
   return (
     <div className="absolute inset-x-2 bottom-2 z-10 flex items-center justify-between gap-3 bg-background p-3 opacity-0 transition-opacity duration-200 md:group-hover:opacity-100">
       <button
         className="cursor-pointer font-medium text-foreground text-sm disabled:cursor-not-allowed disabled:opacity-50"
-        disabled={!canAdd || pending}
+        disabled={!canAdd}
         onClick={handleAdd}
         type="button"
       >

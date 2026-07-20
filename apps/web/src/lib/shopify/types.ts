@@ -81,7 +81,11 @@ export type ShopifyCollectionProduct = {
   variants: Connection<
     Pick<
       ShopifyVariant,
-      "id" | "availableForSale" | "quantityAvailable" | "selectedOptions"
+      | "id"
+      | "availableForSale"
+      | "quantityAvailable"
+      | "price"
+      | "selectedOptions"
     >
   >;
 };
@@ -159,11 +163,29 @@ export type Connection<T> = {
 export type ProductQueryResponse = { product: ShopifyProduct };
 export type CollectionQueryResponse = { collection: ShopifyCollection };
 export type CartQueryResponse = { cart: Cart };
+export type ShopifyCartUserError = {
+  field: string[] | null;
+  message: string;
+  code: string | null;
+};
+
+export type ShopifyCartWarning = {
+  code: string;
+  message: string;
+  target: string | null;
+};
+
+export type CartMutationPayload = {
+  cart: Cart | null;
+  userErrors: ShopifyCartUserError[];
+  warnings: ShopifyCartWarning[];
+};
+
 export type CartMutationResponse = {
-  cartCreate?: { cart: Cart };
-  cartLinesAdd?: { cart: Cart };
-  cartLinesUpdate?: { cart: Cart };
-  cartLinesRemove?: { cart: Cart };
+  cartCreate?: CartMutationPayload;
+  cartLinesAdd?: CartMutationPayload;
+  cartLinesUpdate?: CartMutationPayload;
+  cartLinesRemove?: CartMutationPayload;
 };
 export type RecommendedProductsResponse = {
   productRecommendations: ShopifyProduct[];
@@ -219,7 +241,11 @@ export type FeaturedProduct = {
   variants: Connection<
     Pick<
       ShopifyVariant,
-      "id" | "availableForSale" | "quantityAvailable" | "selectedOptions"
+      | "id"
+      | "availableForSale"
+      | "quantityAvailable"
+      | "price"
+      | "selectedOptions"
     >
   >;
   featuredImage: ShopifyImage | null;
