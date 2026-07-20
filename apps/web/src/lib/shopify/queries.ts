@@ -183,6 +183,10 @@ export const COLLECTION_QUERY = /* graphql */ `
                   id
                   availableForSale
                   quantityAvailable
+                  price {
+                    amount
+                    currencyCode
+                  }
                   selectedOptions {
                     name
                     value
@@ -272,6 +276,10 @@ export const FEATURED_PRODUCTS_QUERY = /* graphql */ `
                 id
                 availableForSale
                 quantityAvailable
+                price {
+                  amount
+                  currencyCode
+                }
                 selectedOptions {
                   name
                   value
@@ -387,6 +395,10 @@ export const SEARCH_PRODUCTS_QUERY = /* graphql */ `
                   id
                   availableForSale
                   quantityAvailable
+                  price {
+                    amount
+                    currencyCode
+                  }
                   selectedOptions {
                     name
                     value
@@ -460,6 +472,10 @@ export const PREDICTIVE_SEARCH_QUERY = /* graphql */ `
               id
               availableForSale
               quantityAvailable
+              price {
+                amount
+                currencyCode
+              }
               selectedOptions {
                 name
                 value
@@ -540,6 +556,10 @@ export const BEST_SELLING_PRODUCTS_QUERY = /* graphql */ `
                 id
                 availableForSale
                 quantityAvailable
+                price {
+                  amount
+                  currencyCode
+                }
                 selectedOptions {
                   name
                   value
@@ -645,6 +665,10 @@ export const PRODUCT_BY_HANDLE_QUERY = /* graphql */ `
             id
             availableForSale
             quantityAvailable
+            price {
+              amount
+              currencyCode
+            }
             selectedOptions {
               name
               value
