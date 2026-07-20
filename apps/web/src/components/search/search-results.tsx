@@ -1,9 +1,7 @@
 "use client";
 
-import { Button } from "@workspace/ui/components/button";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { cn } from "@workspace/ui/lib/utils";
-import Link from "next/link";
 import { useState } from "react";
 
 import { CollectionCard } from "@/components/collection/collection-card";
@@ -17,7 +15,6 @@ import { SearchProductGrid } from "./search-product-grid";
 type Tab = "products" | "collections";
 
 type SearchResultsProps = {
-  query: string;
   related: string[];
   products: ShopifyCollectionProduct[];
   collections: ShopifyCollectionLite[];
@@ -62,7 +59,6 @@ function CollectionsGrid({
 }
 
 export function SearchResults({
-  query,
   related,
   products,
   collections,
@@ -101,7 +97,7 @@ export function SearchResults({
         </section>
       )}
 
-      <div className="flex items-center justify-between border-b">
+      <div className="flex items-center border-b">
         <div className="flex gap-6">
           <button
             className={tabClass(tab === "products")}
@@ -118,9 +114,6 @@ export function SearchResults({
             Collections [{collections.length}]
           </button>
         </div>
-        <Button asChild className="mb-2" size="sm">
-          <Link href={`/search?q=${encodeURIComponent(query)}`}>Shop All</Link>
-        </Button>
       </div>
 
       {tab === "products" ? (

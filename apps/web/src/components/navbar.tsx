@@ -15,7 +15,6 @@ import { MobileMenu } from "./mobile-menu";
 import { CollectionGroupDropdown } from "./nav/collection-group-dropdown";
 import { SavedItemsDrawer } from "./saved-items/saved-items-drawer";
 import { SavedItemsToggle } from "./saved-items/saved-items-toggle";
-import { SearchOverlay } from "./search/search-overlay";
 import { SearchToggle } from "./search/search-toggle";
 
 // Fetcher function
@@ -160,7 +159,7 @@ export function Navbar({
   };
   const { navbarData, settingsData } = navigationData;
   const { columns } = navbarData || {};
-  const { siteTitle } = settingsData || {};
+  const { siteTitle, logo } = settingsData || {};
 
   // Show skeleton only on initial mount when no fallback data is available
   if (isLoading && !data && !(initialNavbarData && initialSettingsData)) {
@@ -203,7 +202,7 @@ export function Navbar({
 
           {/* Logo */}
           <div className="flex h-10 items-center">
-            <Logo text={siteTitle} />
+            <Logo logo={logo} text={siteTitle} />
           </div>
 
           {/* Desktop Actions */}
@@ -232,7 +231,6 @@ export function Navbar({
 
       <CartDrawer />
       <SavedItemsDrawer />
-      <SearchOverlay />
     </header>
   );
 }

@@ -1,20 +1,36 @@
 "use client";
 
 import { Search } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-import { useSearch } from "./search-context";
+const TOGGLE_CLASS =
+  "inline-flex size-9 items-center justify-center rounded-md transition-colors hover:text-foreground";
 
 export function SearchToggle() {
-  const { openSearch } = useSearch();
+  const pathname = usePathname();
+
+  // On the search page itself, focus the existing input instead of navigating
+  // to /search again — a client nav would re-trigger the intercepting route and
+  // pop the drawer over the page.
+  if (pathname === "/search") {
+    return (
+      <button
+        aria-label="Search"
+        className={TOGGLE_CLASS}
+        onClick={() => {
+          document.getElementById("search-page-input")?.focus();
+        }}
+        type="button"
+      >
+        <Search className="size-4" />
+      </button>
+    );
+  }
 
   return (
-    <button
-      aria-label="Search"
-      className="inline-flex size-9 items-center justify-center rounded-md transition-colors hover:text-foreground"
-      onClick={openSearch}
-      type="button"
-    >
+    <Link aria-label="Search" className={TOGGLE_CLASS} href="/search">
       <Search className="size-4" />
-    </button>
+    </Link>
   );
 }

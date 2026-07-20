@@ -7,7 +7,6 @@ import type { PropsWithChildren } from "react";
 import type { Cart } from "@/lib/shopify/types";
 import { CartProvider } from "./cart/cart-context";
 import { SavedItemsProvider } from "./saved-items/saved-items-context";
-import { SearchProvider } from "./search/search-context";
 
 const queryClient = new QueryClient();
 
@@ -19,17 +18,15 @@ export function Providers({
     <QueryClientProvider client={queryClient}>
       <CartProvider initialCart={initialCart}>
         <SavedItemsProvider>
-          <SearchProvider>
-            <NextThemesProvider
-              attribute="class"
-              defaultTheme="system"
-              disableTransitionOnChange
-              enableColorScheme
-              enableSystem
-            >
-              {children}
-            </NextThemesProvider>
-          </SearchProvider>
+          <NextThemesProvider
+            attribute="class"
+            defaultTheme="system"
+            disableTransitionOnChange
+            enableColorScheme
+            enableSystem
+          >
+            {children}
+          </NextThemesProvider>
         </SavedItemsProvider>
       </CartProvider>
     </QueryClientProvider>

@@ -21,8 +21,10 @@ const fontSans = GeistSans;
 
 export default async function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   preconnect("https://cdn.sanity.io");
   prefetchDNS("https://cdn.sanity.io");
@@ -42,6 +44,7 @@ export default async function RootLayout({
               <FooterServer />
             </Suspense>
           </div>
+          {modal}
           <CartToasts />
           <Toaster position="bottom-right" richColors />
           <SanityLive />
