@@ -1,5 +1,6 @@
 "use client";
 
+import NumberFlow from "@number-flow/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +15,18 @@ export type VariantOption = {
   available: boolean;
   hex?: string | null;
 };
+
+/** Numeric values (Qty, numeric sizes) tween via NumberFlow; text stays static. */
+function SelectedValue({ value }: { value: string }) {
+  if (/^\d+$/.test(value)) {
+    return (
+      <span className="tabular-nums">
+        <NumberFlow value={Number(value)} />
+      </span>
+    );
+  }
+  return value;
+}
 
 /** A 16×8 color rectangle with an optional selected underline (per Figma). */
 function Swatch({
@@ -64,7 +77,7 @@ export function CartLineVariantSelect({
       {isSingle ? (
         <span className="inline-flex items-center gap-1 text-muted-foreground">
           {type === "color" && <Swatch hex={selected?.hex} selected />}
-          {value}
+          <SelectedValue value={value} />
         </span>
       ) : (
         <DropdownMenu>
@@ -73,7 +86,7 @@ export function CartLineVariantSelect({
             disabled={disabled}
           >
             {type === "color" && <Swatch hex={selected?.hex} selected />}
-            {value}
+            <SelectedValue value={value} />
             <ChevronDown className="size-4 text-muted-foreground" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="min-w-40">
