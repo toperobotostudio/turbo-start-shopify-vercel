@@ -205,18 +205,6 @@ export const COLLECTION_QUERY = /* graphql */ `
   }
 `;
 
-export const VARIANT_INVENTORY_QUERY = /* graphql */ `
-  query VariantInventory($id: ID!) {
-    node(id: $id) {
-      ... on ProductVariant {
-        id
-        availableForSale
-        quantityAvailable
-      }
-    }
-  }
-`;
-
 export const RECOMMENDED_PRODUCTS_QUERY = /* graphql */ `
   ${VARIANT_FRAGMENT}
   query RecommendedProducts($productId: ID!) {

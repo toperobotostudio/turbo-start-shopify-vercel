@@ -6,7 +6,6 @@ import { cookies } from "next/headers";
 export const CART_CACHE_TAG = "shopify-cart";
 
 const CART_COOKIE = "shopify-cart-id";
-const CART_COOKIE_STALE = "shopify-cart-id-stale";
 const CART_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 
 export async function getCartId(): Promise<string | null> {
@@ -26,15 +25,6 @@ export async function setCartId(cartId: string): Promise<void> {
 
 export async function clearCartId(): Promise<void> {
   const cookieStore = await cookies();
-  const staleId = cookieStore.get(CART_COOKIE)?.value;
-  if (staleId) {
-    cookieStore.set(CART_COOKIE_STALE, staleId, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: CART_COOKIE_MAX_AGE,
-    });
-  }
   cookieStore.delete(CART_COOKIE);
 }
 

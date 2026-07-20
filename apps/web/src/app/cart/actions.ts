@@ -26,7 +26,7 @@ import {
   CART_LINES_UPDATE_MUTATION,
   CART_QUERY,
 } from "@/lib/shopify/mutations";
-import { PRODUCT_QUERY, VARIANT_INVENTORY_QUERY } from "@/lib/shopify/queries";
+import { PRODUCT_QUERY } from "@/lib/shopify/queries";
 import type {
   Cart,
   CartLineInput,
@@ -345,38 +345,6 @@ export async function removeCartLine(
   }
 
   return settleMutation("removeCartLine", result.data.cartLinesRemove, []);
-}
-
-type InventoryResult =
-  | { ok: true; availableForSale: boolean; quantityAvailable: number | null }
-  | { ok: false; error: string };
-
-export async function checkVariantInventory(
-  variantId: string
-): Promise<InventoryResult> {
-  const result = await storefrontQuery<{
-    node: {
-      id: string;
-      availableForSale: boolean;
-      quantityAvailable: number | null;
-    } | null;
-  }>(VARIANT_INVENTORY_QUERY, { variables: { id: variantId } });
-
-  if (!result.ok) {
-    logger.error(`Failed to check inventory: ${result.error}`);
-    return { ok: false, error: result.error };
-  }
-
-  const node = result.data.node;
-  if (!node) {
-    return { ok: false, error: "Variant not found" };
-  }
-
-  return {
-    ok: true,
-    availableForSale: node.availableForSale,
-    quantityAvailable: node.quantityAvailable,
-  };
 }
 
 export type ProductOptions = {
