@@ -4,10 +4,10 @@ import { Bookmark, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { AnimatedMoney } from "@/components/elements/animated-money";
 import { useSavedItems } from "@/components/saved-items/saved-items-context";
 import { isSyntheticLineId } from "@/lib/cart/intents";
 import { getColorHex } from "@/lib/shopify/color";
-import { formatMoney } from "@/lib/shopify/money";
 import { getOptionType } from "@/lib/shopify/options";
 import type { CartLine, SelectedOption } from "@/lib/shopify/types";
 import {
@@ -112,8 +112,8 @@ export function CartLineItem({ line }: { line: CartLine }) {
             >
               {line.merchandise.product.title}
             </Link>
-            <p className="font-medium text-foreground text-sm">
-              {formatMoney(line.cost.totalAmount)}
+            <p className="font-medium text-foreground text-sm tabular-nums">
+              <AnimatedMoney money={line.cost.totalAmount} />
             </p>
           </div>
 

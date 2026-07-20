@@ -1,5 +1,6 @@
 "use client";
 
+import NumberFlow from "@number-flow/react";
 import { Minus, Plus } from "lucide-react";
 
 const MAX_QUANTITY = 99;
@@ -40,7 +41,7 @@ export function QuantitySelector({
         aria-live="polite"
         className="min-w-4 text-center text-base tabular-nums"
       >
-        {value}
+        <NumberFlow value={value} />
       </span>
       <button
         aria-label="Increase quantity"

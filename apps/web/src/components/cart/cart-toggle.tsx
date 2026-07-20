@@ -1,5 +1,6 @@
 "use client";
 
+import NumberFlow from "@number-flow/react";
 import { Button } from "@workspace/ui/components/button";
 import { Handbag } from "lucide-react";
 
@@ -19,8 +20,11 @@ export function CartToggle() {
     >
       <Handbag className="size-5" />
       {quantity > 0 && (
-        <span className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-medium">
-          {quantity > 99 ? "99+" : quantity}
+        <span className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-primary font-medium text-primary-foreground text-xs tabular-nums">
+          <NumberFlow
+            suffix={quantity > 99 ? "+" : undefined}
+            value={Math.min(quantity, 99)}
+          />
         </span>
       )}
     </Button>
