@@ -8,7 +8,6 @@ import type {
   ShopifyCollectionLite,
   ShopifyCollectionProduct,
 } from "@/lib/shopify/types";
-import { useSearch } from "./search-context";
 
 const SEARCH_DEBOUNCE_MS = 250;
 const CACHE_STALE_TIME_MS = 30_000;
@@ -34,16 +33,15 @@ async function searchProducts(
   return response.json() as Promise<SearchResponse>;
 }
 
-export function useProductSearch() {
-  const { isSearchOpen } = useSearch();
-  const [query, setQuery] = useState("");
+export function useProductSearch(initialQuery = "") {
+  const [query, setQuery] = useState(initialQuery);
   const debouncedQuery = useDebounce(query, SEARCH_DEBOUNCE_MS);
 
   const hasQuery = debouncedQuery.trim().length > 0;
   const { data, isLoading } = useQuery({
     queryKey: ["product-search", debouncedQuery],
     queryFn: ({ signal }) => searchProducts(debouncedQuery, signal),
-    enabled: isSearchOpen && hasQuery,
+    enabled: hasQuery,
     staleTime: CACHE_STALE_TIME_MS,
   });
 
@@ -52,6 +50,7 @@ export function useProductSearch() {
   return {
     query,
     setQuery,
+    debouncedQuery,
     products: results.products,
     collections: results.collections,
     related: results.related,

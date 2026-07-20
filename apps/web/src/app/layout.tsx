@@ -19,17 +19,17 @@ const fontSans = GeistSans;
 
 export default async function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   preconnect("https://cdn.sanity.io");
   prefetchDNS("https://cdn.sanity.io");
   const nav = await getNavigationData();
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${fontSans.variable} font-sans antialiased`}
-      >
+      <body className={`${fontSans.variable} font-sans antialiased`}>
         <Providers>
           <div className="flex min-h-screen flex-col">
             <PromoBanner data={nav.promoBannerData} />
@@ -42,6 +42,7 @@ export default async function RootLayout({
               <FooterServer />
             </Suspense>
           </div>
+          {modal}
           <SanityLive />
           <CombinedJsonLd includeOrganization includeWebsite />
           {(await draftMode()).isEnabled && (
