@@ -16,7 +16,7 @@ export function Logo({ text, logo }: LogoProps) {
     <Link className="flex gap-2 items-center" href="/">
       {logo?.id ? (
         <SanityImage
-          className="h-full w-auto object-contain"
+          className="h-full w-auto object-contain dark:invert"
           height={80}
           image={logo}
           loading="eager"
