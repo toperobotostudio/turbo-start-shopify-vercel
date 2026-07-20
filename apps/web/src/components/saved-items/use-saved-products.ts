@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import type { ShopifyCollectionProduct } from "@/lib/shopify/types";
 import { useSavedItems } from "./saved-items-context";
@@ -32,6 +32,7 @@ export function useSavedProducts() {
     queryFn: () => fetchSavedProducts(items),
     enabled: isSavedOpen && items.length > 0,
     staleTime: 5 * 60 * 1000,
+    placeholderData: keepPreviousData,
   });
 
   const products = query.data ?? [];
