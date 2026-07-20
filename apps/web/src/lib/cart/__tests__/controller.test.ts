@@ -1,6 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { type CartActions, CartController } from "@/lib/cart/controller";
+import {
+  type CartActions,
+  CartController,
+  type ExpectedTotal,
+} from "@/lib/cart/controller";
 import { recalcTotals } from "@/lib/cart/engine";
 import type {
   CartActionResult,
@@ -86,7 +90,11 @@ function createDeferred<T>(): Deferred<T> {
 }
 
 type MutationCall =
-  | { type: "addLines"; lines: CartLineInput[] }
+  | {
+      type: "addLines";
+      lines: CartLineInput[];
+      expectedTotals: ExpectedTotal[] | undefined;
+    }
   | {
       type: "updateLine";
       lineId: string;
@@ -118,8 +126,8 @@ function createMockActions(): MockActions {
       gets.push(d);
       return d.promise;
     },
-    addLines(lines) {
-      return pushMutation({ type: "addLines", lines });
+    addLines(lines, expectedTotals) {
+      return pushMutation({ type: "addLines", lines, expectedTotals });
     },
     updateLine(lineId, quantity, merchandiseId) {
       return pushMutation({
@@ -308,6 +316,7 @@ describe("CartController", () => {
       {
         type: "addLines",
         lines: [{ merchandiseId: "variant-2", quantity: 1 }],
+        expectedTotals: [{ merchandiseId: "variant-2", quantity: 1 }],
       },
     ]);
 
@@ -542,6 +551,10 @@ describe("CartController", () => {
         { merchandiseId: "variant-1", quantity: 1 },
         { merchandiseId: "variant-2", quantity: 2 },
       ],
+      expectedTotals: [
+        { merchandiseId: "variant-1", quantity: 1 },
+        { merchandiseId: "variant-2", quantity: 2 },
+      ],
     });
     snapshot = controller.getSnapshot();
     expect(snapshot.isCreatingCart).toBe(true);
@@ -599,6 +612,7 @@ describe("CartController", () => {
     expect(mock.mutationCalls[1]).toEqual({
       type: "addLines",
       lines: [{ merchandiseId: "variant-9", quantity: 1 }],
+      expectedTotals: [{ merchandiseId: "variant-9", quantity: 1 }],
     });
     expect(controller.getSnapshot().isCreatingCart).toBe(true);
 
@@ -677,6 +691,7 @@ describe("CartController", () => {
     expect(mock.mutationCalls[1]).toEqual({
       type: "addLines",
       lines: [{ merchandiseId: "variant-3", quantity: 1 }],
+      expectedTotals: [{ merchandiseId: "variant-3", quantity: 1 }],
     });
     controller.dispose();
   });
@@ -698,6 +713,7 @@ describe("CartController", () => {
       {
         type: "addLines",
         lines: [{ merchandiseId: "variant-1", quantity: 5 }],
+        expectedTotals: [{ merchandiseId: "variant-1", quantity: 5 }],
       },
     ]);
     expect(updateCalls(mock)).toHaveLength(0);
@@ -812,6 +828,7 @@ describe("CartController", () => {
       {
         type: "addLines",
         lines: [{ merchandiseId: "variant-1", quantity: 99 }],
+        expectedTotals: [{ merchandiseId: "variant-1", quantity: 99 }],
       },
     ]);
     controller.dispose();
@@ -856,6 +873,23 @@ describe("CartController", () => {
     snapshot = controller.getSnapshot();
     expect(snapshot.hasPendingAdds).toBe(false);
     expect(lineQty(snapshot.cartWithPending, "line-1")).toBe(2);
+    controller.dispose();
+  });
+
+  it("15. add to an existing line passes the expected post-merge total", async () => {
+    const mock = createMockActions();
+    const controller = new CartController(mock.actions);
+    controller.seed(makeCart([makeLine("line-1", "variant-1", 5, "10.00")]));
+
+    void controller.addLine("variant-1", 3, makeMetadata());
+    await vi.advanceTimersByTimeAsync(300);
+
+    const calls = addCalls(mock);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]).toMatchObject({
+      lines: [{ merchandiseId: "variant-1", quantity: 3 }],
+      expectedTotals: [{ merchandiseId: "variant-1", quantity: 8 }],
+    });
     controller.dispose();
   });
 });

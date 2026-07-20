@@ -14,9 +14,14 @@ import type {
 } from "@/lib/cart/types";
 import type { Cart, CartLineInput } from "@/lib/shopify/types";
 
+export type ExpectedTotal = { merchandiseId: string; quantity: number };
+
 export type CartActions = {
   getCart(): Promise<Cart | null>;
-  addLines(lines: CartLineInput[]): Promise<CartActionResult>;
+  addLines(
+    lines: CartLineInput[],
+    expectedTotals?: ExpectedTotal[]
+  ): Promise<CartActionResult>;
   updateLine(
     lineId: string,
     quantity: number,
@@ -345,6 +350,16 @@ export class CartController {
     }
   }
 
+  private expectedTotalFor(variantId: string, delta: number): ExpectedTotal {
+    const serverLine = this.serverTruth?.lines.edges.find(
+      (edge) => edge.node.merchandise.id === variantId
+    )?.node;
+    return {
+      merchandiseId: variantId,
+      quantity: (serverLine?.quantity ?? 0) + delta,
+    };
+  }
+
   private flushAdd(variantId: string): void {
     this.flushUpdateDebounces();
     if (this.serverTruth === null) {
@@ -364,9 +379,10 @@ export class CartController {
       this.inFlight++;
       this.refold();
       const result = await this.callWithRetry(() =>
-        this.actions.addLines([
-          { merchandiseId: variantId, quantity: intent.quantity },
-        ])
+        this.actions.addLines(
+          [{ merchandiseId: variantId, quantity: intent.quantity }],
+          [this.expectedTotalFor(variantId, intent.quantity)]
+        )
       );
       this.inFlight--;
       this.removeIntent(intent);
@@ -399,7 +415,12 @@ export class CartController {
       this.inFlight++;
       this.refold();
       const result = await this.callWithRetry(() =>
-        this.actions.addLines(lines)
+        this.actions.addLines(
+          lines,
+          lines.map((line) =>
+            this.expectedTotalFor(line.merchandiseId, line.quantity)
+          )
+        )
       );
       this.inFlight--;
       this.creating = false;
