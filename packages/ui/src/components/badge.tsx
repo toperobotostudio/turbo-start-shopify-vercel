@@ -16,9 +16,10 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90",
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        new: "border-transparent bg-secondary text-secondary-foreground uppercase tracking-wider",
+        new: "border-transparent bg-zinc-100 text-zinc-900 uppercase tracking-wider",
         exclusive:
-          "border-border bg-background text-foreground uppercase tracking-wider",
+          "border-transparent bg-zinc-100 text-zinc-900 uppercase tracking-wider",
+        discount: "border-transparent bg-zinc-100 text-zinc-900 tracking-wider",
         "low-stock":
           "border-transparent bg-secondary text-secondary-foreground uppercase tracking-wider",
         "sold-out":
