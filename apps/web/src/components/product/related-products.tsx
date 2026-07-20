@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { Button } from "@workspace/ui/components/button";
 import Link from "next/link";
 
 import { storefrontQuery } from "@/lib/shopify/client";
@@ -95,13 +95,13 @@ export async function RelatedProducts({ productId }: RelatedProductsProps) {
         <h2 className="font-medium text-2xl tracking-tight md:text-3xl">
           Related Products
         </h2>
-        <Link
-          className="flex shrink-0 items-center gap-1 text-muted-foreground text-sm transition-colors hover:text-foreground"
-          href="/collections"
+        <Button
+          asChild
+          className="shrink-0 font-normal tracking-[0.24px]"
+          size="sm"
         >
-          Shop All
-          <ArrowRight className="size-4" />
-        </Link>
+          <Link href="/collections">Shop All</Link>
+        </Button>
       </div>
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
         {products.map((product) => (
