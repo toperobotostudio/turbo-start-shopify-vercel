@@ -123,18 +123,24 @@ function ProductCardMini({
 
 function CardFlags({
   badge,
+  salePercent,
   stockStatus,
 }: {
   badge: MerchBadge | null | undefined;
+  salePercent: number;
   stockStatus: StockStatus | undefined;
 }) {
   return (
     <>
-      <div className="pointer-events-none absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
-        {/* Sale tag temporarily disabled — re-enable with <Badge variant="sale">Save {salePercentage}%</Badge> */}
+      <div className="pointer-events-none absolute top-2 left-2 z-10 flex flex-row items-start gap-1">
         {badge && (
           <Badge className={MERCH_BADGE_CLASS} variant={badge}>
             {BADGE_LABEL[badge]}
+          </Badge>
+        )}
+        {salePercent > 0 && (
+          <Badge className={MERCH_BADGE_CLASS} variant="discount">
+            -{salePercent}%
           </Badge>
         )}
       </div>
@@ -389,6 +395,12 @@ export function ProductCard({
   const onSale =
     typeof compareAtPrice === "number" &&
     compareAtPrice > priceRange.minVariantPrice;
+  const salePercent =
+    onSale && compareAtPrice
+      ? Math.round(
+          ((compareAtPrice - priceRange.minVariantPrice) / compareAtPrice) * 100
+        )
+      : 0;
   const strikePrice = onSale
     ? money(compareAtPrice, code)
     : showRange
@@ -408,7 +420,11 @@ export function ProductCard({
           />
         </Link>
 
-        <CardFlags badge={badge} stockStatus={stockStatus} />
+        <CardFlags
+          badge={badge}
+          salePercent={salePercent}
+          stockStatus={stockStatus}
+        />
 
         {/* Hover add-to-cart bar — inset 8px on the image, per Figma 1515-40 */}
         {stockStatus !== "out" && variants && variants.length > 0 && (
