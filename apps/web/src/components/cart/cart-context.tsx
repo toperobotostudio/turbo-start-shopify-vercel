@@ -49,6 +49,7 @@ type CartActionsValue = {
     metadata?: Partial<LineMetadata>
   ) => void;
   removeLine: (lineId: string) => void;
+  settle: () => Promise<Cart | null>;
 };
 
 type CartContextValue = CartStateValue & CartActionsValue;
@@ -133,6 +134,7 @@ export function CartProvider({
       swapLineVariant: (lineId, merchandiseId, quantity, metadata) =>
         controller.swapLineVariant(lineId, merchandiseId, quantity, metadata),
       removeLine: (lineId) => controller.removeLine(lineId),
+      settle: () => controller.settle(),
     }),
     [controller]
   );

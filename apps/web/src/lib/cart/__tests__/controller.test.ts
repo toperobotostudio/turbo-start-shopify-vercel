@@ -892,4 +892,45 @@ describe("CartController", () => {
     });
     controller.dispose();
   });
+
+  it("16. settle flushes pending mutations and resolves with the confirmed cart", async () => {
+    const mock = createMockActions();
+    const controller = new CartController(mock.actions);
+    controller.seed(makeCart([makeLine("line-1", "variant-1", 1, "10.00")]));
+
+    controller.updateLine("line-1", 3);
+    void controller.addLine("variant-2", 1, makeMetadata());
+
+    let settled: Cart | null | undefined;
+    const settling = controller.settle().then((cart) => {
+      settled = cart;
+    });
+    await flush();
+
+    expect(updateCalls(mock)).toHaveLength(1);
+    expect(addCalls(mock)).toHaveLength(1);
+    expect(settled).toBeUndefined();
+
+    resolveMutation(
+      mock,
+      0,
+      ok(makeCart([makeLine("line-1", "variant-1", 3, "10.00")]))
+    );
+    resolveMutation(
+      mock,
+      1,
+      ok(
+        makeCart([
+          makeLine("line-1", "variant-1", 3, "10.00"),
+          makeLine("line-2", "variant-2", 1, "10.00"),
+        ])
+      )
+    );
+    await flush();
+    await settling;
+
+    expect(settled?.totalQuantity).toBe(4);
+    expect(controller.getSnapshot().hasPendingAdds).toBe(false);
+    controller.dispose();
+  });
 });

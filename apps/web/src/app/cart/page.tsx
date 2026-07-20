@@ -3,17 +3,27 @@
 import { Button } from "@workspace/ui/components/button";
 import { Loader2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 import { useCart } from "@/components/cart/cart-context";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CartSummary } from "@/components/cart/cart-summary";
 
 export default function CartPage() {
-  const { cart, confirmedCart, isCreatingCart, hasPendingAdds, isLoading } =
-    useCart();
+  const { cart, isLoading, settle } = useCart();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const lines = cart?.lines.edges.map((e) => e.node) ?? [];
-  const checkoutPending = isCreatingCart || hasPendingAdds || !confirmedCart;
+
+  async function handleCheckout() {
+    setIsCheckingOut(true);
+    const confirmed = await settle();
+    if (confirmed?.checkoutUrl) {
+      window.location.href = confirmed.checkoutUrl;
+      return;
+    }
+    setIsCheckingOut(false);
+  }
 
   if (isLoading && !cart) {
     return (
@@ -71,14 +81,11 @@ export default function CartPage() {
                 <CartSummary cart={cart} />
                 <Button
                   className="mt-4 w-full"
-                  disabled={checkoutPending}
-                  onClick={() => {
-                    if (!confirmedCart) return;
-                    window.location.href = confirmedCart.checkoutUrl;
-                  }}
+                  disabled={isCheckingOut}
+                  onClick={handleCheckout}
                   size="lg"
                 >
-                  {checkoutPending && (
+                  {isCheckingOut && (
                     <Loader2 className="mr-2 size-4 animate-spin" />
                   )}
                   Checkout

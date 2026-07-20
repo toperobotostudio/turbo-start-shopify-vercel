@@ -350,6 +350,22 @@ export class CartController {
     }
   }
 
+  /**
+   * Flushes every pending debounce and waits for all in-flight mutations to
+   * drain, then resolves with the confirmed cart. Lets checkout defer until
+   * the cart is settled instead of disabling while adds are pending.
+   */
+  async settle(): Promise<Cart | null> {
+    this.flushUpdateDebounces();
+    for (const variantId of Array.from(this.addStates.keys())) {
+      this.flushAdd(variantId);
+    }
+    while (this.chains.size > 0) {
+      await Promise.all(Array.from(this.chains.values()));
+    }
+    return this.getSnapshot().cart;
+  }
+
   private expectedTotalFor(variantId: string, delta: number): ExpectedTotal {
     const serverLine = this.serverTruth?.lines.edges.find(
       (edge) => edge.node.merchandise.id === variantId
