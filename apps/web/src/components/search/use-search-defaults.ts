@@ -6,7 +6,6 @@ import type {
   ShopifyCollectionLite,
   ShopifyCollectionProduct,
 } from "@/lib/shopify/types";
-import { useSearch } from "./search-context";
 
 const CACHE_STALE_TIME_MS = 5 * 60 * 1000;
 
@@ -25,12 +24,9 @@ async function fetchDefaults(): Promise<SearchDefaultsResponse> {
 
 /** Lazily loads the empty-state data (top collections + best sellers). */
 export function useSearchDefaults() {
-  const { isSearchOpen } = useSearch();
-
   const { data, isLoading } = useQuery({
     queryKey: ["search-defaults"],
     queryFn: fetchDefaults,
-    enabled: isSearchOpen,
     staleTime: CACHE_STALE_TIME_MS,
   });
 

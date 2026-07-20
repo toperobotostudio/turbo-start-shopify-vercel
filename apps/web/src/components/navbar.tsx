@@ -15,7 +15,6 @@ import { MobileMenu } from "./mobile-menu";
 import { CollectionGroupDropdown } from "./nav/collection-group-dropdown";
 import { SavedItemsDrawer } from "./saved-items/saved-items-drawer";
 import { SavedItemsToggle } from "./saved-items/saved-items-toggle";
-import { SearchOverlay } from "./search/search-overlay";
 import { SearchToggle } from "./search/search-toggle";
 
 // Fetcher function
@@ -232,7 +231,6 @@ export function Navbar({
 
       <CartDrawer />
       <SavedItemsDrawer />
-      <SearchOverlay />
     </header>
   );
 }
