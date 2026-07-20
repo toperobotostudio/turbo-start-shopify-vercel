@@ -7,9 +7,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { useCart } from "@/components/cart/cart-context";
+import { useCartActions } from "@/components/cart/cart-context";
 import type { CardVariant } from "@/components/product/product-card";
-import type { LineMetadata } from "@/lib/cart/types";
+import { buildLineMetadata } from "@/lib/cart/metadata";
 import { formatMoney } from "@/lib/shopify/money";
 import { collectionProductToCardProps } from "@/lib/shopify/product-card";
 import type {
@@ -64,7 +64,7 @@ function productImageUrls(product: ShopifyCollectionProduct): string[] {
 /** Bottom bar: add-to-cart action, size selector, and price. */
 function PurchaseBar({ product }: { product: ShopifyCollectionProduct }) {
   const card = collectionProductToCardProps(product);
-  const { addLine, openCart } = useCart();
+  const { addLine, openCart } = useCartActions();
   const [selectedSize, setSelectedSize] = useState(card.selectedSize);
 
   const sizes = card.sizes ?? [];
@@ -81,17 +81,13 @@ function PurchaseBar({ product }: { product: ShopifyCollectionProduct }) {
 
   function handleAdd() {
     if (!variant) return;
-    const variantTitle = variant.selectedOptions
-      .map((option) => option.value)
-      .join(" / ");
-    const metadata: LineMetadata = {
+    const metadata = buildLineMetadata({
       productTitle: product.title,
       productHandle: product.handle,
-      variantTitle: variantTitle || "Default Title",
       price: variant.price,
-      image: product.featuredImage ?? null,
       selectedOptions: variant.selectedOptions,
-    };
+      image: product.featuredImage ?? null,
+    });
     openCart();
     void addLine(variant.id, 1, metadata);
   }

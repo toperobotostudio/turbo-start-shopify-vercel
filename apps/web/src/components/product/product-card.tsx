@@ -6,9 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { useCart } from "@/components/cart/cart-context";
+import { useCartActions } from "@/components/cart/cart-context";
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
-import type { LineMetadata } from "@/lib/cart/types";
+import { buildLineMetadata } from "@/lib/cart/metadata";
 import { formatMoney } from "@/lib/shopify/money";
 import type { MoneyV2 } from "@/lib/shopify/types";
 
@@ -237,13 +237,6 @@ function CardSwatches({
   );
 }
 
-function variantTitleFromOptions(
-  options: { name: string; value: string }[]
-): string {
-  const values = options.map((option) => option.value).join(" / ");
-  return values || "Default Title";
-}
-
 /** Hover bar with the "Add to cart" action and size selector. */
 function AddToCartBar({
   variants,
@@ -264,23 +257,22 @@ function AddToCartBar({
   productHandle: string;
   imageUrl: string | null;
 }) {
-  const { addLine, openCart } = useCart();
+  const { addLine, openCart } = useCartActions();
 
   const variant = resolveVariant(variants, selectedColor, selectedSize);
   const canAdd = Boolean(variant?.availableForSale);
 
   function handleAdd() {
     if (!variant) return;
-    const metadata: LineMetadata = {
+    const metadata = buildLineMetadata({
       productTitle,
       productHandle,
-      variantTitle: variantTitleFromOptions(variant.selectedOptions),
       price: variant.price,
+      selectedOptions: variant.selectedOptions,
       image: imageUrl
         ? { url: imageUrl, altText: productTitle, width: 0, height: 0 }
         : null,
-      selectedOptions: variant.selectedOptions,
-    };
+    });
     openCart();
     void addLine(variant.id, 1, metadata);
   }

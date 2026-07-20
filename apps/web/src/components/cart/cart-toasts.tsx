@@ -3,10 +3,11 @@
 import { toast } from "@workspace/ui/components/sonner";
 import { useEffect } from "react";
 
-import { useCart } from "./cart-context";
+import { useCartActions, useCartState } from "./cart-context";
 
 export function CartToasts() {
-  const { warnings, cartError, clearWarnings, clearCartError } = useCart();
+  const { warnings, cartError } = useCartState();
+  const { clearWarnings, clearCartError } = useCartActions();
 
   useEffect(() => {
     if (warnings.length === 0) return;

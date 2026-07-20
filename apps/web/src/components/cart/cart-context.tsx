@@ -2,7 +2,6 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -20,7 +19,7 @@ import { type AddLineResult, CartController } from "@/lib/cart/controller";
 import type { CartError, CartWarning, LineMetadata } from "@/lib/cart/types";
 import type { Cart } from "@/lib/shopify/types";
 
-type CartContextValue = {
+type CartStateValue = {
   cart: Cart | null;
   confirmedCart: Cart | null;
   isLoading: boolean;
@@ -28,10 +27,13 @@ type CartContextValue = {
   isCreatingCart: boolean;
   hasPendingAdds: boolean;
   isCartOpen: boolean;
-  openCart: () => void;
-  closeCart: () => void;
   cartError: CartError | null;
   warnings: CartWarning[];
+};
+
+type CartActionsValue = {
+  openCart: () => void;
+  closeCart: () => void;
   clearCartError: () => void;
   clearWarnings: () => void;
   addLine: (
@@ -49,7 +51,10 @@ type CartContextValue = {
   removeLine: (lineId: string) => void;
 };
 
-const CartContext = createContext<CartContextValue | null>(null);
+type CartContextValue = CartStateValue & CartActionsValue;
+
+const CartStateContext = createContext<CartStateValue | null>(null);
+const CartActionsContext = createContext<CartActionsValue | null>(null);
 
 export function CartProvider({
   children,
@@ -116,43 +121,23 @@ export function CartProvider({
     };
   }, [controller]);
 
-  const openCart = useCallback(() => setIsCartOpen(true), []);
-  const closeCart = useCallback(() => setIsCartOpen(false), []);
-
-  const clearCartError = useCallback(
-    () => controller.clearError(),
-    [controller]
-  );
-  const clearWarnings = useCallback(
-    () => controller.clearWarnings(),
-    [controller]
-  );
-
-  const addLine = useCallback(
-    (variantId: string, quantity: number, metadata: LineMetadata) =>
-      controller.addLine(variantId, quantity, metadata),
-    [controller]
-  );
-  const updateLine = useCallback(
-    (lineId: string, quantity: number) =>
-      controller.updateLine(lineId, quantity),
-    [controller]
-  );
-  const swapLineVariant = useCallback(
-    (
-      lineId: string,
-      merchandiseId: string,
-      quantity: number,
-      metadata?: Partial<LineMetadata>
-    ) => controller.swapLineVariant(lineId, merchandiseId, quantity, metadata),
-    [controller]
-  );
-  const removeLine = useCallback(
-    (lineId: string) => controller.removeLine(lineId),
+  const actions = useMemo<CartActionsValue>(
+    () => ({
+      openCart: () => setIsCartOpen(true),
+      closeCart: () => setIsCartOpen(false),
+      clearCartError: () => controller.clearError(),
+      clearWarnings: () => controller.clearWarnings(),
+      addLine: (variantId, quantity, metadata) =>
+        controller.addLine(variantId, quantity, metadata),
+      updateLine: (lineId, quantity) => controller.updateLine(lineId, quantity),
+      swapLineVariant: (lineId, merchandiseId, quantity, metadata) =>
+        controller.swapLineVariant(lineId, merchandiseId, quantity, metadata),
+      removeLine: (lineId) => controller.removeLine(lineId),
+    }),
     [controller]
   );
 
-  const value = useMemo<CartContextValue>(
+  const state = useMemo<CartStateValue>(
     () => ({
       cart: snapshot.cartWithPending,
       confirmedCart: snapshot.cart,
@@ -161,39 +146,41 @@ export function CartProvider({
       isCreatingCart: snapshot.isCreatingCart,
       hasPendingAdds: snapshot.hasPendingAdds,
       isCartOpen,
-      openCart,
-      closeCart,
       cartError: snapshot.error,
       warnings: snapshot.warnings,
-      clearCartError,
-      clearWarnings,
-      addLine,
-      updateLine,
-      swapLineVariant,
-      removeLine,
     }),
-    [
-      snapshot,
-      isLoading,
-      isCartOpen,
-      openCart,
-      closeCart,
-      clearCartError,
-      clearWarnings,
-      addLine,
-      updateLine,
-      swapLineVariant,
-      removeLine,
-    ]
+    [snapshot, isLoading, isCartOpen]
   );
 
-  return <CartContext value={value}>{children}</CartContext>;
+  return (
+    <CartActionsContext value={actions}>
+      <CartStateContext value={state}>{children}</CartStateContext>
+    </CartActionsContext>
+  );
+}
+
+export function useCartState(): CartStateValue {
+  const context = useContext(CartStateContext);
+  if (!context) {
+    throw new Error("useCartState must be used within a CartProvider");
+  }
+  return context;
+}
+
+/**
+ * Stable action handles only — consumers never re-render on cart changes.
+ * Prefer this in add-to-cart buttons and other write-only surfaces.
+ */
+export function useCartActions(): CartActionsValue {
+  const context = useContext(CartActionsContext);
+  if (!context) {
+    throw new Error("useCartActions must be used within a CartProvider");
+  }
+  return context;
 }
 
 export function useCart(): CartContextValue {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
-  return context;
+  const state = useCartState();
+  const actions = useCartActions();
+  return useMemo(() => ({ ...state, ...actions }), [state, actions]);
 }

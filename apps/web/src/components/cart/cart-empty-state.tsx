@@ -3,11 +3,11 @@
 import { Button } from "@workspace/ui/components/button";
 import Link from "next/link";
 
-import { useCart } from "./cart-context";
+import { useCartActions } from "./cart-context";
 import { CartRecommendations } from "./cart-recommendations";
 
 export function CartEmptyState() {
-  const { closeCart } = useCart();
+  const { closeCart } = useCartActions();
 
   return (
     <div className="flex flex-1 flex-col overflow-y-auto">
