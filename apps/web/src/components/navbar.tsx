@@ -1,10 +1,10 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { env } from "@workspace/env/client";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import useSWR from "swr";
 
 import type { ColumnLink, NavColumn, NavigationData } from "@/types";
 import { CartDrawer } from "./cart/cart-drawer";
@@ -136,22 +136,20 @@ export function Navbar({
   navbarData: initialNavbarData,
   settingsData: initialSettingsData,
 }: NavigationData) {
-  const { data, error, isLoading } = useSWR<NavigationData>(
-    "/api/navigation",
-    fetcher,
-    {
-      fallbackData: {
-        navbarData: initialNavbarData,
-        settingsData: initialSettingsData,
-      },
-      revalidateOnFocus: false,
-      revalidateOnMount: false,
-      revalidateOnReconnect: true,
-      refreshInterval: 30_000,
-      errorRetryCount: 3,
-      errorRetryInterval: 5000,
-    }
-  );
+  const { data, error, isLoading } = useQuery<NavigationData>({
+    queryKey: ["navigation"],
+    queryFn: () => fetcher("/api/navigation"),
+    initialData:
+      initialNavbarData && initialSettingsData
+        ? { navbarData: initialNavbarData, settingsData: initialSettingsData }
+        : undefined,
+    staleTime: 30_000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: true,
+    refetchInterval: 30_000,
+    retry: 3,
+    retryDelay: 5000,
+  });
 
   const navigationData = data || {
     navbarData: initialNavbarData,
