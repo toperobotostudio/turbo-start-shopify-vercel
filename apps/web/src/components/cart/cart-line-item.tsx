@@ -180,7 +180,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
 
       <Link className="shrink-0" href={productUrl} onClick={closeCart}>
         {line.merchandise.image ? (
-          <div className="relative h-32 w-24 overflow-hidden bg-muted">
+          <div className="card-surface relative h-32 w-24 overflow-hidden">
             <Image
               alt={line.merchandise.image.altText ?? line.merchandise.title}
               className="object-cover"
@@ -190,7 +190,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
             />
           </div>
         ) : (
-          <div className="h-32 w-24 bg-muted" />
+          <div className="card-surface h-32 w-24" />
         )}
       </Link>
     </div>

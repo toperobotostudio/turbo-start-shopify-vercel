@@ -34,6 +34,18 @@ const COLOR_MAP: Record<string, string> = {
   slate: "#708090",
   wine: "#722f37",
   natural: "#f5f0e1",
+  // Hand-off catalog colours (exact hex from the product source).
+  "chalk white": "#f2f0ea",
+  ecru: "#e2d8c3",
+  "ecru multi": "#d9c7a8",
+  "faded rose": "#c89aa0",
+  indigo: "#37496b",
+  "indigo rinse": "#2c3e5d",
+  "oat melange": "#d8c9b4",
+  "olive drab": "#6b6b47",
+  "undyed ecru": "#ede6d6",
+  "warm stone": "#8ca6c4",
+  "washed black": "#3a3a3c",
 };
 
 /**
