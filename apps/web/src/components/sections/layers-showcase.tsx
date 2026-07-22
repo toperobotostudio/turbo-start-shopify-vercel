@@ -193,7 +193,10 @@ export function LayersShowcase({
         <div className="group card-surface relative aspect-4/5 overflow-hidden md:aspect-auto md:h-full md:min-h-125">
           {isLoading && <Skeleton className="absolute inset-0" />}
           {largeImage && product && (
-            <Link href={`/products/${product.handle}`}>
+            <Link
+              className="relative block size-full"
+              href={`/products/${product.handle}`}
+            >
               <Image
                 alt={alt}
                 className="object-cover"
