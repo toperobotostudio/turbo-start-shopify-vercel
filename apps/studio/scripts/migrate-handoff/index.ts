@@ -1,13 +1,14 @@
 /**
  * Hand-off product migration — CLI entry point.
  *
- * Creates the 12 real hand-off products in Shopify (Admin API) with their dark
+ * Creates the 12 real hand-off products in Shopify (Admin API) with their
  * images, metafield-driven PDP content, and per-category collections. Shopify
  * Connect then syncs them into Sanity, and the storefront reads them live.
  *
  * Usage (from apps/studio):
  *   pnpm migrate:handoff -- --dry-run --verbose        # parse + validate only
  *   pnpm migrate:handoff -- --clean --verbose          # wipe dummies, then migrate
+ *   pnpm migrate:handoff -- --reimage --verbose        # swap media on existing products
  *   pnpm migrate:handoff -- --handoff=/path/to/handoff # custom source dir
  */
 
@@ -35,8 +36,9 @@ import {
   createCollections,
 } from "./collections.js";
 import {
+  reimageProduct,
   relinkVariantImagesForProduct,
-  uploadAndAttachDarkImages,
+  uploadAndAttachImages,
 } from "./images.js";
 import { buildMetafields, ensureMetafieldDefinitions } from "./metafields.js";
 import { loadProducts } from "./load.js";
@@ -48,10 +50,13 @@ interface Flags {
   verbose: boolean;
   dryRun: boolean;
   relink: boolean;
+  reimage: boolean;
   collectionImages: boolean;
   sale: boolean;
   publish: boolean;
   handoffDir: string;
+  /** When set, restrict --reimage/--relink to these handles. */
+  only: string[];
 }
 
 function parseFlags(): Flags {
@@ -59,22 +64,31 @@ function parseFlags(): Flags {
   let verbose = false;
   let dryRun = false;
   let relink = false;
+  let reimage = false;
   let collectionImages = false;
   let sale = false;
   let publish = false;
   let handoffDir =
     process.env.HANDOFF_DIR ?? `${homedir()}/Downloads/shopify-handoff`;
+  let only: string[] = [];
 
   for (const arg of process.argv.slice(2)) {
     if (arg === "--clean") clean = true;
     else if (arg === "--verbose" || arg === "-v") verbose = true;
     else if (arg === "--dry-run") dryRun = true;
     else if (arg === "--relink") relink = true;
+    else if (arg === "--reimage") reimage = true;
     else if (arg === "--collection-images") collectionImages = true;
     else if (arg === "--sale") sale = true;
     else if (arg === "--publish") publish = true;
     else if (arg.startsWith("--handoff=")) {
       handoffDir = arg.slice("--handoff=".length);
+    } else if (arg.startsWith("--only=")) {
+      only = arg
+        .slice("--only=".length)
+        .split(",")
+        .map((h) => h.trim())
+        .filter(Boolean);
     }
   }
 
@@ -83,10 +97,12 @@ function parseFlags(): Flags {
     verbose,
     dryRun,
     relink,
+    reimage,
     collectionImages,
     sale,
     publish,
     handoffDir,
+    only,
   };
 }
 
@@ -98,7 +114,7 @@ function dryRun(handoffDir: string): void {
   let missing = 0;
   for (const prod of products) {
     const metafields = buildMetafields(prod);
-    for (const img of prod.darkImages) {
+    for (const img of prod.images) {
       if (!existsSync(img.file)) {
         log.error(`  MISSING image: ${img.file}`);
         missing++;
@@ -106,7 +122,7 @@ function dryRun(handoffDir: string): void {
     }
     log.info(
       `${prod.handle} → ${prod.variants.length} variants, ` +
-        `${prod.darkImages.length} dark images, ` +
+        `${prod.images.length} images, ` +
         `${metafields.length} metafields, tags=[${prod.tags.join(", ")}], ` +
         `collection=${prod.collectionHandle}, status=${prod.status}`
     );
@@ -125,10 +141,12 @@ async function main(): Promise<void> {
     verbose,
     dryRun: isDryRun,
     relink,
+    reimage,
     collectionImages,
     sale,
     publish,
     handoffDir,
+    only,
   } = parseFlags();
 
   if (!existsSync(handoffDir) || !statSync(handoffDir).isDirectory()) {
@@ -145,10 +163,19 @@ async function main(): Promise<void> {
   const domain = getStoreDomain();
   log.info(`Store: ${domain}`);
 
+  /** Loads products, optionally narrowed to the --only handles. */
+  const loadSelected = () => {
+    const all = loadProducts(handoffDir);
+    if (only.length === 0) return all;
+    const selected = all.filter((p) => only.includes(p.handle));
+    log.info(`--only → ${selected.length}/${all.length}: ${only.join(", ")}`);
+    return selected;
+  };
+
   // ── Relink mode: repair variant→image links on existing products only ──────
   if (relink) {
     log.info("Mode: RELINK");
-    const products = loadProducts(handoffDir);
+    const products = loadSelected();
     let ok = 0;
     for (const prod of products) {
       try {
@@ -158,6 +185,22 @@ async function main(): Promise<void> {
       }
     }
     log.info(`Relinked ${ok}/${products.length} products`);
+    return;
+  }
+
+  // ── Reimage mode: swap media on existing products (keeps GIDs/variants) ─────
+  if (reimage) {
+    log.info("Mode: REIMAGE");
+    const products = loadSelected();
+    let ok = 0;
+    for (const prod of products) {
+      try {
+        if (await reimageProduct(prod, verbose)) ok++;
+      } catch (err) {
+        log.error(`Reimage ${prod.handle}: ${(err as Error).message}`);
+      }
+    }
+    log.info(`Reimaged ${ok}/${products.length} products`);
     return;
   }
 
@@ -220,7 +263,7 @@ async function main(): Promise<void> {
       const created = await createProduct(prod, locationId, stats, verbose);
       if (!created) continue;
       productIds[prod.handle] = created.productId;
-      await uploadAndAttachDarkImages(
+      await uploadAndAttachImages(
         created.productId,
         prod,
         created.variantIdsBySku,

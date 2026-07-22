@@ -30,7 +30,7 @@ const CATEGORY_TO_COLLECTION: Record<string, string> = {
 export interface HandoffImage {
   /** 1-based position within its colour, used for ordering. */
   position: number;
-  /** Absolute path to the dark PNG. */
+  /** Absolute path to the PNG. */
   file: string;
   alt: string;
   color: string;
@@ -57,8 +57,8 @@ export interface HandoffProduct {
   /** Option names in order — always ["Size", "Color"] for this catalog. */
   optionNames: string[];
   variants: HandoffVariant[];
-  /** All dark images across every colour, ordered by colour then position. */
-  darkImages: HandoffImage[];
+  /** All images across every colour, ordered by colour then position. */
+  images: HandoffImage[];
   /** Collection handle derived from `category`. */
   collectionHandle: string;
   // Raw content for metafields:
@@ -71,7 +71,11 @@ export interface HandoffProduct {
 interface RawImage {
   position: number;
   alt: string;
-  dark: { file: string };
+  /** Path to the neutral cutout, relative to the hand-off root. */
+  file: string;
+  transparent?: boolean;
+  width?: number;
+  height?: number;
 }
 
 interface RawColor {
@@ -107,12 +111,12 @@ function randomInt(min: number, max: number): number {
 }
 
 function mapProduct(raw: RawProduct, handoffDir: string): HandoffProduct {
-  const darkImages: HandoffImage[] = [];
+  const images: HandoffImage[] = [];
   for (const color of raw.colors) {
     for (const img of color.images) {
-      darkImages.push({
+      images.push({
         position: img.position,
-        file: resolve(handoffDir, img.dark.file),
+        file: resolve(handoffDir, img.file),
         alt: img.alt,
         color: color.name,
       });
@@ -148,7 +152,7 @@ function mapProduct(raw: RawProduct, handoffDir: string): HandoffProduct {
     status: "ACTIVE",
     optionNames: ["Size", "Color"],
     variants,
-    darkImages,
+    images,
     collectionHandle,
     details: raw.details,
     fitAndSizing: raw.fit_and_sizing,
