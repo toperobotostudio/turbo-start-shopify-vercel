@@ -39,7 +39,7 @@ export function ActiveFilters() {
   }, [router, pathname, searchParams]);
 
   // Selections are shown as underlines inside the open panel; chips appear
-  // only once the panel is collapsed (Figma "filters applied" state).
+  // only once the panel is collapsed.
   if (filterOpen || active.length === 0) return null;
 
   return (

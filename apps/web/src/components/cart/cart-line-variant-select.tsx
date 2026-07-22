@@ -28,7 +28,7 @@ function SelectedValue({ value }: { value: string }) {
   return value;
 }
 
-/** A 16×8 color rectangle with an optional selected underline (per Figma). */
+/** A 16×8 color rectangle with an optional selected underline. */
 function Swatch({
   hex,
   selected,

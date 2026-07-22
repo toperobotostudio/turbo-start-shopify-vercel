@@ -426,7 +426,7 @@ export function ProductCard({
           stockStatus={stockStatus}
         />
 
-        {/* Hover add-to-cart bar — inset 8px on the image, per Figma 1515-40 */}
+        {/* Hover add-to-cart bar — inset 8px on the image */}
         {stockStatus !== "out" && variants && variants.length > 0 && (
           <AddToCartBar
             imageUrl={imageUrl}

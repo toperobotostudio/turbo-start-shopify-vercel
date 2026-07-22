@@ -77,7 +77,7 @@ const columnHeaderClass =
 const optionBaseClass =
   "w-fit text-left text-sm tracking-[0.24px] transition-colors";
 
-/** Column order to match the Figma design; unlisted facets trail after. */
+/** Preferred column order; unlisted facets trail after. */
 const FILTER_ORDER = ["category", "color", "size", "price", "material", "fit"];
 
 function filterRank(label: string): number {

@@ -23,9 +23,8 @@ export function SavedEmptyState() {
         </Button>
       </div>
 
-      {/* Spacer pushes the "Must haves" section to the bottom of the drawer
-          (the Figma overlay is justify-between). Collapses to allow scroll
-          when the section is tall. */}
+      {/* Spacer pushes the "Must haves" section to the bottom of the drawer.
+          Collapses to allow scroll when the section is tall. */}
       <div className="min-h-12 flex-1" />
 
       <div className="flex flex-col gap-6">

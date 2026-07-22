@@ -101,7 +101,7 @@ const resolveDiscount = (
 };
 
 // Floating bar: inset from the image edges (no radius, no shadow — the float
-// comes from the inset margins). Matches Figma node 2768:556/557.
+// comes from the inset margins).
 const BAR_INSET = 24;
 const BAR_HEIGHT = 42;
 const BAR_BG = "#fafafa";
@@ -325,7 +325,7 @@ const SwatchRow = ({ swatches }: { swatches: string }) => {
   );
 };
 
-// Sale markdown label — matches Figma node 2768:616 (grey zinc/200 chip).
+// Sale markdown label — grey zinc/200 chip.
 const DiscountBadge = ({ label }: { label: string }) => (
   <div
     style={{
