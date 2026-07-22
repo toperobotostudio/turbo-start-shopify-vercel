@@ -91,6 +91,12 @@ function FullBleedHero({ title, buttons, image, richText }: HeroBlockProps) {
           />
         )}
 
+        {/* Bottom scrim so dark promo text stays legible over light imagery */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/60 to-transparent lg:hidden"
+        />
+
         {/* Promo text overlaid bottom-left */}
         <div className="absolute inset-x-0 bottom-0">
           <div className="container mx-auto px-4 pb-8 md:px-6 md:pb-12">
