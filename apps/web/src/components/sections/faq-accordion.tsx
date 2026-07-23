@@ -9,7 +9,7 @@ type FaqAccordionProps = PagebuilderType<"faqAccordion">;
 
 export function FaqAccordion({ title, faqs, link }: FaqAccordionProps) {
   return (
-    <section className="my-8" id="faq">
+    <section className="py-12 md:py-20" id="faq">
       <FaqJsonLd faqs={faqs} />
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center">

@@ -41,7 +41,7 @@ export function FeatureCardsWithIcon({
   cards,
 }: FeatureCardsWithIconProps) {
   return (
-    <section className="my-6 md:my-20" id="features">
+    <section className="py-12 md:py-20" id="features">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-14 flex max-w-2xl flex-col items-start gap-4 md:mb-16">
           {eyebrow && <Badge variant="secondary">{eyebrow}</Badge>}

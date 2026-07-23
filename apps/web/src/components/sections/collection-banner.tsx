@@ -22,7 +22,7 @@ export function CollectionBanner({
   buttons,
 }: CollectionBannerProps) {
   return (
-    <section>
+    <section className="py-12 md:py-20">
       <div className="relative overflow-hidden bg-neutral-900 text-white">
         {image && (
           <div className="absolute inset-0">

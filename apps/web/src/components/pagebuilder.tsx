@@ -176,10 +176,7 @@ export function PageBuilder({
   }
 
   return (
-    <main
-      className="my-16 flex flex-col gap-16"
-      data-sanity={containerDataAttribute}
-    >
+    <main className="flex flex-col" data-sanity={containerDataAttribute}>
       {blocks.map(renderBlock)}
     </main>
   );

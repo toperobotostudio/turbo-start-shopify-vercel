@@ -40,7 +40,7 @@ export function SubscribeNewsletter({
 }: SubscribeNewsletterProps) {
   return (
     <section
-      className="relative container mx-auto px-4 md:px-6 overflow-hidden lg:aspect-2/1 flex justify-center items-center bg-zinc-100 dark:bg-zinc-900"
+      className="relative container mx-auto px-4 py-12 md:px-6 md:py-20 overflow-hidden lg:aspect-2/1 flex justify-center items-center bg-zinc-100 dark:bg-zinc-900"
       id="subscribe"
     >
       {/* Image: absolute, right half only */}

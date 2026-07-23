@@ -45,7 +45,7 @@ export default async function Page() {
   );
 
   return (
-    <main className="flex flex-col gap-6 md:gap-20">
+    <main className="flex flex-col">
       {heroBlock.length > 0 && (
         <div className="[&>main]:my-0">
           <PageBuilder id={_id} pageBuilder={heroBlock} type={_type} />

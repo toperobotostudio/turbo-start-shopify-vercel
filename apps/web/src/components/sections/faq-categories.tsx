@@ -32,7 +32,7 @@ export function FaqCategories({ title, categories }: FaqCategoriesProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="my-8 md:my-20" id="faq">
+    <section className="py-12 md:py-20" id="faq">
       <FaqJsonLd faqs={allFaqs} />
       <div className="container mx-auto px-4 md:px-6">
         <h2 className="mb-8 font-medium text-2xl md:mb-12 md:text-3xl">

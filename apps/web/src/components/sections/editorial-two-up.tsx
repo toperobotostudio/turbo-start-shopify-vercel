@@ -78,7 +78,7 @@ export function EditorialTwoUp({ items }: EditorialTwoUpProps) {
   if (columns.length === 0) return null;
 
   return (
-    <section className="container mx-auto px-4 md:px-6">
+    <section className="container mx-auto px-4 py-12 md:px-6 md:py-20">
       <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
         {columns.map((item) => (
           <EditorialColumn item={item} key={item._key} />
