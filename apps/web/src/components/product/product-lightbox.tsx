@@ -1,6 +1,10 @@
 "use client";
 
-import { Dialog, DialogContent, DialogTitle } from "@workspace/ui/components/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@workspace/ui/components/dialog";
 import { cn } from "@workspace/ui/lib/utils";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import {
@@ -56,7 +60,14 @@ export function ProductLightbox({
 
   const imgRef = useRef<HTMLImageElement>(null);
   const fit = useRef({ w: 0, h: 0 });
-  const drag = useRef({ active: false, sx: 0, sy: 0, px: 0, py: 0, moved: false });
+  const drag = useRef({
+    active: false,
+    sx: 0,
+    sy: 0,
+    px: 0,
+    py: 0,
+    moved: false,
+  });
   const closing = useRef(false);
   const openedFlip = useRef(false);
 
