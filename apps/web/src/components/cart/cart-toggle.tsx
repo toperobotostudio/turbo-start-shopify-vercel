@@ -3,8 +3,8 @@
 import NumberFlow from "@number-flow/react";
 import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
-import { Handbag } from "lucide-react";
 
+import { BagIcon } from "../icons";
 import { useCart } from "./cart-context";
 
 export function CartToggle() {
@@ -20,7 +20,7 @@ export function CartToggle() {
       size="icon"
       variant="ghost"
     >
-      <Handbag className="size-5" />
+      <BagIcon className="size-5" />
       <span
         aria-hidden
         className={cn(

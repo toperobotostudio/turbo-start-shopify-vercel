@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@workspace/ui/lib/utils";
-import { Bookmark } from "lucide-react";
 
+import { BookmarkIcon } from "../icons";
 import { useSavedItems } from "./saved-items-context";
 
 type SavedItemButtonProps = {
@@ -30,7 +30,7 @@ export function SavedItemButton({ handle, className }: SavedItemButtonProps) {
       }}
       type="button"
     >
-      <Bookmark
+      <BookmarkIcon
         className={cn(
           "size-[18px] transition-colors",
           isSaved ? "fill-foreground text-foreground" : "fill-transparent"

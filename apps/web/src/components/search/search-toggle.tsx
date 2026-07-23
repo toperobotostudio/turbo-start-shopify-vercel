@@ -1,8 +1,9 @@
 "use client";
 
-import { Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { SearchIcon } from "../icons";
 
 const TOGGLE_CLASS =
   "inline-flex size-9 items-center justify-center rounded-md transition-colors hover:text-foreground";
@@ -23,14 +24,14 @@ export function SearchToggle() {
         }}
         type="button"
       >
-        <Search className="size-4" />
+        <SearchIcon className="size-4" />
       </button>
     );
   }
 
   return (
     <Link aria-label="Search" className={TOGGLE_CLASS} href="/search">
-      <Search className="size-4" />
+      <SearchIcon className="size-4" />
     </Link>
   );
 }

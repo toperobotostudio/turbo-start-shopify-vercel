@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { Bookmark } from "lucide-react";
 
+import { BookmarkIcon } from "../icons";
 import { useSavedItems } from "./saved-items-context";
 
 type SavedItemsToggleProps = {
@@ -33,7 +33,7 @@ export function SavedItemsToggle({ variant = "icon" }: SavedItemsToggleProps) {
       size="icon"
       variant="ghost"
     >
-      <Bookmark className="size-5" />
+      <BookmarkIcon className="size-5" />
       {count > 0 && (
         <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 font-medium text-primary-foreground text-xs">
           {count > 99 ? "99+" : count}

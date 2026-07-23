@@ -1,10 +1,11 @@
 "use client";
 
-import { Bookmark, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { AnimatedMoney } from "@/components/elements/animated-money";
+import { BookmarkIcon } from "@/components/icons";
 import { useSavedItems } from "@/components/saved-items/saved-items-context";
 import { isSyntheticLineId } from "@/lib/cart/intents";
 import { getColorHex } from "@/lib/shopify/color";
@@ -164,7 +165,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
             onClick={handleMoveToWishlist}
             type="button"
           >
-            <Bookmark className="size-4" />
+            <BookmarkIcon className="size-4" />
             Move to wishlist
           </button>
           <button
