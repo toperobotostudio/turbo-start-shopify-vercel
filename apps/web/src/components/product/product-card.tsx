@@ -446,7 +446,7 @@ export function ProductCard({
         />
       </div>
 
-      <div className="mt-2 flex items-start justify-between gap-2">
+      <div className="mt-2 px-1 flex items-start justify-between gap-2">
         <Link className="flex flex-col gap-2" href={href}>
           <div className="flex flex-col gap-0.5">
             <h3 className="font-medium text-base text-foreground leading-tight">
