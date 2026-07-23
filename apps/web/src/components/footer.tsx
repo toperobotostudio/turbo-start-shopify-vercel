@@ -118,7 +118,7 @@ function FooterColumns({ columns }: Pick<FooterProps["data"], "columns">) {
 
 function HostingCredits() {
   return (
-    <div className="flex items-center gap-4 text-foreground text-sm">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-foreground text-sm">
       <a
         aria-label="Roboto Studio"
         href="https://robotostudio.com/"
