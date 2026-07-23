@@ -27,6 +27,23 @@ export const hero = defineType({
       initialValue: "classic",
     }),
     defineField({
+      name: "contentPosition",
+      type: "string",
+      title: "Content position",
+      description:
+        "Where the promo text sits within a full-bleed hero (bottom edge)",
+      options: {
+        list: [
+          { title: "Bottom left", value: "bottomLeft" },
+          { title: "Bottom center", value: "bottomCenter" },
+          { title: "Bottom right", value: "bottomRight" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "bottomLeft",
+      hidden: ({ parent }) => parent?.style !== "fullBleed",
+    }),
+    defineField({
       name: "badge",
       type: "string",
       title: "Badge",

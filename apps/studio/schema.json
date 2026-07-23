@@ -998,6 +998,27 @@
           },
           "optional": true
         },
+        "contentPosition": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "bottomLeft"
+              },
+              {
+                "type": "string",
+                "value": "bottomCenter"
+              },
+              {
+                "type": "string",
+                "value": "bottomRight"
+              }
+            ]
+          },
+          "optional": true
+        },
         "badge": {
           "type": "objectAttribute",
           "value": {

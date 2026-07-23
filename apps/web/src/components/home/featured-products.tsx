@@ -50,7 +50,7 @@ export async function FeaturedProducts() {
   return (
     <section className="container mx-auto px-4 py-12 md:px-6 md:py-20">
       <div className="mb-8 flex items-end justify-between">
-        <h2 className="font-light text-3xl tracking-tight md:text-4xl">
+        <h2 className="font-medium text-3xl tracking-tight md:text-4xl">
           Featured Products
         </h2>
         <Button asChild size="sm" variant="default">

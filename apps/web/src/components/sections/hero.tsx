@@ -1,4 +1,5 @@
 import { Badge } from "@workspace/ui/components/badge";
+import { cn } from "@workspace/ui/lib/utils";
 import Link from "next/link";
 
 import type {
@@ -10,15 +11,32 @@ import { RichText } from "../elements/rich-text";
 import { SanityButtons } from "../elements/sanity-buttons";
 import { SanityImage } from "../elements/sanity-image";
 
+type HeroContentPosition = "bottomLeft" | "bottomCenter" | "bottomRight";
+
 type HeroBlockProps = {
   _key: string;
   _type: "hero";
   style?: "classic" | "fullBleed" | null;
+  contentPosition?: HeroContentPosition | null;
   badge?: string | null;
   title?: string | null;
   richText?: SanityRichTextProps | null;
   image?: SanityImageProps | null;
   buttons?: SanityButtonProps[] | null;
+};
+
+/**
+ * Maps the Sanity content-position choice to alignment classes. `text` aligns
+ * the actual text lines; `selfX` (auto margins) positions the block and the
+ * w-fit buttons, which text-align alone can't move.
+ */
+const CONTENT_POSITION: Record<
+  HeroContentPosition,
+  { text: string; selfX: string }
+> = {
+  bottomLeft: { text: "text-left", selfX: "mr-auto" },
+  bottomCenter: { text: "text-center", selfX: "mx-auto" },
+  bottomRight: { text: "text-right", selfX: "ml-auto" },
 };
 
 export function HeroBlock(props: HeroBlockProps) {
@@ -76,7 +94,14 @@ function ClassicHero({
   );
 }
 
-function FullBleedHero({ title, buttons, image, richText }: HeroBlockProps) {
+function FullBleedHero({
+  title,
+  buttons,
+  image,
+  richText,
+  contentPosition,
+}: HeroBlockProps) {
+  const pos = CONTENT_POSITION[contentPosition ?? "bottomLeft"];
   return (
     <section className="relative" id="hero">
       <div className="card-surface relative h-[90dvh] min-h-125 w-full overflow-hidden">
@@ -97,16 +122,22 @@ function FullBleedHero({ title, buttons, image, richText }: HeroBlockProps) {
           className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-white/90 via-white/60 to-transparent lg:hidden"
         />
 
-        {/* Promo text overlaid bottom-left */}
+        {/* Promo text overlaid along the bottom (position set in Sanity) */}
         <div className="absolute inset-x-0 bottom-0">
           <div className="container mx-auto px-4 pb-8 md:px-6 md:pb-12">
-            <div className="flex max-w-md flex-col items-start gap-2 font-medium text-zinc-900">
+            <div
+              className={cn(
+                "flex w-full max-w-md flex-col gap-2 font-medium text-zinc-900",
+                pos.text,
+                pos.selfX
+              )}
+            >
               <div className="text-2xl leading-tight">
                 {title && <p>{title}</p>}
                 {buttons?.map((button) =>
                   button.href ? (
                     <Link
-                      className="block w-fit hover:underline"
+                      className={cn("block w-fit hover:underline", pos.selfX)}
                       href={button.href}
                       key={button._key}
                       target={button.openInNewTab ? "_blank" : "_self"}
