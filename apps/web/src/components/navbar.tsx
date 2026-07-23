@@ -135,7 +135,7 @@ export function Navbar({ navbarData, settingsData }: NavigationData) {
           </div>
 
           {/* Mobile Actions */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex items-center gap-4 md:hidden">
             <SearchToggle />
             <SavedItemsToggle />
             <CartToggle />
