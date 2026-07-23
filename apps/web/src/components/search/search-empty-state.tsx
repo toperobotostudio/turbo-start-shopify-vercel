@@ -12,14 +12,14 @@ export function SearchEmptyState() {
   return (
     <div className="flex flex-col gap-8 site-container">
       {collections.length > 0 && (
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-4 py-8">
           <h2 className="font-medium text-foreground text-xl tracking-[0.24px]">
             Popular Searches
           </h2>
           <div className="flex flex-wrap gap-2">
             {collections.map((collection) => (
               <Link
-                className="rounded-md bg-muted px-3 py-1 text-foreground text-sm transition-colors hover:bg-muted/70"
+                className="bg-zinc-200 px-1 text-base text-zinc-900 tracking-[0.24px] transition-colors hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
                 href={`/collections/${collection.handle}`}
                 key={collection.id}
               >
