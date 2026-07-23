@@ -6,10 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ProductCard } from "@/components/product/product-card";
 import { getColorHex } from "@/lib/shopify/color";
 import { getCardOptions } from "@/lib/shopify/options";
-import {
-  badgeFromTags,
-  secondaryImageUrl,
-} from "@/lib/shopify/product-card";
+import { badgeFromTags, secondaryImageUrl } from "@/lib/shopify/product-card";
 import { type FeaturedProduct, LOW_STOCK_THRESHOLD } from "@/lib/shopify/types";
 
 async function fetchFeaturedProducts(): Promise<FeaturedProduct[]> {

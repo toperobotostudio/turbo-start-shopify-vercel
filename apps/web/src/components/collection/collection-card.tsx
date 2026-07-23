@@ -7,7 +7,11 @@ export type CollectionCardProps = {
   imageUrl: string | null;
 };
 
-export function CollectionCard({ handle, title, imageUrl }: CollectionCardProps) {
+export function CollectionCard({
+  handle,
+  title,
+  imageUrl,
+}: CollectionCardProps) {
   return (
     <Link
       className="group block overflow-hidden"

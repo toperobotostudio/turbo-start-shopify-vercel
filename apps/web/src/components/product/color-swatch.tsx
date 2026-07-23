@@ -58,10 +58,7 @@ export function ColorSwatch({
             title={value}
             type="button"
           >
-            <span
-              className="block h-3 w-6"
-              style={{ backgroundColor: hex }}
-            />
+            <span className="block h-3 w-6" style={{ backgroundColor: hex }} />
             <span
               className={cn(
                 "block h-px w-full",

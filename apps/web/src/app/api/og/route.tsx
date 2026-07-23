@@ -93,7 +93,11 @@ const resolveDiscount = (
       compareAtPrice = variant.compareAtPrice;
     }
   }
-  if (price === undefined || compareAtPrice === null || compareAtPrice <= price) {
+  if (
+    price === undefined ||
+    compareAtPrice === null ||
+    compareAtPrice <= price
+  ) {
     return;
   }
   const percent = Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
@@ -134,9 +138,7 @@ const CreditMark = ({ src }: { src: string }) => (
 );
 
 const CreditGroup = ({ children }: { children: ReactNode }) => (
-  <div
-    style={{ display: "flex", alignItems: "center", gap: 7, flexShrink: 0 }}
-  >
+  <div style={{ display: "flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
     {children}
   </div>
 );

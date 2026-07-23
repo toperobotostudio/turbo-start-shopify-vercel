@@ -93,6 +93,7 @@ const blogCardFragment = /* groq */ `
   orderRank,
   ${imageFragment},
   publishedAt,
+  "category": category->{ _id, title, "slug": slug.current },
   ${blogAuthorFragment}
 `;
 
@@ -337,7 +338,7 @@ export const queryBlogIndexPageData = defineQuery(`
 `);
 
 export const queryBlogIndexPageBlogs = defineQuery(`
-  *[_type == "blog" && (seoHideFromLists != true)] | order(orderRank asc) [$start...$end]{
+  *[_type == "blog" && (seoHideFromLists != true) && ($category == "" || category->slug.current == $category)] | order(orderRank asc) [$start...$end]{
     ${blogCardFragment}
   }
 `);
@@ -349,12 +350,21 @@ export const queryAllBlogDataForSearch = defineQuery(`
 `);
 
 export const queryBlogIndexPageBlogsCount = defineQuery(`
-  count(*[_type == "blog" && (seoHideFromLists != true)])
+  count(*[_type == "blog" && (seoHideFromLists != true) && ($category == "" || category->slug.current == $category)])
+`);
+
+export const queryBlogCategories = defineQuery(`
+  *[_type == "category"] | order(orderRank asc){
+    _id,
+    title,
+    "slug": slug.current
+  }
 `);
 export const queryBlogSlugPageData = defineQuery(`
   *[_type == "blog" && slug.current == $slug][0]{
     ...,
     "slug": slug.current,
+    "category": category->{ _id, title, "slug": slug.current },
     ${blogAuthorFragment},
     ${imageFragment},
     ${richTextFragment},

@@ -240,9 +240,7 @@ function GalleryMobile({
             <button
               className={cn(
                 "shrink-0 border-b pb-1 transition-colors",
-                active === index
-                  ? "border-foreground"
-                  : "border-transparent"
+                active === index ? "border-foreground" : "border-transparent"
               )}
               key={image.url}
               onClick={() => scrollToIndex(index)}
@@ -277,11 +275,12 @@ export function ProductGallery({
   // On-page image elements per `${view}:${index}`, so the lightbox can zoom
   // out of / back into whichever view is currently visible.
   const sourceEls = useRef(new Map<string, HTMLButtonElement>());
-  const setSource = (view: "d" | "m") => (index: number, el: HTMLButtonElement | null) => {
-    const key = `${view}:${index}`;
-    if (el) sourceEls.current.set(key, el);
-    else sourceEls.current.delete(key);
-  };
+  const setSource =
+    (view: "d" | "m") => (index: number, el: HTMLButtonElement | null) => {
+      const key = `${view}:${index}`;
+      if (el) sourceEls.current.set(key, el);
+      else sourceEls.current.delete(key);
+    };
   const getSourceRect = (index: number): DOMRect | null => {
     for (const view of ["d", "m"] as const) {
       const el = sourceEls.current.get(`${view}:${index}`);

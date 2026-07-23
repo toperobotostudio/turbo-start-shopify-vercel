@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/typography": "^0.5.20",
     "@turbo/gen": "^2.7.5",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

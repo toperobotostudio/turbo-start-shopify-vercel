@@ -22,7 +22,7 @@ export function CartToggle() {
       <span
         aria-hidden
         className={cn(
-          "absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-primary font-medium text-primary-foreground text-xs tabular-nums",
+          "-top-2 -right-2 absolute flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 font-medium text-[10px] text-primary-foreground leading-none tabular-nums",
           "transition-[opacity,scale] duration-300 ease-out motion-reduce:transition-none",
           hasItems ? "scale-100 opacity-100" : "scale-50 opacity-0"
         )}
