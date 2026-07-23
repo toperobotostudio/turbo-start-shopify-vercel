@@ -1,10 +1,10 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 import { AnimatedMoney } from "@/components/elements/animated-money";
+import { ShopifyImage } from "@/components/elements/shopify-image";
 import { BookmarkIcon } from "@/components/icons";
 import { QuantitySelector } from "@/components/product/quantity-selector";
 import { useSavedItems } from "@/components/saved-items/saved-items-context";
@@ -176,7 +176,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
         onClick={closeCart}
       >
         {line.merchandise.image && (
-          <Image
+          <ShopifyImage
             alt={line.merchandise.image.altText ?? line.merchandise.title}
             className="object-cover"
             fill

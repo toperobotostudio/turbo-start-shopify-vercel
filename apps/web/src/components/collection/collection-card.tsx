@@ -1,5 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
+
+import { ShopifyImage } from "@/components/elements/shopify-image";
 
 export type CollectionCardProps = {
   handle: string;
@@ -15,7 +16,7 @@ export function CollectionCard({ handle, title, imageUrl }: CollectionCardProps)
     >
       <div className="card-surface relative aspect-56/75 overflow-hidden">
         {imageUrl ? (
-          <Image
+          <ShopifyImage
             alt={title}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             fill

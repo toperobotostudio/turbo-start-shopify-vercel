@@ -1,9 +1,10 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+
+import { ShopifyImage } from "@/components/elements/shopify-image";
 
 type CollectionLink = {
   _id: string;
@@ -63,7 +64,7 @@ export function CollectionGroupDropdown({
                 >
                   {collection.store?.imageUrl && (
                     <div className="relative size-10 shrink-0 overflow-hidden rounded-md bg-muted">
-                      <Image
+                      <ShopifyImage
                         alt={collection.store.title ?? ""}
                         className="object-cover"
                         fill

@@ -2,9 +2,10 @@
 
 import { cn } from "@workspace/ui/lib/utils";
 import { ZoomIn } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
+// Aliased: this file's domain type is also named `ShopifyImage`.
+import { ShopifyImage as BlurImage } from "@/components/elements/shopify-image";
 import type { ShopifyImage } from "@/lib/shopify/types";
 import { ProductLightbox } from "./product-lightbox";
 
@@ -95,7 +96,7 @@ function GalleryDesktop({
               type="button"
             >
               <div className="card-surface relative aspect-3/4 w-full overflow-hidden">
-                <Image
+                <BlurImage
                   alt={image.altText ?? `Thumbnail ${index + 1}`}
                   className="object-cover"
                   fill
@@ -121,7 +122,7 @@ function GalleryDesktop({
             }}
             type="button"
           >
-            <Image
+            <BlurImage
               alt={image.altText ?? "Product image"}
               className="object-cover"
               fill
@@ -222,7 +223,7 @@ function GalleryMobile({
             }}
             type="button"
           >
-            <Image
+            <BlurImage
               alt={image.altText ?? "Product image"}
               className="object-cover"
               fill
@@ -249,7 +250,7 @@ function GalleryMobile({
               type="button"
             >
               <div className="card-surface relative h-16 w-12 overflow-hidden">
-                <Image
+                <BlurImage
                   alt={image.altText ?? `Thumbnail ${index + 1}`}
                   className="object-cover"
                   fill

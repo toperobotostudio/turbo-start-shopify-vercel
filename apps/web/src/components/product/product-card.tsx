@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { useCartActions } from "@/components/cart/cart-context";
+import { ShopifyImage } from "@/components/elements/shopify-image";
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
 import { buildLineMetadata } from "@/lib/cart/metadata";
 import { formatMoney } from "@/lib/shopify/money";
@@ -97,7 +98,7 @@ function ProductCardMini({
     >
       {imageUrl ? (
         <div className="card-surface relative size-12 shrink-0 overflow-hidden border">
-          <Image
+          <ShopifyImage
             alt={title}
             className="object-cover"
             fill
@@ -327,7 +328,7 @@ function CardImage({
 
   return (
     <>
-      <Image
+      <ShopifyImage
         alt={title}
         className={cn(
           "object-cover",
