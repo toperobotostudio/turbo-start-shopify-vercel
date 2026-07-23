@@ -2,7 +2,9 @@
 
 import { Input } from "@workspace/ui/components/input";
 import { cn } from "@workspace/ui/lib/utils";
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
+
+import { SearchIcon } from "@/components/icons";
 
 export function SearchInput({
   className,
@@ -25,10 +27,7 @@ export function SearchInput({
         </label>
 
         <div className="relative">
-          <Search
-            aria-hidden="true"
-            className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 h-4 w-4 text-muted-foreground"
-          />
+          <SearchIcon className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
 
           <Input
             className="h-12 pr-10 pl-10 text-base"

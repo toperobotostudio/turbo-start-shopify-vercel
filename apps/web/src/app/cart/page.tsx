@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { Loader2, ShoppingBag } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 import { useCart } from "@/components/cart/cart-context";
 import { CartLineItem } from "@/components/cart/cart-line-item";
 import { CartSummary } from "@/components/cart/cart-summary";
+import { BagIcon } from "@/components/icons";
 
 export default function CartPage() {
   const { cart, isLoading, settle } = useCart();
@@ -41,7 +42,7 @@ export default function CartPage() {
       <div className="px-4 py-16">
         <h1 className="mb-8 font-semibold text-3xl">Cart</h1>
         <div className="flex flex-col items-center justify-center gap-6 py-16">
-          <ShoppingBag className="size-16 text-muted-foreground" />
+          <BagIcon className="size-16 text-muted-foreground" />
           <div className="text-center">
             <p className="font-medium text-lg">Your cart is empty</p>
             <p className="mt-1 text-muted-foreground text-sm">
