@@ -75,7 +75,7 @@ const columnHeaderClass =
   "font-medium text-sm text-zinc-600 tracking-[0.24px] dark:text-zinc-400";
 
 const optionBaseClass =
-  "w-fit text-left text-sm tracking-[0.24px] transition-colors";
+  "w-fit text-left text-sm leading-[18px] tracking-[0.24px] transition-colors";
 
 /** Preferred column order; unlisted facets trail after. */
 const FILTER_ORDER = ["category", "color", "size", "price", "material", "fit"];
