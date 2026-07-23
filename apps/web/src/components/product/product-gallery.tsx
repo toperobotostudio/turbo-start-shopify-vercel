@@ -289,6 +289,20 @@ export function ProductGallery({
     return null;
   };
 
+  // The optimized URL the visible on-page `next/image` already downloaded, so
+  // the lightbox can reuse that cached resource instead of fetching the raw
+  // Shopify master on open. `null` when no view has it loaded (falls back to
+  // the raw URL in the lightbox).
+  const getSourceSrc = (index: number): string | null => {
+    for (const view of ["d", "m"] as const) {
+      const el = sourceEls.current.get(`${view}:${index}`);
+      if (el && el.offsetParent !== null) {
+        return el.querySelector("img")?.currentSrc || null;
+      }
+    }
+    return null;
+  };
+
   if (images.length === 0) {
     return <div className="card-surface aspect-3/4 w-full" />;
   }
@@ -315,6 +329,7 @@ export function ProductGallery({
       />
       <ProductLightbox
         getSourceRect={getSourceRect}
+        getSourceSrc={getSourceSrc}
         images={images}
         index={lightboxIndex}
         onIndexChange={setLightboxIndex}

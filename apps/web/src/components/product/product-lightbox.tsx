@@ -27,6 +27,12 @@ type ProductLightboxProps = {
   sourceRect: DOMRect | null;
   /** Resolves the current on-page source rect (for the close FLIP). */
   getSourceRect: (index: number) => DOMRect | null;
+  /**
+   * Resolves the optimized URL the on-page `next/image` already downloaded, so
+   * the fullscreen `<img>` reuses that cached resource (instant, no new fetch).
+   * `null` when the image isn't loaded on-page.
+   */
+  getSourceSrc: (index: number) => string | null;
 };
 
 /** In-lightbox zoom factor (click to magnify). */
@@ -52,6 +58,7 @@ export function ProductLightbox({
   onIndexChange,
   sourceRect,
   getSourceRect,
+  getSourceSrc,
 }: ProductLightboxProps) {
   const [zoomed, setZoomed] = useState(false);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -73,9 +80,15 @@ export function ProductLightbox({
 
   const current = images[index];
 
+  // Reuse the exact optimized URL the on-page gallery already downloaded so the
+  // fullscreen image is an instant cache hit with no new fetch. Falls back to
+  // the raw Shopify URL only when the image isn't loaded on-page (e.g. an
+  // arrow-navigated image that was still lazy).
+  const displaySrc = current ? (getSourceSrc(index) ?? current.url) : undefined;
+
   // Zoom the image out of its on-page source. Runs once the lightbox image has
-  // laid out (from the layout effect if cached, else its onLoad) — the raw <img>
-  // isn't the same cached resource as the page's next/image, so it can lag.
+  // laid out — usually frame 1, since `displaySrc` reuses the gallery's cached
+  // resource; the raw-URL fallback can still lag, hence the polling below.
   const runOpenFlip = () => {
     if (!open || openedFlip.current) return;
     const img = imgRef.current;
@@ -283,7 +296,7 @@ export function ProductLightbox({
                 className="block max-h-[calc(100vh-4rem)] w-auto max-w-[92vw] select-none object-contain"
                 draggable={false}
                 ref={imgRef}
-                src={current.url}
+                src={displaySrc}
                 style={{
                   transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomed ? SCALE : 1})`,
                   transformOrigin: "center center",
