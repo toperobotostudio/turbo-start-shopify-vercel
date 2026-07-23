@@ -55,7 +55,7 @@ export function FaqCategories({ title, categories }: FaqCategoriesProps) {
                   "text-left text-sm tracking-wide transition-colors",
                   index === activeIndex
                     ? "font-medium text-zinc-900 dark:text-zinc-100"
-                    : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    : "text-muted-foreground hover:text-zinc-900 dark:hover:text-zinc-100"
                 )}
                 id={`faq-tab-${category?._key}`}
                 key={category?._key}
