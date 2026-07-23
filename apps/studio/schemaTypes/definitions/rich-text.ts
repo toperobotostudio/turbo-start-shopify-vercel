@@ -1,4 +1,4 @@
-import { ImageIcon, LinkIcon, ThLargeIcon } from "@sanity/icons";
+import { ImageIcon, LinkIcon } from "@sanity/icons";
 import {
   type ConditionalProperty,
   defineArrayMember,
@@ -66,27 +66,15 @@ const imageMember = defineArrayMember({
 // --- Inline block members (from old portableText) ---
 const inlineMembers = {
   accordion: defineArrayMember({ type: "accordion" }),
-  benefitCards: defineArrayMember({ type: "benefitCards" }),
   callout: defineArrayMember({ type: "callout" }),
-  dataGallery: defineArrayMember({ type: "dataGallery" }),
-  featuredProduct: defineArrayMember({ type: "featuredProduct" }),
   grid: defineArrayMember({ type: "grid" }),
   images: defineArrayMember({ type: "images" }),
   imageWithProductHotspots: defineArrayMember({
     type: "imageWithProductHotspots",
     title: "Image with Hotspots",
   }),
-  table: defineArrayMember({
-    type: "table",
-    title: "Table",
-    icon: ThLargeIcon,
-  }),
   instagram: defineArrayMember({ type: "instagram" }),
-  productFaq: defineArrayMember({ type: "productFaq" }),
-  productResources: defineArrayMember({ type: "productResources" }),
   products: defineArrayMember({ type: "products" }),
-  scatterChartData: defineArrayMember({ type: "scatterChartData" }),
-  specificationsTable: defineArrayMember({ type: "specificationsTable" }),
 };
 
 // --- All available members ---

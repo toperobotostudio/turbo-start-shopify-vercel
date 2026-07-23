@@ -1,5 +1,4 @@
 import { Logger } from "@workspace/logger";
-
 import { cn } from "@workspace/ui/lib/utils";
 import Link from "next/link";
 import { PortableText, type PortableTextReactComponents } from "next-sanity";
@@ -11,7 +10,7 @@ import { SanityImage } from "./sanity-image";
 const logger = new Logger("RichText");
 
 const linkClassName =
-  "font-medium text-text-primary underline decoration-solid underline-offset-2";
+  "font-medium text-foreground underline decoration-solid underline-offset-2";
 
 const components: Partial<PortableTextReactComponents> = {
   block: {
@@ -19,7 +18,7 @@ const components: Partial<PortableTextReactComponents> = {
       const slug = parseChildrenToSlug(value.children);
       return (
         <h2
-          className="scroll-m-32 font-semibold text-2xl leading-tight tracking-[-0.48px] text-text-heading first:mt-0 [&_strong]:font-semibold!"
+          className="scroll-m-32  font-semibold text-2xl leading-tight tracking-[-0.48px] text-foreground first:mt-0 [&_strong]:font-semibold!"
           id={slug}
         >
           {children}
@@ -30,7 +29,7 @@ const components: Partial<PortableTextReactComponents> = {
       const slug = parseChildrenToSlug(value.children);
       return (
         <h3
-          className="scroll-m-32 font-semibold text-2xl leading-tight tracking-[-0.48px] text-text-heading [&_strong]:font-semibold!"
+          className="scroll-m-32  font-semibold text-2xl leading-tight tracking-[-0.48px] text-foreground [&_strong]:font-semibold!"
           id={slug}
         >
           {children}
@@ -41,7 +40,7 @@ const components: Partial<PortableTextReactComponents> = {
       const slug = parseChildrenToSlug(value.children);
       return (
         <h4
-          className="scroll-m-32 font-semibold text-xl [&_strong]:font-semibold!"
+          className="scroll-m-32  font-semibold text-xl [&_strong]:font-semibold!"
           id={slug}
         >
           {children}
@@ -52,7 +51,7 @@ const components: Partial<PortableTextReactComponents> = {
       const slug = parseChildrenToSlug(value.children);
       return (
         <h5
-          className="scroll-m-32 font-semibold text-lg [&_strong]:font-semibold!"
+          className="scroll-m-32  font-semibold text-lg [&_strong]:font-semibold!"
           id={slug}
         >
           {children}
@@ -63,7 +62,7 @@ const components: Partial<PortableTextReactComponents> = {
       const slug = parseChildrenToSlug(value.children);
       return (
         <h6
-          className="scroll-m-32 font-semibold text-base [&_strong]:font-semibold!"
+          className="scroll-m-32  font-semibold text-base [&_strong]:font-semibold!"
           id={slug}
         >
           {children}
@@ -82,7 +81,7 @@ const components: Partial<PortableTextReactComponents> = {
         const slug = parseChildrenToSlug(value.children);
         return (
           <h3
-            className="scroll-m-32 font-semibold text-2xl leading-tight tracking-[-0.48px] text-text-heading [&_strong]:font-semibold!"
+            className="scroll-m-32  font-semibold text-2xl leading-tight tracking-[-0.48px] text-foreground [&_strong]:font-semibold!"
             id={slug}
           >
             {children}
@@ -94,7 +93,7 @@ const components: Partial<PortableTextReactComponents> = {
   },
   marks: {
     code: ({ children }) => (
-      <code className="border border-white/10 bg-opacity-5 p-1 text-sm lg:whitespace-nowrap">
+      <code className="border border-border bg-muted px-1.5 py-0.5 text-foreground text-sm lg:whitespace-nowrap">
         {children}
       </code>
     ),
@@ -159,7 +158,7 @@ const components: Partial<PortableTextReactComponents> = {
             width={1600}
           />
           {value?.caption && (
-            <figcaption className="text-center text-[13px] leading-[1.4] text-text-muted">
+            <figcaption className="text-center text-[13px] leading-[1.4] text-muted-foreground">
               {value.caption}
             </figcaption>
           )}
@@ -184,7 +183,7 @@ export function RichText<T extends SanityRichTextProps>({
   return (
     <div
       className={cn(
-        "prose prose-zinc max-w-none prose-headings:scroll-m-32 prose-headings:font-semibold prose-headings:text-text-heading prose-h2:text-2xl prose-h2:leading-tight prose-h2:tracking-[-0.48px] prose-h2:first:mt-0 prose-h2:mt-12 prose-h2:mb-8 prose-p:text-neutral-800 prose-p:leading-[1.4] prose-p:mt-0 prose-p:mb-6 prose-ol:text-neutral-800 prose-ul:text-neutral-800 prose-li:text-neutral-800 prose-li:leading-[1.4] prose-li:my-0 prose-li:marker:text-neutral-800 prose-ul:my-4 prose-ol:my-4 prose-a:decoration-solid prose-a:font-medium prose-a:text-text-primary",
+        "prose prose-zinc max-w-none prose-headings:scroll-m-32  prose-headings:font-semibold prose-headings:text-foreground prose-h2:text-2xl prose-h2:leading-tight prose-h2:tracking-[-0.48px] prose-h2:first:mt-0 prose-h2:mt-12 prose-h2:mb-8 prose-p:text-foreground prose-p:leading-[1.4] prose-p:mt-0 prose-p:mb-6 prose-ol:text-foreground prose-ul:text-foreground prose-li:text-foreground prose-li:leading-[1.4] prose-li:my-0 prose-li:marker:text-foreground prose-ul:my-4 prose-ol:my-4 prose-strong:text-foreground prose-code:text-foreground prose-a:decoration-solid prose-a:font-medium prose-a:text-foreground",
         className
       )}
     >
