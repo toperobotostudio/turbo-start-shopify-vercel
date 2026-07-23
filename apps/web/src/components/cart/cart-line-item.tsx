@@ -6,6 +6,7 @@ import Link from "next/link";
 
 import { AnimatedMoney } from "@/components/elements/animated-money";
 import { BookmarkIcon } from "@/components/icons";
+import { QuantitySelector } from "@/components/product/quantity-selector";
 import { useSavedItems } from "@/components/saved-items/saved-items-context";
 import { isSyntheticLineId } from "@/lib/cart/intents";
 import { getColorHex } from "@/lib/shopify/color";
@@ -23,7 +24,6 @@ import {
 import { useProductOptions } from "./use-product-options";
 
 const DEFAULT_TITLE = "Default Title";
-const QTY_OPTIONS = 10;
 
 function selectionsFromOptions(
   options: SelectedOption[]
@@ -95,15 +95,9 @@ export function CartLineItem({ line }: { line: CartLine }) {
       !(option.values.length === 1 && option.values[0] === DEFAULT_TITLE)
   );
 
-  const qtyMax = Math.max(QTY_OPTIONS, line.quantity);
-  const qtyOptions: VariantOption[] = Array.from(
-    { length: qtyMax },
-    (_, index) => ({ value: String(index + 1), available: true })
-  );
-
   return (
-    <div className="flex items-start justify-between gap-4 py-8 first:pt-0">
-      <div className="flex flex-1 flex-col gap-6">
+    <div className="flex items-stretch justify-between gap-4 py-8 first:pt-0">
+      <div className="flex flex-1 flex-col items-start gap-4">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
             <Link
@@ -143,21 +137,18 @@ export function CartLineItem({ line }: { line: CartLine }) {
                 />
               );
             })}
-
-            <CartLineVariantSelect
-              disabled={isSynthetic}
-              label="Qty"
-              onSelect={(value) => updateLine(line.id, Number(value))}
-              options={qtyOptions}
-              type="default"
-              value={String(line.quantity)}
-            />
           </div>
 
           {lineError && (
             <p className="text-red-600 text-sm">{lineError.message}</p>
           )}
         </div>
+
+        <QuantitySelector
+          disabled={isSynthetic}
+          onChange={(value) => updateLine(line.id, value)}
+          value={line.quantity}
+        />
 
         <div className="flex items-center gap-4">
           <button
@@ -179,19 +170,19 @@ export function CartLineItem({ line }: { line: CartLine }) {
         </div>
       </div>
 
-      <Link className="shrink-0" href={productUrl} onClick={closeCart}>
-        {line.merchandise.image ? (
-          <div className="card-surface relative h-32 w-24 overflow-hidden">
-            <Image
-              alt={line.merchandise.image.altText ?? line.merchandise.title}
-              className="object-cover"
-              fill
-              sizes="96px"
-              src={line.merchandise.image.url}
-            />
-          </div>
-        ) : (
-          <div className="card-surface h-32 w-24" />
+      <Link
+        className="card-surface relative w-31.25 shrink-0 self-stretch overflow-hidden"
+        href={productUrl}
+        onClick={closeCart}
+      >
+        {line.merchandise.image && (
+          <Image
+            alt={line.merchandise.image.altText ?? line.merchandise.title}
+            className="object-cover"
+            fill
+            sizes="125px"
+            src={line.merchandise.image.url}
+          />
         )}
       </Link>
     </div>
