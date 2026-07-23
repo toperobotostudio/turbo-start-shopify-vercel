@@ -14,15 +14,10 @@ import { sanityCollectionToCardProps } from "@/lib/collection-card";
 
 type CollectionsContentProps = {
   title: string;
-  subtitle: string | null;
   collections: QueryAllCollectionsResult;
 };
 
-function CollectionsGrid({
-  title,
-  subtitle,
-  collections,
-}: CollectionsContentProps) {
+function CollectionsGrid({ title, collections }: CollectionsContentProps) {
   const searchParams = useSearchParams();
   const sort = (searchParams.get("sort") as SortOption) || "a-z";
   const sorted = sortCollections(collections, sort);
@@ -30,14 +25,9 @@ function CollectionsGrid({
   return (
     <div className="site-container py-12">
       <div className="mb-8 flex items-center justify-between gap-4">
-        <div>
-          <h2 className="font-medium text-2xl tracking-tight md:text-[32px]">
-            {title}
-          </h2>
-          {subtitle ? (
-            <p className="mt-2 max-w-2xl text-muted-foreground">{subtitle}</p>
-          ) : null}
-        </div>
+        <h2 className="font-medium text-2xl tracking-tight md:text-[32px]">
+          {title}
+        </h2>
         <CollectionsSortSelector />
       </div>
       {sorted.length === 0 ? (

@@ -46,11 +46,7 @@ export default async function CollectionsPage() {
         name={title}
         url={`${baseUrl}/collections`}
       />
-      <CollectionsContent
-        collections={allCollections}
-        subtitle={indexData?.subtitle ?? null}
-        title={title}
-      />
+      <CollectionsContent collections={allCollections} title={title} />
     </>
   );
 }

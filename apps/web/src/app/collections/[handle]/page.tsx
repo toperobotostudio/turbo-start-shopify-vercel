@@ -134,13 +134,7 @@ export default async function CollectionPage({
           <ListingControls currentReverse={reverse} currentSort={sort} />
         </div>
 
-        {shopifyCollection.description && (
-          <p className="mt-2 max-w-2xl text-muted-foreground">
-            {shopifyCollection.description}
-          </p>
-        )}
-
-        <div className="mt-4 mb-6 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <FilterPanel filters={availableFilters} />
           <ActiveFilters />
         </div>

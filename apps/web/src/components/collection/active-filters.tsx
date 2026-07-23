@@ -51,7 +51,7 @@ export function ActiveFilters() {
         return (
           <button
             className={cn(
-              "flex items-center gap-0.5 px-1 py-0.5 text-sm tracking-[0.24px] transition-colors",
+              "flex items-center justify-center gap-0.5 px-0.5 text-sm tracking-[0.24px] transition-colors",
               filter.invalid
                 ? "bg-destructive/15 text-destructive hover:bg-destructive/25"
                 : "bg-zinc-200 text-zinc-900 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
