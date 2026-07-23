@@ -26,9 +26,22 @@ export async function GET(request: Request) {
   }
 
   const { products, collections, queries } = result.data.predictiveSearch;
-  return NextResponse.json({
-    products,
-    collections,
-    related: queries.map((q) => q.text),
-  });
+
+  // "Related" should surface catalog names that closely match the query. Prefer
+  // real collection + product titles (Shopify's `queries` suggestions are often
+  // empty on low-traffic stores), then top up with any query suggestions.
+  const normalizedQuery = query.toLowerCase();
+  const titleSuggestions = [
+    ...collections.map((collection) => collection.title),
+    ...products.map((product) => product.title),
+  ].filter(
+    (title): title is string =>
+      Boolean(title) && title.toLowerCase() !== normalizedQuery
+  );
+
+  const related = Array.from(
+    new Set([...titleSuggestions, ...queries.map((q) => q.text)])
+  ).slice(0, 8);
+
+  return NextResponse.json({ products, collections, related });
 }

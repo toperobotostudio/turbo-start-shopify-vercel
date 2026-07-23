@@ -85,7 +85,7 @@ export function SearchResults({
           <div className="flex flex-wrap gap-2">
             {related.map((term) => (
               <button
-                className="rounded-md bg-muted px-3 py-1 text-foreground text-sm transition-colors hover:bg-muted/70"
+                className="bg-zinc-200 px-1 text-base text-zinc-900 tracking-[0.24px] transition-colors hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
                 key={term}
                 onClick={() => onSelectTerm(term)}
                 type="button"
