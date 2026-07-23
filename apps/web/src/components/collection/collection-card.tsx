@@ -13,7 +13,7 @@ export function CollectionCard({ handle, title, imageUrl }: CollectionCardProps)
       className="group block overflow-hidden"
       href={`/collections/${handle}`}
     >
-      <div className="card-surface relative aspect-3/4 overflow-hidden">
+      <div className="card-surface relative aspect-56/75 overflow-hidden">
         {imageUrl ? (
           <Image
             alt={title}
