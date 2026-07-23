@@ -20,7 +20,7 @@ export function SearchInput({
   onClear: () => void;
 }) {
   return (
-    <div className={cn("mx-auto w-full max-w-lg", className)}>
+    <div className={cn("w-full", className)}>
       <div className="relative">
         <label className="sr-only" htmlFor="blog-search-input">
           {placeholder}

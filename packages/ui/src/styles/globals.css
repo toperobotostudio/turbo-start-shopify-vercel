@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../../../components/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
@@ -94,6 +95,7 @@
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
   --text-xs: 0.75rem;
   --text-xs--line-height: 1.125rem;
   --text-sm: 0.875rem;

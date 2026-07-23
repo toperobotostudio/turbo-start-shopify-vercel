@@ -2,6 +2,7 @@ import "@workspace/ui/globals.css";
 
 import { SanityLive } from "@workspace/sanity/live";
 import { Toaster } from "@workspace/ui/components/sonner";
+import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -18,6 +19,7 @@ import { Providers } from "@/components/providers";
 import { getNavigationData } from "@/lib/navigation";
 
 const fontSans = GeistSans;
+const fontMono = GeistMono;
 
 export default async function RootLayout({
   children,
@@ -31,7 +33,9 @@ export default async function RootLayout({
   const nav = await getNavigationData();
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${fontSans.variable} font-sans antialiased`}>
+      <body
+        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}
+      >
         <Providers>
           <div className="flex min-h-screen flex-col">
             <PromoBanner data={nav.promoBannerData} />

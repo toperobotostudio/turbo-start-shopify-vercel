@@ -1,4 +1,5 @@
 import { Logger } from "@workspace/logger";
+
 import { cn } from "@workspace/ui/lib/utils";
 import Link from "next/link";
 import { PortableText, type PortableTextReactComponents } from "next-sanity";
@@ -9,13 +10,16 @@ import { SanityImage } from "./sanity-image";
 
 const logger = new Logger("RichText");
 
+const linkClassName =
+  "font-medium text-text-primary underline decoration-solid underline-offset-2";
+
 const components: Partial<PortableTextReactComponents> = {
   block: {
     h2: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
         <h2
-          className="scroll-m-20 border-b pb-2 font-semibold text-3xl first:mt-0"
+          className="scroll-m-32 font-semibold text-2xl leading-tight tracking-[-0.48px] text-text-heading first:mt-0 [&_strong]:font-semibold!"
           id={slug}
         >
           {children}
@@ -25,7 +29,10 @@ const components: Partial<PortableTextReactComponents> = {
     h3: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
-        <h3 className="scroll-m-20 font-semibold text-2xl" id={slug}>
+        <h3
+          className="scroll-m-32 font-semibold text-2xl leading-tight tracking-[-0.48px] text-text-heading [&_strong]:font-semibold!"
+          id={slug}
+        >
           {children}
         </h3>
       );
@@ -33,7 +40,10 @@ const components: Partial<PortableTextReactComponents> = {
     h4: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
-        <h4 className="scroll-m-20 font-semibold text-xl" id={slug}>
+        <h4
+          className="scroll-m-32 font-semibold text-xl [&_strong]:font-semibold!"
+          id={slug}
+        >
           {children}
         </h4>
       );
@@ -41,7 +51,10 @@ const components: Partial<PortableTextReactComponents> = {
     h5: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
-        <h5 className="scroll-m-20 font-semibold text-lg" id={slug}>
+        <h5
+          className="scroll-m-32 font-semibold text-lg [&_strong]:font-semibold!"
+          id={slug}
+        >
           {children}
         </h5>
       );
@@ -49,10 +62,34 @@ const components: Partial<PortableTextReactComponents> = {
     h6: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
-        <h6 className="scroll-m-20 font-semibold text-base" id={slug}>
+        <h6
+          className="scroll-m-32 font-semibold text-base [&_strong]:font-semibold!"
+          id={slug}
+        >
           {children}
         </h6>
       );
+    },
+    normal: ({ children, value }) => {
+      const isFullyBold =
+        Array.isArray(value.children) &&
+        value.children.length > 0 &&
+        value.children.every(
+          (c) =>
+            "marks" in c && Array.isArray(c.marks) && c.marks.includes("strong")
+        );
+      if (isFullyBold) {
+        const slug = parseChildrenToSlug(value.children);
+        return (
+          <h3
+            className="scroll-m-32 font-semibold text-2xl leading-tight tracking-[-0.48px] text-text-heading [&_strong]:font-semibold!"
+            id={slug}
+          >
+            {children}
+          </h3>
+        );
+      }
+      return <p>{children}</p>;
     },
   },
   marks: {
@@ -63,16 +100,12 @@ const components: Partial<PortableTextReactComponents> = {
     ),
     customLink: ({ children, value }) => {
       if (!value.href || value.href === "#") {
-        return (
-          <span className="underline decoration-dotted underline-offset-2">
-            Link Broken
-          </span>
-        );
+        return <span className={linkClassName}>Link Broken</span>;
       }
       return (
         <Link
           aria-label={`Link to ${value?.href}`}
-          className="underline decoration-dotted underline-offset-2"
+          className={linkClassName}
           href={value.href}
           prefetch={false}
           target={value.openInNewTab ? "_blank" : "_self"}
@@ -84,11 +117,7 @@ const components: Partial<PortableTextReactComponents> = {
     linkInternal: ({ children, value }) => {
       if (!value?.href) return <span>{children}</span>;
       return (
-        <Link
-          className="underline decoration-dotted underline-offset-2"
-          href={value.href}
-          prefetch={false}
-        >
+        <Link className={linkClassName} href={value.href} prefetch={false}>
           {children}
         </Link>
       );
@@ -97,7 +126,7 @@ const components: Partial<PortableTextReactComponents> = {
       if (!value?.href) return <span>{children}</span>;
       return (
         <Link
-          className="underline decoration-dotted underline-offset-2"
+          className={linkClassName}
           href={value.href}
           prefetch={false}
           target={value.openInNewTab ? "_blank" : "_self"}
@@ -110,10 +139,7 @@ const components: Partial<PortableTextReactComponents> = {
     linkEmail: ({ children, value }) => {
       if (!value?.href) return <span>{children}</span>;
       return (
-        <a
-          className="underline decoration-dotted underline-offset-2"
-          href={value.href}
-        >
+        <a className={linkClassName} href={value.href}>
           {children}
         </a>
       );
@@ -125,15 +151,15 @@ const components: Partial<PortableTextReactComponents> = {
         return null;
       }
       return (
-        <figure className="my-4">
+        <figure className="my-8 flex flex-col gap-2">
           <SanityImage
-            className="h-auto w-full "
-            height={900}
+            className="h-auto w-full rounded-xl object-cover"
+            height={640}
             image={value}
             width={1600}
           />
           {value?.caption && (
-            <figcaption className="mt-2 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            <figcaption className="text-center text-[13px] leading-[1.4] text-text-muted">
               {value.caption}
             </figcaption>
           )}
@@ -158,7 +184,7 @@ export function RichText<T extends SanityRichTextProps>({
   return (
     <div
       className={cn(
-        "prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-m-24 prose-h2:border-b prose-h2:pb-2 prose-h2:font-semibold prose-h2:text-3xl prose-headings:text-opacity-90 prose-ol:text-opacity-80 prose-p:text-opacity-80 prose-ul:text-opacity-80 prose-a:decoration-dotted prose-h2:first:mt-0",
+        "prose prose-zinc max-w-none prose-headings:scroll-m-32 prose-headings:font-semibold prose-headings:text-text-heading prose-h2:text-2xl prose-h2:leading-tight prose-h2:tracking-[-0.48px] prose-h2:first:mt-0 prose-h2:mt-12 prose-h2:mb-8 prose-p:text-neutral-800 prose-p:leading-[1.4] prose-p:mt-0 prose-p:mb-6 prose-ol:text-neutral-800 prose-ul:text-neutral-800 prose-li:text-neutral-800 prose-li:leading-[1.4] prose-li:my-0 prose-li:marker:text-neutral-800 prose-ul:my-4 prose-ol:my-4 prose-a:decoration-solid prose-a:font-medium prose-a:text-text-primary",
         className
       )}
     >
