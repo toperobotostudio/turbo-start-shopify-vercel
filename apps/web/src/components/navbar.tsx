@@ -93,7 +93,7 @@ export function Navbar({ navbarData, settingsData }: NavigationData) {
       <div className="site-container">
         <div className="flex h-10 items-center justify-between">
           {/* Desktop Navigation */}
-          <nav className="hidden flex-1 items-center gap-6 md:flex">
+          <nav className="hidden flex-1 items-center gap-6 lg:flex">
             {columns?.map((column) => {
               if (column.type === "column") {
                 return (
@@ -128,14 +128,14 @@ export function Navbar({ navbarData, settingsData }: NavigationData) {
           </div>
 
           {/* Desktop Actions */}
-          <div className="hidden flex-1 items-center justify-end gap-6 md:flex">
+          <div className="hidden flex-1 items-center justify-end gap-6 lg:flex">
             <SavedItemsToggle variant="text" />
             <SearchToggle />
             <CartToggle />
           </div>
 
           {/* Mobile Actions */}
-          <div className="flex items-center gap-4 md:hidden">
+          <div className="flex items-center gap-4 lg:hidden">
             <SearchToggle />
             <SavedItemsToggle />
             <CartToggle />
