@@ -109,7 +109,7 @@ export default async function CollectionPage({
   const baseUrl = getBaseUrl();
 
   return (
-    <div className="px-4 py-8">
+    <div className="site-container py-8">
       <BreadcrumbJsonLd
         items={[
           { name: "Home", url: baseUrl },

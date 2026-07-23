@@ -200,7 +200,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
           { name: title },
         ]}
       />
-      <div className="px-4 py-8 lg:px-8">
+      <div className="site-container py-8">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)] xl:grid-cols-[minmax(0,1fr)_minmax(0,600px)] 2xl:grid-cols-[minmax(0,1fr)_minmax(0,760px)]">
           {/* Info column — sticky on desktop, uniform 32px rhythm */}
           <div className="flex flex-col gap-8 self-start lg:sticky lg:top-24">

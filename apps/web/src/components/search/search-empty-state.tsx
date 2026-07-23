@@ -10,7 +10,7 @@ export function SearchEmptyState() {
   const { collections, bestSellers, isLoading } = useSearchDefaults();
 
   return (
-    <div className="flex flex-col gap-8 px-4 py-8 md:px-8">
+    <div className="flex flex-col gap-8 site-container">
       {collections.length > 0 && (
         <section className="flex flex-col gap-4">
           <h2 className="font-medium text-foreground text-xl tracking-[0.24px]">

@@ -83,7 +83,7 @@ export function SearchPageContent({
 
       <div className="bg-muted/30">
         {hasQuery ? (
-          <div className="px-4 py-8 md:px-8">
+          <div className="site-container py-8 ">
             {!isLoading && (
               <p className="mb-6 text-muted-foreground text-sm">
                 {results.totalCount} result
