@@ -149,9 +149,11 @@ export default async function BlogSlugPage({
         </main>
 
         <aside className="hidden self-start lg:sticky lg:top-24 lg:block">
-          <div className="flex flex-col gap-12">
-            <TableOfContent richText={richText ?? []} />
-            <BlogShare title={title ?? ""} url={shareUrl} />
+          <div className="bg-grid-dots p-4 text-muted-foreground">
+            <div className="flex flex-col gap-12 bg-card p-4 text-foreground">
+              <TableOfContent richText={richText ?? []} />
+              <BlogShare title={title ?? ""} url={shareUrl} />
+            </div>
           </div>
         </aside>
       </div>
