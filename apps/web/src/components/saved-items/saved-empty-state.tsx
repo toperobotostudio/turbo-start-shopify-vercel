@@ -10,7 +10,7 @@ export function SavedEmptyState() {
   const { closeSaved } = useSavedItems();
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto">
+    <div className="-mx-8 flex flex-1 flex-col overflow-y-auto px-8">
       <div className="flex flex-col items-start gap-4">
         <p className="text-base text-muted-foreground">
           Tap the bookmark icon to effortlessly add your favorite items to your

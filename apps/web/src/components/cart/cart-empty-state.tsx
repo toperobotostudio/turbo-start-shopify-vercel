@@ -10,7 +10,7 @@ export function CartEmptyState() {
   const { closeCart } = useCartActions();
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto">
+    <div className="-mx-8 flex flex-1 flex-col overflow-y-auto px-8">
       <div className="flex flex-col items-start gap-4">
         <p className="text-base text-muted-foreground">
           Explore our complete range of products or easily find exactly what you
