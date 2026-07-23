@@ -14,7 +14,7 @@ export function SavedItemsToggle({ variant = "icon" }: SavedItemsToggleProps) {
     return (
       <button
         aria-label={`Wishlist${count > 0 ? ` (${count} items)` : ""}`}
-        className="text-foreground text-sm transition-colors hover:text-foreground/70"
+        className="text-foreground font-medium text-sm transition-colors hover:text-foreground/70"
         onClick={openSaved}
         type="button"
       >
