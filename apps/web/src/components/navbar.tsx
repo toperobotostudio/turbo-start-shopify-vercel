@@ -35,7 +35,7 @@ function DesktopColumnDropdown({
       <button
         aria-expanded={isOpen}
         aria-haspopup="menu"
-        className="flex items-center gap-1 px-3 py-2 font-medium text-sm tracking-[0.02em] transition-colors hover:text-foreground"
+        className="flex items-center gap-1 py-2 font-medium text-sm tracking-[0.02em] transition-colors hover:text-foreground"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         type="button"
@@ -76,7 +76,7 @@ function DesktopColumnLink({
 
   return (
     <Link
-      className="px-3 py-2 font-medium text-sm tracking-[0.02em] transition-colors hover:text-foreground"
+      className="py-2 font-medium text-sm tracking-[0.02em] transition-colors hover:text-foreground"
       href={column.href}
     >
       {column.name}
@@ -90,10 +90,10 @@ export function Navbar({ navbarData, settingsData }: NavigationData) {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white dark:bg-black">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+      <div className="site-container">
+        <div className="flex h-10 items-center justify-between">
           {/* Desktop Navigation */}
-          <nav className="hidden flex-1 items-center gap-1 md:flex">
+          <nav className="hidden flex-1 items-center gap-6 md:flex">
             {columns?.map((column) => {
               if (column.type === "column") {
                 return (
@@ -128,7 +128,7 @@ export function Navbar({ navbarData, settingsData }: NavigationData) {
           </div>
 
           {/* Desktop Actions */}
-          <div className="hidden flex-1 items-center justify-end gap-4 md:flex">
+          <div className="hidden flex-1 items-center justify-end gap-6 md:flex">
             <SavedItemsToggle variant="text" />
             <SearchToggle />
             <CartToggle />

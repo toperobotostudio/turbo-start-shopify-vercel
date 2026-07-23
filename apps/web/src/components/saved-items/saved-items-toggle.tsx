@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@workspace/ui/components/button";
-
 import { BookmarkIcon } from "../icons";
 import { useSavedItems } from "./saved-items-context";
 
@@ -26,12 +24,11 @@ export function SavedItemsToggle({ variant = "icon" }: SavedItemsToggleProps) {
   }
 
   return (
-    <Button
+    <button
       aria-label={`Saved items${count > 0 ? ` (${count} items)` : ""}`}
-      className="relative"
+      className="relative inline-flex items-center justify-center transition-colors hover:text-foreground"
       onClick={openSaved}
-      size="icon"
-      variant="ghost"
+      type="button"
     >
       <BookmarkIcon className="size-5" />
       {count > 0 && (
@@ -39,6 +36,6 @@ export function SavedItemsToggle({ variant = "icon" }: SavedItemsToggleProps) {
           {count > 99 ? "99+" : count}
         </span>
       )}
-    </Button>
+    </button>
   );
 }

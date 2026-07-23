@@ -1,7 +1,6 @@
 "use client";
 
 import NumberFlow from "@number-flow/react";
-import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
 
 import { BagIcon } from "../icons";
@@ -13,12 +12,11 @@ export function CartToggle() {
   const hasItems = quantity > 0;
 
   return (
-    <Button
+    <button
       aria-label={`Cart${hasItems ? ` (${quantity} items)` : ""}`}
-      className="relative"
+      className="relative inline-flex items-center justify-center transition-colors hover:text-foreground"
       onClick={openCart}
-      size="icon"
-      variant="ghost"
+      type="button"
     >
       <BagIcon className="size-5" />
       <span
@@ -34,6 +32,6 @@ export function CartToggle() {
           value={Math.min(quantity, 99)}
         />
       </span>
-    </Button>
+    </button>
   );
 }

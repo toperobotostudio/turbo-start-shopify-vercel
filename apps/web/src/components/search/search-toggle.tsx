@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { SearchIcon } from "../icons";
 
 const TOGGLE_CLASS =
-  "inline-flex size-9 items-center justify-center rounded-md transition-colors hover:text-foreground";
+  "inline-flex items-center justify-center transition-colors hover:text-foreground";
 
 export function SearchToggle() {
   const pathname = usePathname();
@@ -24,14 +24,14 @@ export function SearchToggle() {
         }}
         type="button"
       >
-        <SearchIcon className="size-4" />
+        <SearchIcon className="size-5" />
       </button>
     );
   }
 
   return (
     <Link aria-label="Search" className={TOGGLE_CLASS} href="/search">
-      <SearchIcon className="size-4" />
+      <SearchIcon className="size-5" />
     </Link>
   );
 }
