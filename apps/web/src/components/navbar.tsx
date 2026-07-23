@@ -1,7 +1,5 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { env } from "@workspace/env/client";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -16,15 +14,6 @@ import { CollectionGroupDropdown } from "./nav/collection-group-dropdown";
 import { SavedItemsDrawer } from "./saved-items/saved-items-drawer";
 import { SavedItemsToggle } from "./saved-items/saved-items-toggle";
 import { SearchToggle } from "./search/search-toggle";
-
-// Fetcher function
-const fetcher = async (url: string): Promise<NavigationData> => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Failed to fetch navigation data");
-  }
-  return response.json();
-};
 
 function DesktopColumnDropdown({
   column,
@@ -95,74 +84,9 @@ function DesktopColumnLink({
   );
 }
 
-function NavbarSkeleton() {
-  return (
-    <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-sm dark:bg-black/80">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo skeleton - matches Logo component dimensions: width={120} height={40} */}
-          {/* <div className="flex items-center">
-            <div className="h-10 w-[120px] rounded bg-muted/50 animate-pulse" />
-          </div> */}
-          <div className="flex h-10 w-40 items-center">
-            <div className="h-10 w-40 animate-pulse rounded bg-muted/50" />
-          </div>
-
-          {/* Desktop nav skeleton - matches nav gap-1 and px-3 py-2 buttons */}
-          {/* <nav className="hidden md:flex items-center gap-1">
-            {Array.from({ length: 2 }).map((_, i) => (
-              <div
-                key={`nav-${i}`}
-                className="h-9 px-3 py-2 rounded bg-muted/50 animate-pulse min-w-[60px]"
-              />
-            ))}
-          </nav> */}
-
-          {/* Desktop actions skeleton - matches gap-4, ModeToggle (icon button) + SanityButtons */}
-          {/* <div className="hidden md:flex items-center gap-4">
-            <div className="h-9 w-9 rounded bg-muted/50 animate-pulse" />
-            <div className="h-9 px-4 rounded-lg bg-muted/50 animate-pulse min-w-[80px]" />
-          </div> */}
-
-          {/* Mobile menu button skeleton - matches Button size="icon" */}
-          <div className="h-10 w-10 animate-pulse rounded bg-muted/50 md:hidden" />
-        </div>
-      </div>
-    </header>
-  );
-}
-
-export function Navbar({
-  navbarData: initialNavbarData,
-  settingsData: initialSettingsData,
-}: NavigationData) {
-  const { data, error, isLoading } = useQuery<NavigationData>({
-    queryKey: ["navigation"],
-    queryFn: () => fetcher("/api/navigation"),
-    initialData:
-      initialNavbarData && initialSettingsData
-        ? { navbarData: initialNavbarData, settingsData: initialSettingsData }
-        : undefined,
-    staleTime: 30_000,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: true,
-    refetchInterval: 30_000,
-    retry: 3,
-    retryDelay: 5000,
-  });
-
-  const navigationData = data || {
-    navbarData: initialNavbarData,
-    settingsData: initialSettingsData,
-  };
-  const { navbarData, settingsData } = navigationData;
+export function Navbar({ navbarData, settingsData }: NavigationData) {
   const { columns } = navbarData || {};
   const { siteTitle, logo } = settingsData || {};
-
-  // Show skeleton only on initial mount when no fallback data is available
-  if (isLoading && !data && !(initialNavbarData && initialSettingsData)) {
-    return <NavbarSkeleton />;
-  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white dark:bg-black">
@@ -219,13 +143,6 @@ export function Navbar({
           </div>
         </div>
       </div>
-
-      {/* Error boundary for SWR */}
-      {error && env.NODE_ENV === "development" && (
-        <div className="border-destructive/20 border-b bg-destructive/10 px-4 py-2 text-destructive text-xs">
-          Navigation data fetch error: {error.message}
-        </div>
-      )}
 
       <CartDrawer />
       <SavedItemsDrawer />
