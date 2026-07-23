@@ -32,7 +32,10 @@ const customLinkFragment = /* groq */ `
   ...customLink{
     openInNewTab,
     "href": select(
-      type == "internal" => internal->slug.current,
+      type == "internal" => coalesce(
+        internal->slug.current,
+        "/collections/" + internal->store.slug.current
+      ),
       type == "external" => external,
       type == "email" => "mailto:" + email,
       type == "product" => "/products/" + product->store.slug.current,
@@ -138,7 +141,10 @@ const imageLinkCardsBlock = /* groq */ `
       ...,
       "openInNewTab": url.openInNewTab,
       "href": select(
-        url.type == "internal" => url.internal->slug.current,
+        url.type == "internal" => coalesce(
+          url.internal->slug.current,
+          "/collections/" + url.internal->store.slug.current
+        ),
         url.type == "external" => url.external,
         url.type == "email" => "mailto:" + url.email,
         url.type == "product" => "/products/" + url.product->store.slug.current,
@@ -175,7 +181,10 @@ const faqAccordionBlock = /* groq */ `
       ...,
       "openInNewTab": url.openInNewTab,
       "href": select(
-        url.type == "internal" => url.internal->slug.current,
+        url.type == "internal" => coalesce(
+          url.internal->slug.current,
+          "/collections/" + url.internal->store.slug.current
+        ),
         url.type == "external" => url.external,
         url.type == "email" => "mailto:" + url.email,
         url.type == "product" => "/products/" + url.product->store.slug.current,
@@ -464,7 +473,10 @@ export const queryPromoBannerData = defineQuery(`
     text,
     "openInNewTab": link.openInNewTab,
     "href": select(
-      link.type == "internal" => link.internal->slug.current,
+      link.type == "internal" => coalesce(
+        link.internal->slug.current,
+        "/collections/" + link.internal->store.slug.current
+      ),
       link.type == "external" => link.external,
       link.type == "email" => "mailto:" + link.email,
       link.type == "product" => "/products/" + link.product->store.slug.current,
@@ -488,7 +500,10 @@ export const queryFooterData = defineQuery(`
         name,
         "openInNewTab": url.openInNewTab,
         "href": select(
-          url.type == "internal" => url.internal->slug.current,
+          url.type == "internal" => coalesce(
+            url.internal->slug.current,
+            "/collections/" + url.internal->store.slug.current
+          ),
           url.type == "external" => url.external,
           url.type == "email" => "mailto:" + url.email,
           url.type == "product" => "/products/" + url.product->store.slug.current,
@@ -514,7 +529,10 @@ export const queryNavbarData = defineQuery(`
           description,
           "openInNewTab": url.openInNewTab,
           "href": select(
-            url.type == "internal" => url.internal->slug.current,
+            url.type == "internal" => coalesce(
+              url.internal->slug.current,
+              "/collections/" + url.internal->store.slug.current
+            ),
             url.type == "external" => url.external,
             url.type == "email" => "mailto:" + url.email,
             url.type == "product" => "/products/" + url.product->store.slug.current,
@@ -528,7 +546,10 @@ export const queryNavbarData = defineQuery(`
         description,
         "openInNewTab": url.openInNewTab,
         "href": select(
-          url.type == "internal" => url.internal->slug.current,
+          url.type == "internal" => coalesce(
+            url.internal->slug.current,
+            "/collections/" + url.internal->store.slug.current
+          ),
           url.type == "external" => url.external,
           url.type == "email" => "mailto:" + url.email,
           url.type == "product" => "/products/" + url.product->store.slug.current,
