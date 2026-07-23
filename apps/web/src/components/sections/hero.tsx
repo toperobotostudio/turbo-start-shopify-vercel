@@ -79,7 +79,7 @@ function ClassicHero({
 function FullBleedHero({ title, buttons, image, richText }: HeroBlockProps) {
   return (
     <section className="relative" id="hero">
-      <div className="card-surface relative h-[72vh] min-h-125 w-full overflow-hidden">
+      <div className="card-surface relative h-[90dvh] min-h-125 w-full overflow-hidden">
         {image && (
           <SanityImage
             className="absolute inset-0 h-full min-h-full w-full rounded-none object-cover"
@@ -94,7 +94,7 @@ function FullBleedHero({ title, buttons, image, richText }: HeroBlockProps) {
         {/* Bottom scrim so dark promo text stays legible over light imagery */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/90 via-white/60 to-transparent lg:hidden"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-white/90 via-white/60 to-transparent lg:hidden"
         />
 
         {/* Promo text overlaid bottom-left */}
