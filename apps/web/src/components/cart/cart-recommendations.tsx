@@ -43,7 +43,7 @@ export function CartRecommendations() {
       <div className="-mr-8 flex gap-4 overflow-hidden">
         {["a", "b"].map((key) => (
           <div className="w-[340px] shrink-0" key={key}>
-            <Skeleton className="aspect-3/4 w-full" />
+            <Skeleton className="aspect-56/75 w-full" />
             <Skeleton className="mt-3 h-4 w-3/4" />
             <Skeleton className="mt-2 h-4 w-1/2" />
           </div>

@@ -411,7 +411,7 @@ export function ProductCard({
 
   return (
     <div className="group relative">
-      <div className="card-surface relative aspect-3/4 overflow-hidden">
+      <div className="card-surface relative aspect-56/75 overflow-hidden">
         <Link aria-label={title} className="relative block size-full" href={href}>
           <CardImage
             imageUrl={imageUrl}

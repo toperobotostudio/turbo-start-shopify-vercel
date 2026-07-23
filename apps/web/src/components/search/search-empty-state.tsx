@@ -39,7 +39,11 @@ export function SearchEmptyState() {
             <Link href="/collections">Shop All</Link>
           </Button>
         </div>
-        <SearchProductGrid isLoading={isLoading} products={bestSellers} />
+        <SearchProductGrid
+          isLoading={isLoading}
+          products={bestSellers}
+          skeletonCount={4}
+        />
       </section>
     </div>
   );

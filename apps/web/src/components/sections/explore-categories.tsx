@@ -47,7 +47,7 @@ export function ExploreCategories({
           ) : null
         )}
       </div>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+      <div className="grid grid-cols-2 gap-x-1 gap-y-4 md:grid-cols-4 md:gap-y-6">
         {collections.map((collection) => (
           <CollectionCard
             key={collection._id}

@@ -103,7 +103,7 @@ export async function RelatedProducts({ productId }: RelatedProductsProps) {
           <Link href="/collections">Shop All</Link>
         </Button>
       </div>
-      <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-x-1 gap-y-6 md:grid-cols-4">
         {products.map((product) => (
           <ProductCard
             key={product.id}

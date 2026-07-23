@@ -6,24 +6,26 @@ import { ProductCard } from "@/components/product/product-card";
 import { collectionProductToCardProps } from "@/lib/shopify/product-card";
 import type { ShopifyCollectionProduct } from "@/lib/shopify/types";
 
-const SKELETON_COUNT = 8;
+const DEFAULT_SKELETON_COUNT = 8;
 
 type SearchProductGridProps = {
   products: ShopifyCollectionProduct[];
   isLoading: boolean;
+  skeletonCount?: number;
 };
 
 /** Shared 4-col ProductCard grid used by both the empty and active states. */
 export function SearchProductGrid({
   products,
   isLoading,
+  skeletonCount = DEFAULT_SKELETON_COUNT,
 }: SearchProductGridProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
-        {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
+      <div className="grid grid-cols-2 gap-x-1 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+        {Array.from({ length: skeletonCount }).map((_, index) => (
           <div className="flex flex-col gap-2" key={index.toString()}>
-            <Skeleton className="aspect-3/4 w-full" />
+            <Skeleton className="aspect-56/75 w-full" />
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-3 w-1/3" />
             <Skeleton className="h-4 w-1/4" />
@@ -38,7 +40,7 @@ export function SearchProductGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-x-1 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
       {products.map((product) => (
         <ProductCard
           key={product.id}

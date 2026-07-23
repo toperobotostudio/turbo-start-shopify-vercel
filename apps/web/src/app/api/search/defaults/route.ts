@@ -11,7 +11,7 @@ import type {
 } from "@/lib/shopify/types";
 
 const COLLECTIONS_LIMIT = 8;
-const BEST_SELLERS_LIMIT = 8;
+const BEST_SELLERS_LIMIT = 4;
 
 export async function GET() {
   const [collectionsResult, bestSellersResult] = await Promise.all([

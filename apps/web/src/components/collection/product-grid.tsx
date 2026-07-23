@@ -25,7 +25,7 @@ export function ProductGrid({
   return (
     <div
       className={cn(
-        "grid gap-4 lg:gap-6",
+        "grid gap-x-1 gap-y-4 lg:gap-y-6",
         density === "dense"
           ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
           : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"

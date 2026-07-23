@@ -31,7 +31,7 @@ function CollectionsGrid({
 }) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3">
+      <div className="grid grid-cols-2 gap-x-1 gap-y-8 md:grid-cols-3">
         {["a", "b", "c"].map((key) => (
           <div className="flex flex-col gap-2" key={key}>
             <Skeleton className="aspect-square w-full" />
@@ -47,7 +47,7 @@ function CollectionsGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3">
+    <div className="grid grid-cols-2 gap-x-1 gap-y-8 md:grid-cols-3">
       {collections.map((collection) => (
         <CollectionCard
           key={collection.id}
