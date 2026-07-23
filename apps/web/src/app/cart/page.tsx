@@ -27,7 +27,7 @@ export default function CartPage() {
 
   if (isLoading && !cart) {
     return (
-      <div className="container mx-auto px-4 py-16">
+      <div className="px-4 py-16">
         <h1 className="mb-8 font-semibold text-3xl">Cart</h1>
         <div className="flex items-center justify-center py-16">
           <div className="size-8 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
@@ -38,7 +38,7 @@ export default function CartPage() {
 
   if (lines.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-16">
+      <div className="px-4 py-16">
         <h1 className="mb-8 font-semibold text-3xl">Cart</h1>
         <div className="flex flex-col items-center justify-center gap-6 py-16">
           <ShoppingBag className="size-16 text-muted-foreground" />
@@ -57,7 +57,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16">
+    <div className="px-4 py-16">
       <h1 className="mb-8 font-semibold text-3xl">Cart</h1>
       <div className="grid gap-12 lg:grid-cols-3">
         <div className="lg:col-span-2">

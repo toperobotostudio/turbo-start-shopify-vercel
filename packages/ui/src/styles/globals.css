@@ -136,15 +136,15 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* @utility container {
-  max-width: 80rem;
-  margin-inline: auto;
+/* Full-width content wrapper: responsive side gutter, no max-width. */
+@utility site-container {
+  width: 100%;
   padding-inline: 1rem;
 
-  @media (width >= 40rem) {
+  @media (width >= 48rem) {
     padding-inline: 2rem;
   }
-} */
+}
 
 /* Soft vertical gradient behind product/collection card images. Follows
  * light/dark via the --card-surface-* tokens. */

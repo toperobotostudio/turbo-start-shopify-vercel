@@ -19,7 +19,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
   const query = sp.q?.trim() ?? "";
 
   return (
-    <div className="container mx-auto flex w-full flex-col px-4 py-12 md:px-6 md:py-20">
+    <div className="site-container flex w-full flex-col py-12 md:py-20">
       <SearchPageContent initialQuery={query} />
     </div>
   );

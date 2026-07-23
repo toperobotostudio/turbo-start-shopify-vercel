@@ -9,7 +9,7 @@ export type CTABlockProps = PagebuilderType<"cta">;
 export function CTABlock({ richText, title, eyebrow, buttons }: CTABlockProps) {
   return (
     <section className="py-12 md:py-20" id="features">
-      <div className="container mx-auto px-4 md:px-8">
+      <div className="site-container">
         <div className="bg-muted px-4 py-16">
           <div className="mx-auto max-w-3xl space-y-8 text-center">
             {eyebrow && (

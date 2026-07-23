@@ -42,7 +42,7 @@ export function FeatureCardsWithIcon({
 }: FeatureCardsWithIconProps) {
   return (
     <section className="py-12 md:py-20" id="features">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="site-container">
         <div className="mb-14 flex max-w-2xl flex-col items-start gap-4 md:mb-16">
           {eyebrow && <Badge variant="secondary">{eyebrow}</Badge>}
           <h2 className="font-semibold text-3xl tracking-tight md:text-4xl">
@@ -53,7 +53,7 @@ export function FeatureCardsWithIcon({
             richText={richText}
           />
         </div>
-        <div className="grid  border gap-1   border-border/60 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid border gap-1 border-border/60 sm:grid-cols-2 lg:grid-cols-3">
           {cards?.map((card, index) => (
             <FeatureCard
               card={card}

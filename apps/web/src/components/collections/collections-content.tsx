@@ -28,7 +28,7 @@ function CollectionsGrid({
   const sorted = sortCollections(collections, sort);
 
   return (
-    <div className="container mx-auto px-4 py-12 md:px-6">
+    <div className="site-container py-12">
       <div className="mb-8 flex items-center justify-between gap-4">
         <div>
           <h2 className="font-medium text-2xl tracking-tight md:text-[32px]">

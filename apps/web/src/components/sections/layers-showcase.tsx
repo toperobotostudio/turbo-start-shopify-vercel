@@ -149,7 +149,7 @@ export function LayersShowcase({
   const alt = product?.title ?? productTitle ?? "";
 
   return (
-    <section className="container mx-auto px-4 py-12 md:px-6 md:py-20">
+    <section className="site-container py-12 md:py-20">
       <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
         {/* Left: 2×2 collage from the product's images + heading/description */}
         <div className="flex flex-col gap-4">

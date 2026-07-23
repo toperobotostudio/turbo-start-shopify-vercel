@@ -34,7 +34,7 @@ export function FaqCategories({ title, categories }: FaqCategoriesProps) {
   return (
     <section className="py-12 md:py-20" id="faq">
       <FaqJsonLd faqs={allFaqs} />
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="site-container">
         <h2 className="mb-8 font-medium text-2xl md:mb-12 md:text-3xl">
           {title}
         </h2>

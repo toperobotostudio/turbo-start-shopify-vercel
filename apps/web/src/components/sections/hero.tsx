@@ -56,7 +56,7 @@ function ClassicHero({
 }: HeroBlockProps) {
   return (
     <section className="mt-4 md:my-16" id="hero">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="site-container">
         <div className="grid items-center gap-8 lg:grid-cols-2">
           <div className="grid h-full grid-rows-[auto_1fr_auto] items-center justify-items-center gap-4 text-center lg:items-start lg:justify-items-start lg:text-left">
             {badge && <Badge variant="secondary">{badge}</Badge>}
@@ -104,7 +104,7 @@ function FullBleedHero({
   const pos = CONTENT_POSITION[contentPosition ?? "bottomLeft"];
   return (
     <section className="relative" id="hero">
-      <div className="card-surface relative h-[90dvh] min-h-125 w-full overflow-hidden">
+      <div className="card-surface relative h-[92dvh] min-h-125 w-full overflow-hidden">
         {image && (
           <SanityImage
             className="absolute inset-0 h-full min-h-full w-full rounded-none object-cover"
@@ -124,7 +124,7 @@ function FullBleedHero({
 
         {/* Promo text overlaid along the bottom (position set in Sanity) */}
         <div className="absolute inset-x-0 bottom-0">
-          <div className="container mx-auto px-4 pb-8 md:px-6 md:pb-12">
+          <div className="site-container pb-8 md:pb-12">
             <div
               className={cn(
                 "flex w-full max-w-md flex-col gap-2 font-medium text-zinc-900",
@@ -148,7 +148,10 @@ function FullBleedHero({
                 )}
               </div>
               {richText && (
-                <RichText className="text-sm text-zinc-800" richText={richText} />
+                <RichText
+                  className="text-sm text-zinc-800"
+                  richText={richText}
+                />
               )}
             </div>
           </div>

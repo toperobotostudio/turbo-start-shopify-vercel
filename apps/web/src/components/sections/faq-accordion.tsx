@@ -11,11 +11,9 @@ export function FaqAccordion({ title, faqs, link }: FaqAccordionProps) {
   return (
     <section className="py-12 md:py-20" id="faq">
       <FaqJsonLd faqs={faqs} />
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="site-container">
         <div className="flex flex-col items-center">
-          <h2 className="mb-10 font-normal text-3xl md:text-4xl">
-            {title}
-          </h2>
+          <h2 className="mb-10 font-normal text-3xl md:text-4xl">{title}</h2>
         </div>
         <div className="mx-auto max-w-3xl">
           <div className="flex w-full flex-col gap-3">

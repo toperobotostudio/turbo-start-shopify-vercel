@@ -146,7 +146,7 @@ function HostingCredits() {
 export function FooterSkeleton() {
   return (
     <footer className="mt-20 border-t py-9">
-      <div className="container mx-auto px-4">
+      <div className="site-container">
         <div className="flex flex-col justify-between gap-10 lg:flex-row">
           <div className="h-32 w-full max-w-84 animate-pulse rounded bg-muted" />
           <div className="grid grid-cols-2 gap-8 sm:flex sm:gap-14">
@@ -175,7 +175,7 @@ function Footer({ data, settingsData }: FooterProps) {
 
   return (
     <footer className="mt-20 bg-background">
-      <div className="container mx-auto px-4">
+      <div className="site-container">
         <div className="flex flex-col justify-between gap-10 py-9 lg:flex-row">
           <div className="flex flex-col gap-6">
             <NewsletterForm />

@@ -84,7 +84,7 @@ export default async function BlogSlugPage({
   const baseUrl = getBaseUrl();
 
   return (
-    <div className="container mx-auto px-4 md:px-6 py-16 max-w-7xl">
+    <div className="px-4 md:px-8 py-16 max-w-7xl">
       <ArticleJsonLd article={data} />
       <BreadcrumbJsonLd
         items={[
@@ -123,7 +123,7 @@ export default async function BlogSlugPage({
 
       {/* Hero image — full width */}
       {image && (
-        <div className="mb-12  overflow-hidden">
+        <div className="mb-12 overflow-hidden">
           <SanityImage
             alt={title}
             className="h-auto w-full object-cover"

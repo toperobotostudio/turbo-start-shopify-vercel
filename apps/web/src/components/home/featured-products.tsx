@@ -8,10 +8,7 @@ import {
 import { storefrontQuery } from "@/lib/shopify/client";
 import { getColorHex } from "@/lib/shopify/color";
 import { getCardOptions } from "@/lib/shopify/options";
-import {
-  badgeFromTags,
-  secondaryImageUrl,
-} from "@/lib/shopify/product-card";
+import { badgeFromTags, secondaryImageUrl } from "@/lib/shopify/product-card";
 import { FEATURED_PRODUCTS_QUERY } from "@/lib/shopify/queries";
 import {
   type FeaturedProduct,
@@ -48,7 +45,7 @@ export async function FeaturedProducts() {
   if (products.length === 0) return null;
 
   return (
-    <section className="container mx-auto px-4 py-12 md:px-6 md:py-20">
+    <section className="site-container py-12 md:py-20">
       <div className="mb-8 flex items-end justify-between">
         <h2 className="font-medium text-3xl tracking-tight md:text-4xl">
           Featured Products

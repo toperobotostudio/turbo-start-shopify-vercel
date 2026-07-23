@@ -82,7 +82,12 @@ export default async function OgPreviewPage() {
   const simple: { key: string; heading: string; type: string; docs: Doc[] }[] =
     [
       { key: "pages", heading: "Pages", type: "page", docs: content.pages },
-      { key: "blogs", heading: "Blog posts", type: "blog", docs: content.blogs },
+      {
+        key: "blogs",
+        heading: "Blog posts",
+        type: "blog",
+        docs: content.blogs,
+      },
       {
         key: "collections",
         heading: "Collections",
@@ -120,9 +125,11 @@ export default async function OgPreviewPage() {
   const total = sections.reduce((n, s) => n + s.cards.length, 0);
 
   return (
-    <main className="container mx-auto px-4 py-12 lg:px-8">
+    <main className="px-4 py-12 lg:px-8">
       <header className="mb-10 flex flex-col gap-2">
-        <h1 className="font-medium text-3xl tracking-tight">OG Image Preview</h1>
+        <h1 className="font-medium text-3xl tracking-tight">
+          OG Image Preview
+        </h1>
         <p className="max-w-2xl text-muted-foreground text-sm">
           {total} live Open Graph images across the site, rendered from{" "}
           <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
