@@ -15,6 +15,7 @@ import {
   FacebookIcon,
   InstagramIcon,
   LinkedinIcon,
+  RobotoWordmark,
   ShopifyIcon,
   VercelIcon,
   XIcon,
@@ -119,6 +120,17 @@ function HostingCredits() {
   return (
     <div className="flex items-center gap-4 text-foreground text-sm">
       <a
+        aria-label="Roboto Studio"
+        href="https://robotostudio.com/"
+        rel="noopener noreferrer"
+        target="_blank"
+        className="flex items-center gap-1 hover:opacity-80"
+      >
+        Built by
+        <RobotoWordmark className="h-2.5 w-auto" />
+      </a>
+      <span className="h-4 w-px bg-border" />
+      <a
         className="flex items-center gap-1 hover:opacity-80"
         href="https://vercel.com"
         rel="noopener noreferrer"
@@ -126,7 +138,6 @@ function HostingCredits() {
       >
         Hosted on
         <VercelIcon className="size-3.5" />
-        <span className="font-medium">Vercel</span>
       </a>
       <span className="h-4 w-px bg-border" />
       <a
@@ -136,8 +147,7 @@ function HostingCredits() {
         target="_blank"
       >
         Powered by
-        <ShopifyIcon className="h-4.5 w-auto" />
-        <span className="font-medium">Shopify</span>
+        <ShopifyIcon className="h-5.5 w-auto" />
       </a>
     </div>
   );
