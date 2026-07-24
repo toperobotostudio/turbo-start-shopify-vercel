@@ -149,7 +149,7 @@ function FullBleedHero({
               </div>
               {richText && (
                 <RichText
-                  className="text-sm text-zinc-800"
+                  className="text-sm [&_p]:text-zinc-800!"
                   richText={richText}
                 />
               )}
