@@ -25,10 +25,10 @@ export function joinSections(sections: Array<string | null | undefined>): string
     .join("\n\n");
 }
 
-/** `#`-style heading at the given level. */
+/** `#`-style heading at the given level, with the text Markdown-escaped. */
 export function heading(level: number, text: string): string {
   const clamped = Math.min(Math.max(level, 1), 6);
-  return `${"#".repeat(clamped)} ${text.trim()}`;
+  return `${"#".repeat(clamped)} ${escapeMarkdown(text.trim())}`;
 }
 
 /**
@@ -43,7 +43,13 @@ export function escapeMarkdown(text: string): string {
 /** Rejects dangerous URL schemes so serialized links are safe to publish. */
 export function sanitizeUrl(url: string): string | null {
   const trimmed = url.trim();
-  if (/^(javascript|vbscript|data):/i.test(trimmed)) return null;
+  // Browsers strip embedded whitespace/control chars when parsing a scheme, so
+  // `java\tscript:` stays live. Test a stripped copy, but return the original.
+  const normalized = Array.from(trimmed)
+    .filter((char) => char.charCodeAt(0) > 0x20)
+    .join("")
+    .toLowerCase();
+  if (/^(javascript|vbscript|data):/.test(normalized)) return null;
   return trimmed;
 }
 
@@ -96,8 +102,8 @@ export function formatMoney(money: Money | null | undefined): string {
 
 /**
  * Preserves an author's line breaks for Markdown: single newlines become hard
- * breaks (trailing two spaces), blank lines separate paragraphs. Keeps
- * multi-line metafield/description text readable instead of collapsing it.
+ * breaks (trailing two spaces), blank lines separate paragraphs. Each line is
+ * Markdown-escaped so merchant-authored text can't inject links or formatting.
  */
 export function formatMultiline(value: string): string {
   return value
@@ -108,6 +114,7 @@ export function formatMultiline(value: string): string {
         .split("\n")
         .map((line) => line.trim())
         .filter(Boolean)
+        .map(escapeMarkdown)
         .join("  \n")
     )
     .filter(Boolean)

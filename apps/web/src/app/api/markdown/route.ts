@@ -9,7 +9,7 @@ import {
   queryCollectionsIndexPageData,
   queryHomePageData,
   queryProductByHandle,
-  queryRedirects,
+  queryRedirectBySource,
   querySlugPageData,
 } from "@workspace/sanity/query";
 
@@ -139,10 +139,13 @@ async function buildMarkdown(path: string): Promise<string | null> {
 }
 
 async function findRedirect(path: string) {
-  const { data } = await sanityFetch({ query: queryRedirects, ...PUBLISHED });
-  const match = (data ?? []).find((redirect) => redirect.source === path);
-  return match
-    ? { destination: match.destination, permanent: match.permanent }
+  const { data } = await sanityFetch({
+    query: queryRedirectBySource,
+    params: { source: path },
+    ...PUBLISHED,
+  });
+  return data
+    ? { destination: data.destination, permanent: data.permanent }
     : null;
 }
 

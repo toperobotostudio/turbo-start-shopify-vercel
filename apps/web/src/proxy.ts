@@ -7,8 +7,10 @@ import { normalizeMarkdownPath, prefersMarkdown } from "@/lib/markdown/path";
  * prefers `Accept: text/markdown` is rewritten to the `/api/markdown` route,
  * which serves a Markdown representation of the same content a browser would
  * get as HTML. Everything else passes straight through unchanged.
+ *
+ * Next.js 16's `proxy` convention (the former `middleware`).
  */
-export function middleware(request: NextRequest): NextResponse {
+export function proxy(request: NextRequest): NextResponse {
   if (request.method !== "GET" && request.method !== "HEAD") {
     return NextResponse.next();
   }

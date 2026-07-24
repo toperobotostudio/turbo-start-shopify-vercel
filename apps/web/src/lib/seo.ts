@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { toMarkdownHref } from "@/lib/markdown/shared";
 import type { Maybe } from "@/types";
 import { capitalize, getBaseUrl } from "@/utils";
 
@@ -140,7 +141,7 @@ export function getSEOMetadata(page: PageSeoData = {}): Metadata {
       // Advertise the Markdown representation served via content negotiation
       // (also reachable by appending `.md` or sending `Accept: text/markdown`).
       types: {
-        "text/markdown": pageUrl === `${baseUrl}/` ? `${baseUrl}/index.md` : `${pageUrl}.md`,
+        "text/markdown": `${baseUrl}${toMarkdownHref(slug)}`,
       },
     },
     openGraph: {
