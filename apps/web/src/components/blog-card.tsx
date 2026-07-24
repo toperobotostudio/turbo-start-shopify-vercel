@@ -100,8 +100,9 @@ export function FeaturedBlogCard({ blog }: BlogCardProps) {
           <SanityImage
             alt={title ?? "Blog post image"}
             className="aspect-video h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            height={400}
+            height={450}
             image={image}
+            mode="cover"
             width={800}
           />
         </div>
