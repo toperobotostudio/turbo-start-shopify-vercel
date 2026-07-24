@@ -11,7 +11,8 @@ import { portableTextToMarkdownString } from "./portable-text";
 type Block = Record<string, unknown>;
 
 function text(value: unknown): string | null {
-  return typeof value === "string" && value.trim() ? value : null;
+  const trimmed = typeof value === "string" ? value.trim() : "";
+  return trimmed ? trimmed : null;
 }
 
 type Linkish = { text?: string; title?: string; href?: string };

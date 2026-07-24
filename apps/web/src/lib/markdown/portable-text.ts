@@ -13,6 +13,7 @@ import {
   type PortableTextMarkRenderer,
   type PortableTextTypeRenderer,
 } from "@portabletext/markdown";
+import type { PortableTextBlock } from "next-sanity";
 
 import { absolutizeUrl, sanityImageMarkdown } from "./shared";
 
@@ -32,17 +33,22 @@ const imageType: PortableTextTypeRenderer = ({ value }) => {
   return sanityImageMarkdown(image) ?? (image.caption ?? image.alt ?? "").trim();
 };
 
-/** Product-body callout block → blockquote. */
+/** Product-body callout block → blockquote (each line prefixed). */
 const calloutType: PortableTextTypeRenderer = ({ value }) => {
   const text = (value as { text?: string | null })?.text?.trim();
-  return text ? `> ${text}` : "";
+  if (!text) return "";
+  return text
+    .split("\n")
+    .map((line) => (line.trim() ? `> ${line.trim()}` : ""))
+    .filter(Boolean)
+    .join("\n");
 };
 
 export function portableTextToMarkdownString(
   blocks: readonly unknown[] | null | undefined
 ): string {
   if (!Array.isArray(blocks) || blocks.length === 0) return "";
-  return portableTextToMarkdown(blocks as never, {
+  return portableTextToMarkdown(blocks as PortableTextBlock[], {
     marks: {
       customLink: linkMark,
       linkInternal: linkMark,

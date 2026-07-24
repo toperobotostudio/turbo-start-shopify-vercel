@@ -155,14 +155,13 @@ function pricingSection(variants: ShopifyVariant[]): string | null {
     min.amount === max.amount
       ? formatMoney(min.variant.price)
       : `${formatMoney(min.variant.price)} – ${formatMoney(max.variant.price)}`;
-  const compareAt = min.variant.compareAtPrice
-    ? formatMoney(min.variant.compareAtPrice)
-    : formatMoney({ amount: "0", currencyCode: min.variant.price.currencyCode });
 
-  return joinSections([
-    heading(2, "Pricing"),
-    [`- **Price**: ${price}`, `- **Compare At**: ${compareAt}`].join("\n"),
-  ]);
+  const bullets = [`- **Price**: ${price}`];
+  if (min.variant.compareAtPrice) {
+    bullets.push(`- **Compare At**: ${formatMoney(min.variant.compareAtPrice)}`);
+  }
+
+  return joinSections([heading(2, "Pricing"), bullets.join("\n")]);
 }
 
 function optionsSection(product: ShopifyProduct): string | null {
