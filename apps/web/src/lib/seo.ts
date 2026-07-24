@@ -137,6 +137,11 @@ export function getSEOMetadata(page: PageSeoData = {}): Metadata {
     },
     alternates: {
       canonical: pageUrl,
+      // Advertise the Markdown representation served via content negotiation
+      // (also reachable by appending `.md` or sending `Accept: text/markdown`).
+      types: {
+        "text/markdown": pageUrl === `${baseUrl}/` ? `${baseUrl}/index.md` : `${pageUrl}.md`,
+      },
     },
     openGraph: {
       type: pageType ?? "website",
