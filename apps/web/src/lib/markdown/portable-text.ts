@@ -15,7 +15,7 @@ import {
 } from "@portabletext/markdown";
 import type { PortableTextBlock } from "next-sanity";
 
-import { absolutizeUrl, sanityImageMarkdown } from "./shared";
+import { absolutizeUrl, escapeMarkdown, sanityImageMarkdown } from "./shared";
 
 /** All of this repo's link annotations resolve an `href` in GROQ. */
 const linkMark: PortableTextMarkRenderer = ({ value, children }) => {
@@ -39,7 +39,10 @@ const calloutType: PortableTextTypeRenderer = ({ value }) => {
   if (!text) return "";
   return text
     .split("\n")
-    .map((line) => (line.trim() ? `> ${line.trim()}` : ""))
+    .map((line) => {
+      const trimmed = line.trim();
+      return trimmed ? `> ${escapeMarkdown(trimmed)}` : "";
+    })
     .filter(Boolean)
     .join("\n");
 };
